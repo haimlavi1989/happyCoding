@@ -24,7 +24,6 @@ A collection of commonly used JavaScript utility functions for everyday developm
   - [Array Utilities](#array-utilities)
   - [String Utilities](#string-utilities)
   - [Random Generators](#random-generators)
-  - # JavaScript Utility Functions
   - [Number Utilities](#number-utilities)
   - [Object Utilities](#object-utilities)
   - [Date Utilities](#date-utilities)
