@@ -24,6 +24,26 @@ A collection of commonly used JavaScript utility functions for everyday developm
   - [Array Utilities](#array-utilities)
   - [String Utilities](#string-utilities)
   - [Random Generators](#random-generators)
+  - # JavaScript Utility Functions
+  - [Number Utilities](#number-utilities)
+  - [Object Utilities](#object-utilities)
+  - [Date Utilities](#date-utilities)
+  - [Validation Utilities](#validation-utilities)
+  - [Browser Utilities](#browser-utilities)
+  - [Async Utilities](#async-utilities)
+  - [Design Patterns](#design-patterns)
+  - [Performance Utilities](#performance-utilities)
+  - [Array Utilities](#array-utilities)
+  - [String Utilities](#string-utilities)
+  - [Random Generators](#random-generators)
+  - [Map Operations](#map-operations)
+  - [Cache Utilities](#cache-utilities)
+  - [Promise Utilities](#promise-utilities)
+  - [Time Utilities](#time-utilities)
+  - [Array Operations](#array-operations)
+  - [String Templates](#string-templates)
+  - [Common Entity Names](#common-entity-names)
+
 
 ## Functions
 
@@ -481,10 +501,174 @@ const random = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 ```
 
-## Contributing
+### Map Operations
+```javascript
+// Map operations examples
+const map = new Map();
 
-Feel free to submit issues and enhancement requests!
+// Setting values
+map.set('name', 'Haim');
+map.set(123, 'ID');
+map.set(true, 'isActive');
 
-## License
+// Getting values
+map.get('name');    // Returns 'Haim'
+map.has('name');    // Returns true
+map.delete(123);    // Deletes key-value pair
+map.clear();        // Removes all entries
+map.size;           // Returns number of entries
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+// Iteration methods
+map.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+
+// Getting iterators
+const keys = map.keys();     // Returns keys iterator
+const values = map.values(); // Returns values iterator
+```
+
+### Cache Utilities
+
+#### Complex Key Caching
+```javascript
+const createCacheKey = (fn, ...args) => {
+  return JSON.stringify([fn.toString(), ...args]);
+};
+
+// Usage example
+const cache = new Map();
+const key = createCacheKey(someFunction, arg1, arg2);
+const cached = cache.get(key);
+```
+
+#### Cache Counter
+```javascript
+const incrementCache = (cacheMap, key) => {
+  return (cacheMap.get(key) || 0) + 1;
+};
+```
+
+#### TTL Cache Utilities
+```javascript
+const isExpired = (currentTime, referenceTime, timeToLive) => {
+  return (currentTime - referenceTime) >= (timeToLive * 1000);
+};
+
+const shouldExecute = (currentTime, referenceTime, timerRunTime) => {
+  return currentTime > referenceTime + timerRunTime;
+};
+```
+
+### Promise Utilities
+
+#### Promise.all Implementation Essentials
+```javascript
+// Check if all promises are settled
+if (settledCount === promises.length) {
+  resolve(results);
+}
+
+// Timeout wrapper for promises
+const withTimeout = (promise, timeout) => {
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('timed_out')), timeout)
+  );
+  return Promise.race([promise, timeoutPromise]);
+};
+```
+
+### Array/String Manipulation
+
+#### Swap Array Elements
+```javascript
+const swap = (arr, i, j) => {
+  [arr[i], arr[j]] = [arr[j], arr[i]];
+  return arr;
+};
+```
+
+#### Words Only Filter
+```javascript
+const wordsOnly = str => str.replace(/[^\w]/g, '').toLowerCase();
+```
+
+#### Reverse Integer
+```javascript
+const reverseInt = int => {
+  const reversedStr = Math.abs(int).toString().split('').reverse().join('');
+  const reversedInt = parseInt(reversedStr);
+  return int < 0 ? -reversedInt : reversedInt;
+};
+```
+
+#### Palindrome Check
+```javascript
+const isPalindrome = str => {
+  return str.split('').every((char, i) => char === str[str.length - i - 1]);
+};
+```
+
+### Time Utilities
+
+#### Calculate Days Passed
+```javascript
+const daysPassed = (unixStart, unixEnd) => {
+  return (unixEnd - unixStart) / (60 * 60 * 24);
+};
+```
+
+### Array Operations
+
+#### Advanced Array Methods Example
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// Map: Transform each element
+const doubled = numbers.map(num => num * 2);
+
+// Filter: Select elements matching condition
+const evens = numbers.filter(num => num % 2 === 0);
+
+// Reduce: Accumulate values
+const sum = numbers.reduce((acc, num) => acc + num, 0);
+```
+
+### Async Operations
+
+#### Sequential Async Processing
+```javascript
+async function fetchData(urls) {
+  const results = [];
+  for (const url of urls) {
+    const response = await fetch(url);
+    results.push(await response.json());
+  }
+  return results;
+}
+
+// Usage example
+const urls = [
+  'https://api.example.com/data1',
+  'https://api.example.com/data2'
+];
+
+fetchData(urls).then(data => console.log(data));
+```
+
+### String Templates
+
+#### URL Template Example
+```javascript
+const API_BASE_URL = 'https://api.example.com';
+const endpoint = `${API_BASE_URL}/users`;
+```
+
+### Common Entity Names
+Common names for data structures and modules:
+- Entities
+- Items
+- Resources
+- Records
+- Modules
+
