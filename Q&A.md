@@ -2,25 +2,7 @@
 
 <details>
 <summary>What is this project about?</summary>
-
-This project is a [brief description of your project]. It helps users to [main benefit/purpose].
-
-Key features:
-- Feature 1
-- Feature 2
-- Feature 3
-</details>
-
-<details>
-<summary>How do I install this project?</summary>
-
-```bash
-# Installation steps here
-npm install my-project
-
-# Additional setup if needed
-npm run setup
-```
+Practice job Job interview code challenges
 </details>
 
 <details>
