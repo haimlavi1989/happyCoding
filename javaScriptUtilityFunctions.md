@@ -4,44 +4,32 @@ A collection of commonly used JavaScript utility functions for everyday developm
 
 ## Table of Contents
 
-- [Functions](#functions)
-  - [Debounce](#debounce)
-  - [Memoization](#memoization)
-  - [Deep Clone](#deep-clone)
-  - [Pick](#pick)
-  - [Event Delegation](#event-delegation)
-  - [Array Utilities](#array-utilities)
-  - [String Utilities](#string-utilities)
-  - [Random Generators](#random-generators)
-  - [Number Utilities](#number-utilities)
-  - [Object Utilities](#object-utilities)
-  - [Date Utilities](#date-utilities)
-  - [Validation Utilities](#validation-utilities)
-  - [Browser Utilities](#browser-utilities)
-  - [Async Utilities](#async-utilities)
-  - [Design Patterns](#design-patterns)
-  - [Performance Utilities](#performance-utilities)
-  - [Array Utilities](#array-utilities)
-  - [String Utilities](#string-utilities)
-  - [Random Generators](#random-generators)
-  - [Number Utilities](#number-utilities)
-  - [Object Utilities](#object-utilities)
-  - [Date Utilities](#date-utilities)
-  - [Validation Utilities](#validation-utilities)
-  - [Browser Utilities](#browser-utilities)
-  - [Async Utilities](#async-utilities)
-  - [Design Patterns](#design-patterns)
-  - [Performance Utilities](#performance-utilities)
-  - [Array Utilities](#array-utilities)
-  - [String Utilities](#string-utilities)
-  - [Random Generators](#random-generators)
-  - [Map Operations](#map-operations)
-  - [Cache Utilities](#cache-utilities)
-  - [Promise Utilities](#promise-utilities)
-  - [Time Utilities](#time-utilities)
-  - [Array Operations](#array-operations)
-  - [String Templates](#string-templates)
-  - [Common Entity Names](#common-entity-names)
+- [Number Utilities](#number-utilities)
+- [Object Utilities](#object-utilities)
+- [Date Utilities](#date-utilities)
+- [Validation Utilities](#validation-utilities)
+- [Browser Utilities](#browser-utilities)
+- [Async Utilities](#async-utilities)
+- [Design Patterns](#design-patterns)
+- [Performance Utilities](#performance-utilities)
+- [Array Utilities](#array-utilities)
+  - [Basic Operations](#basic-operations)
+  - [Search Operations](#search-operations)
+  - [Transformation Operations](#transformation-operations)
+  - [Sort Operations](#sort-operations)
+- [String Utilities](#string-utilities)
+  - [Basic Manipulations](#basic-manipulations)
+  - [Search Operations](#string-search-operations)
+  - [Case Operations](#case-operations)
+  - [Split and Join](#split-and-join)
+- [Function Utilities](#function-utilities)
+  - [Recursive Functions](#recursive-functions)
+  - [Rate Limiting](#rate-limiting)
+- [Random Generators](#random-generators)
+- [Map Operations](#map-operations)
+- [Cache Utilities](#cache-utilities)
+- [Promise Utilities](#promise-utilities)
+- [Time Utilities](#time-utilities)
 
 
 ## Functions
@@ -670,4 +658,132 @@ Common names for data structures and modules:
 - Resources
 - Records
 - Modules
+
+#### Recursive Functions
+```javascript
+function factorial(n) {
+  return n <= 1 ? 1 : n * factorial(n - 1);
+}
+
+// Usage example
+console.log(factorial(5)); // 120
+```
+
+#### Rate Limiting
+
+##### Throttle
+```javascript
+function throttle(func, delay) {
+  let lastCall = 0;
+  return function(...args) {
+    const now = new Date().getTime();
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      return func(...args);
+    }
+  };
+}
+```
+
+### Array Utilities
+
+#### Basic Operations
+```javascript
+// forEach iteration
+[1, 2, 3].forEach((value, index) => {
+  console.log(`Key: ${index}, Value: ${value}`);
+});
+
+// Splice - modify array content
+let arr = [1, 2, 3, 4];
+arr.splice(1, 2);  // arr becomes [1, 4]
+
+// Reverse array
+[1, 2, 3].reverse();  // [3, 2, 1]
+```
+
+#### Search Operations
+```javascript
+// Find - get first matching element
+const users = [{ name: 'Alice' }, { name: 'Bob' }];
+const user = users.find(user => user.name === 'Alice');
+
+// FindIndex - get index of first matching element
+[1, 2, 3].findIndex(x => x === 2);  // returns 1
+
+// Some and Every - check conditions
+const numbers = [10, 20, 30];
+numbers.some(num => num > 15);   // true
+numbers.every(num => num > 15);  // false
+```
+
+#### Sort Operations
+```javascript
+// Basic sort
+[3, 1, 2].sort();  // [1, 2, 3]
+
+// Custom sort (descending)
+[3, 1, 2].sort((a, b) => b - a);  // [3, 2, 1]
+
+// Detailed sort with equality check
+[3, 1, 2].sort((a, b) => {
+  if (a === b) return 0;
+  return b - a;
+});
+```
+
+### String Utilities
+
+#### Basic Manipulations
+```javascript
+// Trim whitespace
+"  hello  ".trim();       // "hello"
+"  hello  ".trimStart();  // "hello  "
+"  hello  ".trimEnd();    // "  hello"
+
+// Slice
+"hello world".slice(0, 5);  // "hello"
+"hello world".slice(6);     // "world"
+"hello world".slice(-5);    // "world"
+
+// Substring (similar to slice but no negative indices)
+"hello world".substring(0, 5);  // "hello"
+```
+
+#### String Search Operations
+```javascript
+// Includes
+const str = 'hello world';
+str.includes('world');  // true
+
+// StartsWith and EndsWith
+"hello world".startsWith("hello");  // true
+"hello world".endsWith("world");    // true
+```
+
+#### Case Operations
+```javascript
+"Hello".toLowerCase();  // "hello"
+"hello".toUpperCase();  // "HELLO"
+```
+
+#### Split and Join
+```javascript
+// Split string to array
+"hello,world".split(",");   // ['hello', 'world']
+"hello world".split(" ");   // ['hello', 'world']
+"hello".split("");         // ['h','e','l','l','o']
+
+// Join array to string
+['hello', 'world'].join(' ');  // "hello world"
+```
+
+#### Replace Operations
+```javascript
+// Single replacement
+"hello world".replace("world", "there");
+
+// Replace all occurrences
+"hello hello".replaceAll("hello", "hi");
+```
 
