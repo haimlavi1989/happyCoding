@@ -12,7 +12,7 @@ A collection of commonly used JavaScript utility functions for everyday developm
     - [toFixed](#tofixed)
     - [parseInt / parseFloat](#parseint--parsefloat)
   - [Math Methods](#math-methods)
-
+ 
 - [Object Utilities](#object-utilities)
   - [Deep Clone](#deep-clone)
   - [Pick](#pick)
@@ -261,28 +261,6 @@ const randomString = (length = 8) =>
 ```javascript
 const random = (min, max) => 
   Math.floor(Math.random() * (max - min + 1) + min);
-```
-
-### Number Utilities
-
-#### Format Number with Commas
-```javascript
-const formatNumber = num => 
-  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-// Usage example:
-console.log(formatNumber(1234567));  // "1,234,567"
-console.log(formatNumber(1000000));  // "1,000,000"
-```
-
-#### Round to Decimal Places
-```javascript
-const round = (num, decimals = 2) => 
-  Number(Math.round(num + 'e' + decimals) + 'e-' + decimals);
-
-// Usage example:
-console.log(round(3.14159, 3));  // 3.142
-console.log(round(10.9876, 1));  // 11.0
 ```
 
 ### Object Utilities
@@ -872,31 +850,70 @@ str.includes('world');  // true
 
 ### Number Utilities
 
-#### Basic Conversions
+#### Format Number with Commas
 ```javascript
-// ToString conversion
-(123).toString();  // "123"
+const formatNumber = num => 
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-// Fixed decimal places
-(3.1415).toFixed(2);  // "3.14"
-
-// String to number conversion
-parseInt("123");      // 123
-parseFloat("3.14");   // 3.14
+// Usage examples
+console.log(formatNumber(1234));     // "1,234"
+console.log(formatNumber(1000000));  // "1,000,000"
+console.log(formatNumber(123));      // "123"
+console.log(formatNumber(1234567));  // "1,234,567"
 ```
 
-#### Math Operations
+#### Round to Decimal Places
 ```javascript
-// Math utility methods
-Math.floor(3.7);   // 3
-Math.ceil(3.2);    // 4
-Math.round(3.5);   // 4
-Math.abs(-5);      // 5
-Math.max(1, 2, 3); // 3
-Math.min(1, 2, 3); // 1
+const round = (num, decimals = 2) => 
+  Number(Math.round(num + 'e' + decimals) + 'e-' + decimals);
 
-// Simple number check
-const isEven = num => num % 2 === 0;
+// Usage examples
+console.log(round(3.14159));     // 3.14
+console.log(round(3.14159, 3));  // 3.142
+console.log(round(10.9876, 1));  // 11.0
+console.log(round(123.456, 0));  // 123
+```
+
+#### Basic Conversions
+
+##### toString
+```javascript
+// Convert number to string
+const numString = (123).toString();  // "123"
+```
+
+##### toFixed
+```javascript
+// Round to specific decimal places and return as string
+const fixed = (3.1415).toFixed(2);  // "3.14"
+```
+
+##### parseInt / parseFloat
+```javascript
+// Convert string to integer/float
+const intNum = parseInt("123");      // 123
+const floatNum = parseFloat("3.14"); // 3.14
+```
+
+#### Math Methods
+```javascript
+// Common Math utility methods
+Math.floor(3.7);   // 3    - Round down
+Math.ceil(3.2);    // 4    - Round up
+Math.round(3.5);   // 4    - Round to nearest integer
+Math.abs(-5);      // 5    - Absolute value
+Math.max(1, 2, 3); // 3    - Maximum value
+Math.min(1, 2, 3); // 1    - Minimum value
+
+// Usage examples
+const price = 123.456;
+console.log(Math.floor(price));  // 123
+console.log(Math.ceil(price));   // 124
+console.log(Math.abs(-price));   // 123.456
+
+const numbers = [1, 2, 3, 4, 5];
+console.log(Math.max(...numbers));  // 5
+console.log(Math.min(...numbers));  // 1
 ```
 
 ### Date Utilities
