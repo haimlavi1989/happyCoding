@@ -1423,8 +1423,10 @@ class Timer {
 ## 19. Stack Reversal Implementation
 
 ### Question:
- -Task 1: create a function to reverse a stack using two auxiliary stacks.
- -Task 2: Do the same but using one helper Stack and 1 temp
+```
+ Task 1: create a function to reverse a stack using two auxiliary stacks.
+ Task 2: Do the same but using one helper Stack and 1 temp
+```
 ```javascript
 function reverseStack(originalStack)
 ```
