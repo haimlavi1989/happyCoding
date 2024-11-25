@@ -1418,3 +1418,95 @@ class Timer {
 }
 ```
 </details>
+
+## 19. Stack Reversal Implementation
+
+### Question:
+ create a function to reverse a stack using two auxiliary stacks.
+```javascript
+function reverseStack(originalStack)
+```
+Explain the output.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+// Implementation of a basic Stack class
+class Stack {
+    constructor() {
+        this.items = [];
+    }
+    
+    push(element) {
+        this.items.push(element);
+    }
+    
+    pop() {
+        if (this.isEmpty()) return null;
+        return this.items.pop();
+    }
+    
+    peek() {
+        if (this.isEmpty()) return null;
+        return this.items[this.items.length - 1];
+    }
+    
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    
+    size() {
+        return this.items.length;
+    }
+    
+    print() {
+        console.log(this.items.toString());
+    }
+}
+
+function reverseStack(originalStack) {
+    // Create two auxiliary stacks
+    const auxiliaryStack1 = new Stack();
+    const auxiliaryStack2 = new Stack();
+    
+    // Step 1: Transfer all elements from original stack to auxiliary stack 1
+    // This will reverse the order once
+    while (!originalStack.isEmpty()) {
+        auxiliaryStack1.push(originalStack.pop());
+    }
+    
+    // Step 2: Transfer all elements from auxiliary stack 1 to auxiliary stack 2
+    // This will reverse the order again
+    while (!auxiliaryStack1.isEmpty()) {
+        auxiliaryStack2.push(auxiliaryStack1.pop());
+    }
+    
+    // Step 3: Transfer all elements back to original stack
+    // This will reverse the order one final time, giving us the desired reversal
+    while (!auxiliaryStack2.isEmpty()) {
+        originalStack.push(auxiliaryStack2.pop());
+    }
+    
+    return originalStack;
+}
+
+// Example usage:
+const stack = new Stack();
+stack.push(1);
+stack.push(2);
+stack.push(3);
+stack.push(4);
+
+console.log("Original Stack:");
+stack.print(); // Output: 1,2,3,4
+
+reverseStack(stack);
+
+console.log("Reversed Stack:");
+stack.print(); // Output: 4,3,2,1
+```
+</details>
+
+
+create a function to reverse a stack using two auxiliary stacks
