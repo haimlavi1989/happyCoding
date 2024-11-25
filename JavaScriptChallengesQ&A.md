@@ -658,6 +658,8 @@ Design a system that interacts with the Deck of Cards API to:
 1. Create and manage a deck of cards
 2. Draw a specified number of cards
 3. Sort drawn cards by value and suit
+API Integration:
+  - Base URL: 'https://www.deckofcardsapi.com/api/deck'
 
 <details>
 <summary>Solution</summary>
