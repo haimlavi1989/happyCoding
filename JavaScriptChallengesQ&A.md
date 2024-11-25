@@ -1423,14 +1423,15 @@ class Timer {
 ## 19. Stack Reversal Implementation
 
 ### Question:
- create a function to reverse a stack using two auxiliary stacks.
+ Task 1: create a function to reverse a stack using two auxiliary stacks.
+ Task 2: Do the same but using one helper Stack and 1 temp
 ```javascript
 function reverseStack(originalStack)
 ```
 Explain the output.
 
 <details>
-<summary>Solution</summary>
+<summary>Solution task 1</summary>
 
 ```javascript
 // Implementation of a basic Stack class
@@ -1507,5 +1508,81 @@ reverseStack(stack);
 console.log("Reversed Stack:");
 stack.print(); // Output: 4,3,2,1
 ```
+
+<summary>Solution task 2</summary>
+
+```javascript
+class Stack {
+    constructor() {
+        this.items = [];
+    }
+    
+    push(element) {
+        this.items.push(element);
+    }
+    
+    pop() {
+        if (this.isEmpty()) return null;
+        return this.items.pop();
+    }
+    
+    shift() {
+        if (this.isEmpty()) return null;
+        return this.items.shift();
+    }
+    
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    
+    size() {
+        return this.items.length;
+    }
+    
+    print() {
+        console.log(this.items.toString());
+    }
+}
+
+function reverseStack(stack) {
+    const n = stack.size();
+    
+    // For each element in the stack
+    for (let i = 0; i < n; i++) {
+        // Step 1: Remove the top element
+        let temp = stack.pop();
+        
+        // Step 2: Rotate remaining elements to move them up
+        for (let j = 0; j < n - i - 1; j++) {
+            // Remove from front and add to back
+            let frontElement = stack.shift();
+            stack.push(frontElement);
+        }
+        
+        // Step 3: Push the original top element
+        // It will now be at the correct position from bottom
+        stack.push(temp);
+    }
+    
+    return stack;
+}
+
+// Example usage:
+const stack = new Stack();
+stack.push(1);
+stack.push(2);
+stack.push(3);
+stack.push(4);
+stack.push(5);
+
+console.log("Original Stack:");
+stack.print(); // Output: 1,2,3,4,5
+
+reverseStack(stack);
+
+console.log("Reversed Stack:");
+stack.print(); // Output: 5,4,3,2,1
+```
+
 </details>
 
