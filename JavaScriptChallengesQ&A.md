@@ -1431,7 +1431,8 @@ function reverseStack(originalStack)
 Explain the output.
 
 <details>
-<summary>Solution task 1</summary>
+<summary>Solution</summary>
+Solution task 1:
 
 ```javascript
 // Implementation of a basic Stack class
@@ -1509,7 +1510,7 @@ console.log("Reversed Stack:");
 stack.print(); // Output: 4,3,2,1
 ```
 
-<summary>Solution task 2</summary>
+Solution task 2:
 
 ```javascript
 class Stack {
