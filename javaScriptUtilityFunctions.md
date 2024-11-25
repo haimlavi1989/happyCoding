@@ -221,25 +221,6 @@ const chunk = (arr, size) =>
     arr.slice(i * size, (i + 1) * size));
 ```
 
-### String Utilities
-
-#### Capitalize First Letter
-```javascript
-const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
-```
-
-#### Generate Slug
-```javascript
-const slugify = str => str
-  .toLowerCase()
-  .trim()
-  .replace(/[^\w\s-]/g, '')
-  .replace(/\s+/g, '-');
-
-// Usage example:
-console.log(slugify("Product Name 123 @#$")); // "product-name-123"
-```
-
 #### Truncate String
 ```javascript
 const truncate = (str, length, ending = '...') =>
