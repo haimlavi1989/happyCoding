@@ -21,6 +21,7 @@ A comprehensive collection of JavaScript interview questions and solutions with 
 - [16. Lowest Common Ancestor](#16-lowest-common-ancestor)
 - [17. Function Currying](#17-function-currying)
 - [18. Function Types Comparison](#18-function-types-comparison)
+- [19. Stack Reversal Implementation](#19-stack-reversal-implementation)
 
 ## 1. Closures and Timeouts
 
@@ -1508,5 +1509,3 @@ stack.print(); // Output: 4,3,2,1
 ```
 </details>
 
-
-create a function to reverse a stack using two auxiliary stacks
