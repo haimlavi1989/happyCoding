@@ -317,31 +317,6 @@ maxChar("apple 1231111") === "1"
 <details>
 <summary>Solution</summary>
 
-Here are two implementations:
-
-1. Basic Solution:
-```javascript
-function maxChar(str) {
-    const countChars = {};
-    let maxFrequencyLetter = str[0];
-
-    for (let char of str) {
-        if (countChars[char]) {
-            countChars[char]++;
-        } else {
-            countChars[char] = 1;
-        }
-        
-        if (countChars[char] > countChars[maxFrequencyLetter]) {
-            maxFrequencyLetter = char;
-        }
-    }
-    
-    return maxFrequencyLetter;
-}
-```
-
-2. Optimized Solution using Map:
 ```javascript
 function maxChar(str) {
     if (!str) return null;
