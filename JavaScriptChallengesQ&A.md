@@ -200,7 +200,6 @@ Build a Web Application with the following requirements:
 
 It is a full stack 2-hour home test the solution is in my Git.
 
-```
 </details>
 
 ## 6. Character Frequency
