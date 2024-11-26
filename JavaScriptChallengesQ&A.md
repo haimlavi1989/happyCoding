@@ -648,52 +648,27 @@ Output: [1, 1, 2, 2, 3, 3, 4, 4]
 <summary>Solution</summary>
 
 ```javascript
-const sortByFrequency = (arr) => {
-    // Count frequencies
-    const frequencyMap = new Map();
-    arr.forEach(num => {
-        frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);
-    });
-
-    // Create array of unique elements with their frequencies
-    const uniqueElements = [...new Set(arr)];
-
-    // Sort by frequency and original order
-    uniqueElements.sort((a, b) => {
-        const freqDiff = frequencyMap.get(b) - frequencyMap.get(a);
-        if (freqDiff !== 0) return freqDiff;
-        return arr.indexOf(a) - arr.indexOf(b);
-    });
-
-    // Build result array
-    const result = [];
-    uniqueElements.forEach(num => {
-        const frequency = frequencyMap.get(num);
-        result.push(...Array(frequency).fill(num));
-    });
-
-    return result;
+const sorByKind = (digits) => {
+  const result = [];
+  const map = new Map(); // Example: 1: 2, 2: 2, 3: 2, 4: 2
+  
+  // Count occurrences of each digit
+  for (let digit of digits) {
+    map.has(digit) ? map.set(digit, map.get(digit) + 1) : map.set(digit, 1);
+  }
+  
+  // Push the digits into result array based on their count
+  map.forEach((value, key) => {
+    for (let i = 0; i < value; i++) {
+      result.push(key);
+    }
+  });
+  
+  return result;
 };
 
-// More efficient version for large arrays
-const sortByFrequencyOptimized = (arr) => {
-    const freqMap = new Map();
-    const firstOccurrence = new Map();
-    
-    // Track frequency and first occurrence
-    arr.forEach((num, index) => {
-        if (!firstOccurrence.has(num)) {
-            firstOccurrence.set(num, index);
-        }
-        freqMap.set(num, (freqMap.get(num) || 0) + 1);
-    });
-    
-    return arr.sort((a, b) => {
-        const freqDiff = freqMap.get(b) - freqMap.get(a);
-        if (freqDiff !== 0) return freqDiff;
-        return firstOccurrence.get(a) - firstOccurrence.get(b);
-    });
-};
+// Example usage
+console.log(sorByKind([1, 2, 3, 4, 1, 2, 3, 4])); // Output: [1, 1, 2, 2, 3, 3, 4, 4]
 ```
 
 Key features:
