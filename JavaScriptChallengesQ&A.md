@@ -1034,6 +1034,9 @@ Key features:
 
 ### Question:
 Implement a Timer class that can:
+"setTimer" overrides itself if we run it twice
+Your job is to make addTimer an improvement to the "setTimer" and it should 
+another new call should not override the old call.
 ```javascript
 class Timer {
     static timerCache = new Map();
@@ -1056,12 +1059,6 @@ Usage example:
 // Add timers
 Timer.addTimer(1000, () => console.log('Timer 1: 1 second'));
 Timer.addTimer(2000, () => console.log('Timer 2: 2 seconds'));
-
-// Check active timers
-console.log(Timer.getActiveTimers());
-
-// Cancel a timer
-Timer.cancelTimer(2000);
 ```
 
 <details>
