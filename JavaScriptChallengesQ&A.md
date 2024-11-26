@@ -450,7 +450,7 @@ Key features:
 ## 9. LRU Cache
 
 ### Question:
-Design and implement a Least Recently Used (LRU) Cache with O(1) time complexity for all operations.
+Implement a Least Recently Used (LRU) Cache with O(1) time complexity for all operations.
 
 ```javascript
 class Node {
