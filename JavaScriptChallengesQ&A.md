@@ -588,49 +588,18 @@ Requirements:
 
 Here are two approaches:
 
-1. Simple One-Pass Solution:
+<summary>Solution</summary>
 ```javascript
 const sortZerosOnes = (arr) => {
-    const result = [];
-    
-    for (let digit of arr) {
-        digit === 0 ? result.unshift(0) : result.push(1);
-    }
-    
-    return result;
+  const result = [];
+
+  for (let digit of arr) {
+    digit === 1 ? result.push(1) : result.unshift(0);
+  }
+
+  return result; // Output: [0, 0, 0, 1, 1, 1]
 };
 ```
-
-2. Optimized In-Place Solution:
-```javascript
-const sortZerosOnesInPlace = (arr) => {
-    let left = 0;
-    let right = arr.length - 1;
-    
-    while (left < right) {
-        // Move left pointer until we find a 1
-        while (left < right && arr[left] === 0) left++;
-        // Move right pointer until we find a 0
-        while (left < right && arr[right] === 1) right--;
-        
-        // Swap elements if pointers haven't crossed
-        if (left < right) {
-            [arr[left], arr[right]] = [arr[right], arr[left]];
-            left++;
-            right--;
-        }
-    }
-    
-    return arr;
-};
-```
-
-Key features:
-1. O(n) time complexity
-2. No extra space in the in-place version
-3. Stable sorting
-4. Single pass through the array
-5. Handles edge cases (empty array, single element)
 </details>
 
 ## 11. Sort Array by Element Frequency
