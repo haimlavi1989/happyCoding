@@ -658,84 +658,87 @@ API Integration:
 
 ```javascript
 const API_BASE_URL = 'https://www.deckofcardsapi.com/api/deck';
-const DECK_COUNT = 1;
+const DECK_COUNT = 1;  // Number of decks to use
 
-class DeckManager {
-    constructor() {
-        this.deckId = null;
-        this.drawnCards = [];
+// Fetch API wrapper for easier error handling
+const fetchWithErrorHandling = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    return await response.json();
+  } catch (error) {
+    console.error('An error occurred during fetch:', error.message);
+    throw error;
+  }
+};
 
-    // Fetch wrapper with error handling
-    async fetchWithErrorHandling(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('API Error:', error);
-            throw error;
-        }
-    }
+// Create a new deck
+const createDeck = async () => {
+  const apiUrl = `${API_BASE_URL}/new/shuffle/?deck_count=${DECK_COUNT}`;
+  const data = await fetchWithErrorHandling(apiUrl);
+  if (!data.deck_id) {
+    throw new Error('Failed to create a deck. No deck ID returned.');
+  }
+  return data.deck_id;
+};
 
-    // Create new deck
-    async createDeck() {
-        const url = `${API_BASE_URL}/new/shuffle/?deck_count=${DECK_COUNT}`;
-        const data = await this.fetchWithErrorHandling(url);
-        this.deckId = data.deck_id;
-        return this.deckId;
-    }
+// Draw cards from the deck
+const drawCards = async (deckId, count) => {
+  const apiUrl = `${API_BASE_URL}/${deckId}/draw/?count=${count}`;
+  const data = await fetchWithErrorHandling(apiUrl);
+  
+  if (!data.cards || data.cards.length < count) {
+    throw new Error('Failed to draw the expected number of cards.');
+  }
+  return data.cards;
+};
 
-    // Draw cards
-    async drawCards(count) {
-        if (!this.deckId) throw new Error('No deck created');
-        
-        const url = `${API_BASE_URL}/${this.deckId}/draw/?count=${count}`;
-        const data = await this.fetchWithErrorHandling(url);
-        
-        this.drawnCards.push(...data.cards);
-        return data.cards;
-    }
+// Helper function to get the numeric value of a card
+const getCardValue = (card) => {
+  const values = {
+    'ACE': 1, 'JACK': 11, 'QUEEN': 12, 'KING': 13
+  };
+  return values[card.value] || parseInt(card.value, 10); // Parse number cards
+};
 
-    // Sort cards
-    sortCards() {
-        const valueOrder = {
-            'ACE': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
-            '8': 8, '9': 9, '10': 10, 'JACK': 11, 'QUEEN': 12, 'KING': 13
-        };
-        
-        const suitOrder = {
-            'CLUBS': 0, 'DIAMONDS': 1, 'HEARTS': 2, 'SPADES': 3
-        };
+// Helper function to get the numeric value of a suit
+const getSuitValue = (suit) => {
+  const suits = {
+    'CLUBS': 0, 'DIAMONDS': 1, 'HEARTS': 2, 'SPADES': 3
+  };
+  return suits[suit];
+};
 
-        return [...this.drawnCards].sort((a, b) => {
-            // Sort by value first
-            const valueDiff = valueOrder[a.value] - valueOrder[b.value];
-            if (valueDiff !== 0) return valueDiff;
-            
-            // Then by suit
-            return suitOrder[a.suit] - suitOrder[b.suit];
-        });
-    }
-}
+// Sort cards by value and suit
+const sortCards = (cards) => {
+  return cards.sort((a, b) => {
+    const valueDiff = getCardValue(a) - getCardValue(b);
+    if (valueDiff !== 0) return valueDiff;  // Sort by value first
+    return getSuitValue(a.suit) - getSuitValue(b.suit);  // Then by suit
+  });
+};
 
-// Usage example
-async function main() {
-    try {
-        const deck = new DeckManager();
-        await deck.createDeck();
-        
-        const drawnCards = await deck.drawCards(5);
-        console.log('Drawn cards:', drawnCards);
-        
-        const sortedCards = deck.sortCards();
-        console.log('Sorted cards:', sortedCards);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
+// Main function to demonstrate the process
+const main = async () => {
+  try {
+    const deckId = await createDeck();
+    console.log('Created deck with ID:', deckId);
+    
+    const cardsToDraw = 10; // Specify the number of cards to draw
+    const drawnCards = await drawCards(deckId, cardsToDraw);
+    console.log('Drawn cards:', drawnCards);
+    
+    const sortedCards = sortCards(drawnCards);
+    console.log('Sorted cards:', sortedCards);
+  } catch (error) {
+    console.error('An error occurred:', error.message);
+  }
+};
+
+// Run the main function
+main();
 ```
 
 Key features:
