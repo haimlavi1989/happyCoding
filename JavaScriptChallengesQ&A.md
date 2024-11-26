@@ -584,9 +584,6 @@ Requirements:
 - In-place sorting is a plus
 
 <details>
-<summary>Solution</summary>
-
-Here are two approaches:
 
 <summary>Solution</summary>
 ```javascript
