@@ -584,18 +584,15 @@ Requirements:
 - In-place sorting is a plus
 
 <details>
-
 <summary>Solution</summary>
-```javascript
-const sortZerosOnes = (arr) => {
-  const result = [];
-
-  for (let digit of arr) {
-    digit === 1 ? result.push(1) : result.unshift(0);
-  }
-
-  return result; // Output: [0, 0, 0, 1, 1, 1]
-};
+ ```javascript
+  const sortZerosOnes = (arr) => {
+    const result = [];
+    for (let digit of arr) {
+      digit === 1 ? result.push(1) : result.unshift(0);
+    }
+    return result; // Output: [0, 0, 0, 1, 1, 1]
+  };
 ```
 </details>
 
