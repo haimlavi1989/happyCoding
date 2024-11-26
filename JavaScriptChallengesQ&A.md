@@ -614,15 +614,15 @@ Output: [1, 1, 2, 2, 3, 3, 4, 4]
 ```javascript
 const sorByKind = (digits) => {
   const result = [];
-  const map = new Map(); // Example: 1: 2, 2: 2, 3: 2, 4: 2
+  const cache = new Map(); // Example: 1: 2, 2: 2, 3: 2, 4: 2
   
   // Count occurrences of each digit
   for (let digit of digits) {
-    map.has(digit) ? map.set(digit, map.get(digit) + 1) : map.set(digit, 1);
+    cache.has(digit) ? cache.set(digit, cache.get(digit) + 1) : cache.set(digit, 1);
   }
   
   // Push the digits into result array based on their count
-  map.forEach((value, key) => {
+  cache.forEach((value, key) => {
     for (let i = 0; i < value; i++) {
       result.push(key);
     }
