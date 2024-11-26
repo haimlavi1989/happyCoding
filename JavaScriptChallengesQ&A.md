@@ -813,11 +813,13 @@ Key features:
 Implement a function wrapper that caches results with a time-to-live (TTL) mechanism. For example, caching API responses like currency exchange rates for 24 hours.
 
 ```javascript
-const action = () => {
-    return 100.50; // Simulating API call
+const memoize = (fn, TTL) => {
+ 
 }
+const memoizedGetRate = memoize(action, 24 * 60 * 60); // 1 hour cache
 
-const getDailyQuotes = memoize(action, 24 * 60 * 60); // 24 hour TTL
+console.log(memoizedGetRate('USD', 'EUR')); // Calls function
+console.log(memoizedGetRate('USD', 'EUR')); // Uses cache
 ```
 
 <details>
@@ -831,49 +833,15 @@ const memoize = (fn, TTL) => {
         // Create unique key from function and arguments
         const key = JSON.stringify([fn.toString(), ...args]);
         
-        const cached = cache.get(key);
-        
-        // Return cached value if within TTL
-        if (cached && (Date.now() - cached.time < TTL * 1000)) {
-            return cached.value;
+        // Check if key exists in cache and is within TTL
+        if (cache.has(key)) {
+            const cached = cache.get(key);
+            if (Date.now() - cached.time < TTL * 1000) {
+                return cached.value;
+            }
         }
         
         // Calculate new value and cache it
-        const result = fn(...args);
-        cache.set(key, {
-            time: Date.now(),
-            value: result
-        });
-        
-        return result;
-    };
-};
-
-// Enhanced version with automatic cache cleanup
-const memoizeWithCleanup = (fn, TTL) => {
-    const cache = new Map();
-    
-    // Cleanup function
-    const cleanup = () => {
-        const now = Date.now();
-        for (const [key, entry] of cache.entries()) {
-            if (now - entry.time >= TTL * 1000) {
-                cache.delete(key);
-            }
-        }
-    };
-    
-    // Set periodic cleanup
-    setInterval(cleanup, TTL * 1000);
-    
-    return (...args) => {
-        const key = JSON.stringify([fn.toString(), ...args]);
-        const cached = cache.get(key);
-        
-        if (cached && (Date.now() - cached.time < TTL * 1000)) {
-            return cached.value;
-        }
-        
         const result = fn(...args);
         cache.set(key, {
             time: Date.now(),
@@ -888,12 +856,11 @@ const memoizeWithCleanup = (fn, TTL) => {
 Usage example:
 ```javascript
 // Simulated API call
-const getExchangeRate = (from, to) => {
-    console.log('Fetching exchange rate...'); // Shows when actually calling API
+const action = (...args) => {
     return Math.random() * 2; // Simulate random exchange rate
 };
 
-const memoizedGetRate = memoize(getExchangeRate, 3600); // 1 hour cache
+const memoizedGetRate = memoize(action, 24 * 60 * 60); // 1 hour cache
 
 console.log(memoizedGetRate('USD', 'EUR')); // Calls function
 console.log(memoizedGetRate('USD', 'EUR')); // Uses cache
