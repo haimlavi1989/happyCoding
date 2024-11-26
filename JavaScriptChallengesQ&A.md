@@ -715,10 +715,10 @@ const getSuitValue = (suit) => {
 const sortCards = (cards) => {
   return cards.sort((a, b) => {
     const valueDiff = getCardValue(a) - getCardValue(b);
-    if (valueDiff !== 0) {
-      return valueDiff;  // Sort by value first
-    }
-    return getSuitValue(a.suit) - getSuitValue(b.suit);  // Then by suit
+    // Sort by value first, then by suit if values are equal
+    return valueDiff === 0 
+      ? getSuitValue(a.suit) - getSuitValue(b.suit)  // If same value, sort by suit
+      : valueDiff;  // Otherwise sort by value
   });
 };
 
