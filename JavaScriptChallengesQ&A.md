@@ -585,6 +585,7 @@ Requirements:
 
 <details>
 <summary>Solution</summary>
+ 
  ```javascript
   const sortZerosOnes = (arr) => {
     const result = [];
