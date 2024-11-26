@@ -1033,6 +1033,7 @@ Key features:
 ## 15. Timer Implementation
 
 ### Question:
+<details>
 Implement a Timer class that can:
 "setTimer" overrides itself if we run it twice
 Your job is to make addTimer an improvement to the "setTimer" and it should 
@@ -1060,6 +1061,7 @@ Usage example:
 Timer.addTimer(1000, () => console.log('Timer 1: 1 second'));
 Timer.addTimer(2000, () => console.log('Timer 2: 2 seconds'));
 ```
+</details>
 
 <details>
 <summary>Solution</summary>
