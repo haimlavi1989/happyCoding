@@ -66,8 +66,8 @@ for (var i = 0; i < 5; i++) {
 
 ### Question:
 ```javascript
-let a = { key: '123'};
-let b = { key: '123'};
+let a = { key: '3'};
+let b = { key: '3'};
 console.log(a === b);
 ```
 Explain the output.
@@ -211,7 +211,7 @@ Given a string, return the character that is most commonly used in the string.
 Examples:
 ```javascript
 maxChar("abcccccccd") === "c"
-maxChar("apple 1231111") === "1"
+maxChar("apple 31111") === "1"
 ```
 
 <details>
@@ -715,7 +715,9 @@ const getSuitValue = (suit) => {
 const sortCards = (cards) => {
   return cards.sort((a, b) => {
     const valueDiff = getCardValue(a) - getCardValue(b);
-    if (valueDiff !== 0) return valueDiff;  // Sort by value first
+    if (valueDiff !== 0) {
+      return valueDiff;  // Sort by value first
+    }
     return getSuitValue(a.suit) - getSuitValue(b.suit);  // Then by suit
   });
 };
