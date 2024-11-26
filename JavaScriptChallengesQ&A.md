@@ -1033,11 +1033,8 @@ Key features:
 ## 15. Timer Implementation
 
 ### Question:
-<details>
-Implement a Timer class that can:
-"setTimer" overrides itself if we run it twice
-Your job is to make addTimer an improvement to the "setTimer" and it should 
-another new call should not override the old call.
+"setTimer" overrides its older call if we run it consecutively. Your job is to add "addTimer," and it should not override an old call.
+
 ```javascript
 class Timer {
     static timerCache = new Map();
@@ -1061,7 +1058,6 @@ Usage example:
 Timer.addTimer(1000, () => console.log('Timer 1: 1 second'));
 Timer.addTimer(2000, () => console.log('Timer 2: 2 seconds'));
 ```
-</details>
 
 <details>
 <summary>Solution</summary>
