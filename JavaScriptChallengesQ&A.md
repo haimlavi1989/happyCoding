@@ -289,13 +289,10 @@ class RateLimiter {
             time => currentTime - time <= this.timeFrameMilliseconds
         );
         
-        if (recentAttempts.length < this.maxAttempts) {
-            recentAttempts.push(currentTime);
-            this.attempts.set(userId, recentAttempts);
-            return true;
-        }
+        recentAttempts.push(currentTime);
+        this.attempts.set(userId, recentAttempts);
         
-        return false;
+        return recentAttempts.length <= this.maxAttempts;
     }
 }
 ```
