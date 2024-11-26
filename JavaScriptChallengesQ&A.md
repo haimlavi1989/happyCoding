@@ -455,6 +455,28 @@ Key features:
 ### Question:
 Design and implement a Least Recently Used (LRU) Cache with O(1) time complexity for all operations.
 
+```javascript
+class Node {
+}
+
+class LRUCache {
+
+    constructor() {
+    }
+    
+    get(key) {
+    }
+    
+    put(key, value) {
+    }
+    
+    removeNode(node) {
+    }
+    
+    addToFront(node) {
+    }
+}
+```
 Requirements:
 - Fixed size cache
 - O(1) operations
