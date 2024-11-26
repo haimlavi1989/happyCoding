@@ -1034,70 +1034,23 @@ Key features:
 
 ### Question:
 Implement a Timer class that can:
-1. Store active timers
-2. Get current time in milliseconds
-3. Add timers without interrupting existing ones
-4. Handle multiple concurrent timers
-
-<details>
-<summary>Solution</summary>
-
 ```javascript
 class Timer {
     static timerCache = new Map();
-    
+
     static getCurrentTimeMillis() {
         return Date.now();
     }
-    
+
     static setTimer(durationMillis, callback) {
-        return setTimeout(callback, durationMillis);
+        // You can use it - No need to implement
     }
-    
+
     static addTimer(durationMillis, callback) {
-        const currentTime = this.getCurrentTimeMillis();
-        
-        // Check and execute expired timers
-        for (const [duration, timer] of this.timerCache.entries()) {
-            if (currentTime >= timer.startTime + timer.duration) {
-                timer.callback();
-                this.timerCache.delete(duration);
-            }
-        }
-        
-        // Create new timer
-        const timer = {
-            startTime: currentTime,
-            duration: durationMillis,
-            callback: callback,
-            timerId: this.setTimer(durationMillis, () => {
-                callback();
-                this.timerCache.delete(durationMillis);
-            })
-        };
-        
-        this.timerCache.set(durationMillis, timer);
-        return timer;
-    }
-    
-    static cancelTimer(durationMillis) {
-        const timer = this.timerCache.get(durationMillis);
-        if (timer) {
-            clearTimeout(timer.timerId);
-            this.timerCache.delete(durationMillis);
-            return true;
-        }
-        return false;
-    }
-    
-    static getActiveTimers() {
-        const currentTime = this.getCurrentTimeMillis();
-        return Array.from(this.timerCache.values())
-            .filter(timer => currentTime < timer.startTime + timer.duration);
+
     }
 }
 ```
-
 Usage example:
 ```javascript
 // Add timers
@@ -1111,12 +1064,54 @@ console.log(Timer.getActiveTimers());
 Timer.cancelTimer(2000);
 ```
 
-Key features:
-1. Concurrent timer support
-2. Timer cancellation
-3. Active timer tracking
-4. Memory management
-5. Thread-safe implementation
+<details>
+<summary>Solution</summary>
+
+```javascript
+class Timer {
+    static timerCache = new Map();
+
+    static getCurrentTimeMillis() {
+        return Date.now();
+    }
+
+    static setTimer(durationMillis, callback) {
+        // You can use it - No need to implement
+    }
+
+    static addTimer(durationMillis, callback) {
+        const now = this.getCurrentTimeMillis();
+        
+        // Check cached timers
+        for (const [key, timer] of this.timerCache) {
+            if (now >= timer.startTime + timer.duration) {
+                if (this.timerCache.has(key)) {  // Check if not already executed
+                    timer.callback();
+                    this.timerCache.delete(key);
+                }
+            }
+        }
+        
+        // Wrap callback to clean cache after execution
+        const wrappedCallback = () => {
+            if (this.timerCache.has(durationMillis)) {
+                callback();
+                this.timerCache.delete(durationMillis);
+            }
+        };
+        
+        const timer = {
+            startTime: now,
+            duration: durationMillis,
+            callback: wrappedCallback
+        };
+        
+        this.timerCache.set(durationMillis, timer);
+        this.setTimer(durationMillis, wrappedCallback);
+        return timer;
+    }
+}
+```
 </details>
 
 ## 16. Lowest Common Ancestor (LCA)
