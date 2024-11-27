@@ -39,9 +39,9 @@
 ### Question:
 Given a string, return a new string with the reversed order of characters.
 ```javascript
-//reverse('apple') === 'leppa'
-//reverse('hello') === 'olleh'
-//reverse('Greetings!') === '!sgniteerG'
+reverse('apple') === 'leppa'
+reverse('hello') === 'olleh'
+reverse('Greetings!') === '!sgniteerG'
 ```
 
 <details>
@@ -58,8 +58,8 @@ function reverse(str) {
 ### Question:
 Given a string, return true if the string is a palindrome or false if it is not.
 ```javascript
-//palindrome("abba") === true
-//palindrome("abcdefg") === false
+palindrome("abba") === true
+palindrome("abcdefg") === false
 ```
 
 <details>
@@ -84,11 +84,11 @@ function isPalindrome2(str) {
 ### Question:
 Given an integer, return an integer that is the reverse ordering of numbers.
 ```javascript
-//reverseInt(15) === 51;
-//reverseInt(981) === 189;
-//reverseInt(500) === 5;
-//reverseInt(-15) === -51;
-//reverseInt(-90) === -9;
+reverseInt(15) === 51;
+reverseInt(981) === 189;
+reverseInt(500) === 5;
+reverseInt(-15) === -51;
+reverseInt(-90) === -9;
 ```
 
 <details>
@@ -107,8 +107,8 @@ function reverseInt(int) {
 ### Question:
 Given a string, return the character that is most commonly used in the string.
 ```javascript
-//maxChar("abcccccccd") === "c"
-//maxChar("apple 1231111") === "1"
+maxChar("abcccccccd") === "c"
+maxChar("apple 1231111") === "1"
 ```
 
 <details>
@@ -140,8 +140,8 @@ function maxChar(str) {
 ### Question:
 Write a program that console logs the numbers from 1 to n. For multiples of three print 'fizz', for multiples of five print 'buzz', for numbers which are multiples of both three and five print 'fizzbuzz'.
 ```javascript
-//fizzBuzz(5);
-//Output: 1, 2, fizz, 4, buzz
+fizzBuzz(5);
+Output: 1, 2, fizz, 4, buzz
 ```
 
 <details>
@@ -168,8 +168,8 @@ function fizzBuzz(n) {
 ### Question:
 Given an array and chunk size, divide the array into many subarrays where each subarray is of the provided size.
 ```javascript
-//chunk([1, 2, 3, 4], 2) --> [[ 1, 2], [3, 4]]
-//chunk([1, 2, 3, 4, 5], 2) --> [[ 1, 2], [3, 4], [5]]
+chunk([1, 2, 3, 4], 2) --> [[ 1, 2], [3, 4]]
+chunk([1, 2, 3, 4, 5], 2) --> [[ 1, 2], [3, 4], [5]]
 ```
 
 <details>
@@ -198,9 +198,9 @@ function chunk(array, size) {
 ### Question:
 Check if two provided strings are anagrams of each other.
 ```javascript
-//anagrams('rail safety', 'fairy tales') === true
-//anagrams('RAIL! SAFETY!', 'fairy tales') === true
-//anagrams('Hi there', 'Bye there') === false
+anagrams('rail safety', 'fairy tales') === true
+anagrams('RAIL! SAFETY!', 'fairy tales') === true
+anagrams('Hi there', 'Bye there') === false
 ```
 
 <details>
@@ -240,8 +240,8 @@ function anagrams(str1, str2) {
 ### Question:
 Write a function that accepts a string and capitalizes the first letter of each word.
 ```javascript
-//capitalize('a short sentence') --> 'A Short Sentence'
-//capitalize('look, it is working!') --> 'Look, It Is Working!'
+capitalize('a short sentence') --> 'A Short Sentence'
+capitalize('look, it is working!') --> 'Look, It Is Working!'
 ```
 
 <details>
@@ -260,10 +260,10 @@ function capitalize(str) {
 ### Question:
 Write a function that accepts a positive number N and prints a pyramid shape.
 ```javascript
-//pyramid(3);
-//  '  #  '
-//  ' ### '
-//  '#####'
+pyramid(3);
+  '  #  '
+  ' ### '
+  '#####'
 ```
 
 <details>
@@ -285,8 +285,8 @@ function pyramid(n) {
 ### Question:
 Write a function that returns the number of vowels used in a string.
 ```javascript
-//vowels('Hi There!') --> 3
-//vowels('Why do you ask?') --> 4
+vowels('Hi There!') --> 3
+vowels('Why do you ask?') --> 4
 ```
 
 <details>
@@ -310,10 +310,10 @@ function vowels(str) {
 ### Question:
 Write a function that accepts an integer N and returns a NxN spiral matrix.
 ```javascript
-//matrix(3);
-//[[1, 2, 3],
-// [8, 9, 4],
-// [7, 6, 5]]
+matrix(3);
+[[1, 2, 3],
+[8, 9, 4],
+[7, 6, 5]]
 ```
 
 <details>
@@ -361,8 +361,8 @@ function matrix(n) {
 ### Question:
 Print the n-th entry in the fibonacci series.
 ```javascript
-//fib(4) === 3
-//fib(7) === 13
+fib(4) === 3
+fib(7) === 13
 ```
 
 <details>
@@ -393,10 +393,10 @@ const fib3 = (n, memo = new Map()) => {
 ### Question:
 Implement a Queue data structure.
 ```javascript
-//const queue = new Queue();
-//queue.add(1); queue.add(2);
-//queue.remove() --> 1
-//queue.peek() --> 2
+const queue = new Queue();
+queue.add(1); queue.add(2);
+queue.remove() --> 1
+queue.peek() --> 2
 ```
 
 <details>
@@ -427,11 +427,11 @@ class Queue {
 ### Question:
 Combine two queues by alternatively taking elements from each queue.
 ```javascript
-//const q1 = new Queue();
-//q1.add(1); q1.add(2);
-//const q2 = new Queue();
-//q2.add('Hi'); q2.add('There');
-//weave(q1, q2) --> [1, 'Hi', 2, 'There']
+const q1 = new Queue();
+q1.add(1); q1.add(2);
+const q2 = new Queue();
+q2.add('Hi'); q2.add('There');
+weave(q1, q2) --> [1, 'Hi', 2, 'There']
 ```
 
 <details>
@@ -627,9 +627,9 @@ class LinkedList {
 ### Question:
 Return the middle node of a linked list.
 ```javascript
-//const l = new LinkedList();
-//l.insertLast('a'); l.insertLast('b'); l.insertLast('c');
-//midpoint(l); // returns { data: 'b' }
+const l = new LinkedList();
+l.insertLast('a'); l.insertLast('b'); l.insertLast('c');
+midpoint(l); // returns { data: 'b' }
 ```
 
 <details>
@@ -653,7 +653,7 @@ const midpoint = (list) => {
 ### Question:
 Return true if the list is circular, false if it is not.
 ```javascript
-//circular(list) // returns true if list is circular
+circular(list) // returns true if list is circular
 ```
 
 <details>
@@ -680,7 +680,7 @@ const circular = (list) => {
 ### Question:
 Return the element n spaces from the last node in the list.
 ```javascript
-//fromLast(list, 2).data // returns 'b' if list is a -> b -> c -> d
+fromLast(list, 2).data // returns 'b' if list is a -> b -> c -> d
 ```
 
 <details>
@@ -759,12 +759,12 @@ class Tree {
 ### Question:
 Return an array with the width of each tree level.
 ```javascript
-//Given:    0
-//        / | \
-//       1  2  3
-//       |     |
-//       4     5
-//Answer: [1, 3, 2]
+Given:    0
+        / | \
+       1  2  3
+       |     |
+       4     5
+Answer: [1, 3, 2]
 ```
 
 <details>
@@ -952,7 +952,7 @@ class Trie {
 ### Question:
 Determine if string with brackets is valid.
 ```javascript
-//isValid("()[]{}") === true
+isValid("()[]{}") === true
 ```
 
 <details>
@@ -984,8 +984,8 @@ function isValid(s) {
 ### Question:
 Remove minimum number of parentheses to make string valid.
 ```javascript
-//Input: "a)b(c)d"
-//Output: "ab(c)d"
+Input: "a)b(c)d"
+Output: "ab(c)d"
 ```
 
 <details>
@@ -1021,8 +1021,8 @@ function minRemoveToMakeValid(s) {
 ### Question:
 Find kth largest element in unsorted array without sorting.
 ```javascript
-//Input: nums = [3,2,1,5,6,4], k = 2
-//Output: 5
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
 ```
 
 <details>
@@ -1066,8 +1066,8 @@ function findKthLargest(nums, k) {
 ### Question:
 Implement binary search for sorted array.
 ```javascript
-//Input: nums = [-1,0,3,5,9,12], target = 9
-//Output: 4
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
 ```
 
 <details>
@@ -1098,8 +1098,8 @@ function binarySearch(nums, target) {
 ### Question:
 Return binary tree level order traversal.
 ```javascript
-//Input: root = [3,9,20,null,null,15,7]
-//Output: [[3],[9,20],[15,7]]
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]
 ```
 
 <details>
@@ -1136,8 +1136,8 @@ function levelOrder(root) {
 ### Question:
 Reverse a linked list from position m to n.
 ```javascript
-//Input: 1->2->3->4->5, m=2, n=4
-//Output: 1->4->3->2->5
+Input: 1->2->3->4->5, m=2, n=4
+Output: 1->4->3->2->5
 ```
 
 <details>
@@ -1172,8 +1172,8 @@ function reverseBetween(head, m, n) {
 ### Question:
 Flatten a multilevel doubly linked list.
 ```javascript
-//Input: [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
-//Output: [1,2,3,7,8,11,12,9,10,4,5,6]
+Input: [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
+Output: [1,2,3,7,8,11,12,9,10,4,5,6]
 ```
 
 <details>
