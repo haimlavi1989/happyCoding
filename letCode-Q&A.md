@@ -271,6 +271,16 @@ pyramid(3);
 
 ```javascript
 function pyramid(n) {
+    let sidePadding = n - 1;
+    let levelPadding = 1;
+    for (let i=1; i<=n; i++) {
+        console.log(' '.repeat(sidePadding) + '#'.repeat(levelPadding) + ' '.repeat(sidePadding));
+        levelPadding += 2;
+        sidePadding--;
+    }
+}
+// option 2
+function pyramid(n) {
     for (let i = 1; i <= n; i++) {
         const sidePadding = n - i;
         const hashes = 2 * i - 1;
