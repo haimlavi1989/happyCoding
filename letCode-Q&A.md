@@ -192,8 +192,6 @@ function chunk(array, size) {
 ```
 </details>
 
-[Continuing with sections 7-32 following the same pattern...]
-
 ## 7. Anagrams
 ### Question:
 Check if two provided strings are anagrams of each other.
@@ -955,8 +953,6 @@ class Trie {
 }
 ```
 </details>
-
-[Continuing with remaining sections 26-32...]
 
 ## 26. Valid Parentheses
 ### Question:
