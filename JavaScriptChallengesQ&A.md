@@ -1685,7 +1685,7 @@ if (failures > 0) {
     console.log(`  ${count} passing`);
 }
 ```
-<details>
+
 <summary>Solution 2 advanced with Bonus</summary>
 
 ```javascript
