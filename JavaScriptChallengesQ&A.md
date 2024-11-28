@@ -22,6 +22,7 @@ A comprehensive collection of JavaScript interview questions and solutions with 
 - [17. Function Currying](#17-function-currying)
 - [18. Function Types Comparison](#18-function-types-comparison)
 - [19. Stack Reversal Implementation](#19-stack-reversal-implementation)
+- [20. New](#20-New)
 
 ## 1. Closures and Timeouts
 
@@ -1544,4 +1545,19 @@ stack.print(); // Output: 5,4,3,2,1
 ```
 
 </details>
+
+## 20. New
+
+### Question:
+description
+```javascript
+
+```
+title
+<details>
+<summary>Solution</summary>
+
+```javascript
+
+```
 
