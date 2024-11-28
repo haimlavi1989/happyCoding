@@ -1687,7 +1687,7 @@ if (failures > 0) {
 }
 ```
 
-<summary>Solution 2 advanced with Bonus</summary>
+Solution 2 advanced with Bonus
 
 ```javascript
 class TestCase {
