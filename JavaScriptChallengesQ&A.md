@@ -1901,6 +1901,7 @@ global.describe.only = (name, fn) => {
 require(process.argv[2]);
 runner.run().catch(console.error);
 ```
+</details>
 
 ## 21. New Template
 
@@ -1916,4 +1917,4 @@ Question
 ```javascript
 
 ```
-
+</details>
