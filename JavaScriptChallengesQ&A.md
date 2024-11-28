@@ -1554,32 +1554,32 @@ Implement basic test runner support a subset of the "mocha" (https://mochajs.org
 
 ## Core Requirements
 
-# Test Structure and Display
+Test Structure and Display
 - Test suites must be hierarchically organized
 - Each nested level should be visually indented for clarity
 - Test descriptions should clearly indicate their purpose
 
-# Test Results Formatting
+Test Results Formatting
 - Successful tests: Display with checkmark (✓) followed by test description
 - Failed tests: Show with numeric reference (e.g., "1)") linking to detailed error output
 - References should correlate with comprehensive error details shown at the end
 
-# Results Summary
+Results Summary
 The framework must provide:
 - Count of successful test executions
 - Number of failures (when applicable)
 - Complete error details for failed tests, referenced by numbers in the main output
 
-# Enhanced Features
+Enhanced Features
 
-# Test Performance Monitoring
+Test Performance Monitoring
 Implement test execution timing with these considerations:
 - Track individual test duration
 - Measure total test suite execution time
 - Provide command-line option to toggle timing display
 - Include test coverage for timing functionality
 
-# Test Execution Control
+Test Execution Control
 Add safety measures for test execution:
 - Implement automatic test timeout mechanism
 - Handle long-running tests appropriately
