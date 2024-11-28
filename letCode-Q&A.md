@@ -34,7 +34,7 @@
 30. [Level Order Traversal](#30-level-order-traversal)
 31. [Reverse Linked List Range](#31-reverse-linked-list-range)
 32. [Flatten Multilevel List](#32-flatten-multilevel-list)
-33. [Reverse Linked List](#32-Reverse-Linked-List)
+33. [Reverse Linked List](#33-Reverse-Linked-List)
 
 ## 1. String Reversal
 ### Question:
