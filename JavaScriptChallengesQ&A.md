@@ -1591,8 +1591,9 @@ Add safety measures for test execution:
 ```
 
 <details>
-<summary>Solution 1 - simple </summary>
-
+<summary>Solutions</summary>
+Solution 1 - simple 
+ 
 ```javascript
 let count = 0;
 let failures = 0;
