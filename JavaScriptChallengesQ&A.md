@@ -22,7 +22,8 @@ A comprehensive collection of JavaScript interview questions and solutions with 
 - [17. Function Currying](#17-function-currying)
 - [18. Function Types Comparison](#18-function-types-comparison)
 - [19. Stack Reversal Implementation](#19-stack-reversal-implementation)
-- [20. New Template](#20-New-Template)
+- [20. Mocha Test Framework](#20-Mocha-Test-Framework)
+- [21. New Template](#21-New-Template)
 
 ## 1. Closures and Timeouts
 
@@ -1546,10 +1547,270 @@ stack.print(); // Output: 5,4,3,2,1
 
 </details>
 
-## 20. New Template
+## 20. Mocha Test Framework
 
 ### Question:
-description
+Implement basic test runner support a subset of the "mocha" (https://mochajs.org/) API execution and reporting.
+
+## Core Requirements
+
+### Test Structure and Display
+- Test suites must be hierarchically organized
+- Each nested level should be visually indented for clarity
+- Test descriptions should clearly indicate their purpose
+
+### Test Results Formatting
+- Successful tests: Display with checkmark (✓) followed by test description
+- Failed tests: Show with numeric reference (e.g., "1)") linking to detailed error output
+- References should correlate with comprehensive error details shown at the end
+
+### Results Summary
+The framework must provide:
+- Count of successful test executions
+- Number of failures (when applicable)
+- Complete error details for failed tests, referenced by numbers in the main output
+
+## Enhanced Features
+
+### Test Performance Monitoring
+Implement test execution timing with these considerations:
+- Track individual test duration
+- Measure total test suite execution time
+- Provide command-line option to toggle timing display
+- Include test coverage for timing functionality
+
+### Test Execution Control
+Add safety measures for test execution:
+- Implement automatic test timeout mechanism
+- Handle long-running tests appropriately
+- Continue execution with remaining tests after timeout
+- Ensure proper test coverage for timeout scenarios
+
+```javascript
+
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+class TestCase {
+    constructor(description, fn, level, suitePath) {
+        this.description = description;
+        this.fn = fn;
+        this.level = level;
+        this.suitePath = suitePath;
+    }
+}
+
+class TestGroup {
+    constructor(name, parent = null) {
+        this.name = name;
+        this.parent = parent;
+        this.hooks = [];  // beforeEach hooks
+        this.tests = [];
+        this.groups = [];
+        this.exclusive = false;
+    }
+
+    addTest(test) {
+        this.tests.push(test);
+    }
+
+    addGroup(group) {
+        this.groups.push(group);
+    }
+
+    getHooks() {
+        let hooks = [...this.hooks];
+        let current = this.parent;
+        while (current) {
+            hooks = [...current.hooks, ...hooks];
+            current = current.parent;
+        }
+        return hooks;
+    }
+}
+
+class TestRunner {
+    constructor() {
+        this.rootGroup = new TestGroup('');
+        this.currentGroup = this.rootGroup;
+        this.count = 0;
+        this.failures = 0;
+        this.errors = [];
+        this.printedSuites = new Set();
+        this.hasExclusiveTests = false;
+        this.exclusiveTests = new Set();
+        this.startTime = null;
+        this.showTiming = process.argv.includes('--timing');
+    }
+
+    getIndent(level) {
+        return '  '.repeat(level);
+    }
+
+    printSuite(name, level) {
+        if (!this.printedSuites.has(name)) {
+            console.log(`${this.getIndent(level)}${name}`);
+            this.printedSuites.add(name);
+        }
+    }
+
+    describe(name, fn) {
+        const parent = this.currentGroup;
+        const group = new TestGroup(name, parent);
+        parent.addGroup(group);
+        
+        this.currentGroup = group;
+        fn();
+        this.currentGroup = parent;
+        return group;
+    }
+
+    it(description, fn) {
+        const suitePath = [];
+        let current = this.currentGroup;
+        while (current && current.name) {
+            suitePath.unshift(current.name);
+            current = current.parent;
+        }
+        
+        const level = this.currentGroup.name ? suitePath.length + 1 : 1;
+        const test = new TestCase(description, fn, level, suitePath);
+        this.currentGroup.addTest(test);
+        return test;
+    }
+
+    async runTest(test, group) {
+        return new Promise(async (resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+                reject(new Error('Test timeout - exceeded 5000ms'));
+            }, 5000);
+
+            try {
+                const start = process.hrtime();
+                
+                // Run beforeEach hooks
+                const hooks = group.getHooks();
+                for (const hook of hooks) {
+                    await hook();
+                }
+
+                // Run the test
+                await test.fn();
+
+                // Calculate duration if timing is enabled
+                if (this.showTiming) {
+                    const [seconds, nanoseconds] = process.hrtime(start);
+                    const duration = Math.round((seconds * 1000) + (nanoseconds / 1000000));
+                    test.duration = duration;
+                }
+
+                clearTimeout(timeoutId);
+                resolve();
+            } catch (error) {
+                clearTimeout(timeoutId);
+                reject(error);
+            }
+        });
+    }
+
+    shouldRunTest(test, group) {
+        if (!this.hasExclusiveTests) return true;
+        return this.exclusiveTests.has(test) || group.exclusive;
+    }
+
+    async runTests(group = this.rootGroup, level = 1) {
+
+        for (const test of group.tests) {
+            if (!this.shouldRunTest(test, group)) continue;
+
+            test.suitePath.forEach((suite, idx) => {
+                this.printSuite(suite, idx + 1);
+            });
+
+            try {
+                await this.runTest(test, group);
+                const timing = this.showTiming && test.duration ? ` (${test.duration}ms)` : '';
+                console.log(`${this.getIndent(test.level)}✓ ${test.description}${timing}`);
+                this.count++;
+            } catch (err) {
+                this.failures++;
+                this.errors.push({
+                    description: test.description,
+                    error: err,
+                    order: this.failures
+                });
+                console.log(`${this.getIndent(test.level)}${this.failures}) ${test.description}`);
+            }
+        }
+
+        for (const subgroup of group.groups) {
+            await this.runTests(subgroup, level + 1);
+        }
+    }
+
+    printResults() {
+        if (this.showTiming) {
+            const [seconds, nanoseconds] = process.hrtime(this.startTime);
+            const duration = Math.round((seconds * 1000) + (nanoseconds / 1000000));
+            console.log(`\n  Finished in ${duration}ms`);
+        }
+
+        if (this.failures > 0) {
+            console.log('');
+            console.log(`  ${this.count} passing`);
+            console.log(`  ${this.failures} failing`);
+            console.log('');
+            
+            this.errors.forEach((failure, index) => {
+                console.log(`  ${index + 1}) ${failure.description}:`);
+                console.log('');
+                console.log(`      ${failure.error.toString()}`);
+                console.log('');
+            });
+        } else if (this.count > 0) {
+            console.log('');
+            console.log(`  ${this.count} passing`);
+        }
+    }
+
+    async run() {
+        this.startTime = process.hrtime();
+        await this.runTests();
+        this.printResults();
+    }
+}
+
+const runner = new TestRunner();
+
+global.describe = (name, fn) => runner.describe(name, fn);
+global.it = (description, fn) => runner.it(description, fn);
+global.beforeEach = (fn) => runner.currentGroup.hooks.push(fn);
+
+global.it.only = (description, fn) => {
+    runner.hasExclusiveTests = true;
+    const test = runner.it(description, fn);
+    runner.exclusiveTests.add(test);
+    return test;
+};
+
+global.describe.only = (name, fn) => {
+    runner.hasExclusiveTests = true;
+    const group = runner.describe(name, fn);
+    group.exclusive = true;
+    return group;
+};
+
+require(process.argv[2]);
+runner.run().catch(console.error);
+```
+
+## 21. New Template
+
+### Question:
+Question
 ```javascript
 
 ```
