@@ -34,6 +34,7 @@
 30. [Level Order Traversal](#30-level-order-traversal)
 31. [Reverse Linked List Range](#31-reverse-linked-list-range)
 32. [Flatten Multilevel List](#32-flatten-multilevel-list)
+33. [Reverse Linked List](#32-Reverse-Linked-List)
 
 ## 1. String Reversal
 ### Question:
@@ -1213,5 +1214,70 @@ function flatten(head) {
     
     return head;
 }
+```
+</details>
+
+## 33. Reverse Linked List
+### Question:
+1. Reverse the linked list.
+2. Make the above code atomicity - use a simple solution.
+```javascript
+const reverseList = (list) => {
+  // Add your code
+}
+```
+
+<details>
+<summary>Solution</summary>
+Solution 1
+  
+```javascript
+const reverseList = (list) => {
+    let currentNode = list.head;
+    let reversedList = null;
+    while (currentNode) {
+        let next = currentNode.next;
+        currentNode.next = reversedList;
+        reversedList = currentNode;
+        currentNode = next;
+    }
+    return reversedList;
+}
+```
+
+Solution 2
+
+```javascript
+const reverseList = (list) => {
+    if (!list || !list.head) {
+        return null;
+    }
+    // Create a deep copy first
+    const newList = deepCopyList(list);
+    let currentNode = newList.head;
+    let reversedList = null;
+    while (currentNode) {
+        let next = currentNode.next;
+        currentNode.next = reversedList;
+        reversedList = currentNode;
+        currentNode = next;
+    }
+    return reversedList;
+}
+```
+</details>
+
+## 34. Template
+### Question:
+
+```javascript
+
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+
 ```
 </details>
