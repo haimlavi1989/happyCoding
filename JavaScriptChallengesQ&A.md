@@ -1552,6 +1552,20 @@ stack.print(); // Output: 5,4,3,2,1
 ### Question:
 Implement basic test runner support a subset of the "mocha" (https://mochajs.org/) API execution and reporting.
 
+```javascript
+let count = 0;
+
+global.it = function(description, fn) {
+  fn();
+  console.log(`  ✓ ${description}`);
+  count++;
+};
+
+require(process.argv[2]);
+console.log('');
+console.log(`  ${count} passing`);
+```
+
 ## Core Requirements
 
 Test Structure and Display
@@ -1585,10 +1599,6 @@ Add safety measures for test execution:
 - Handle long-running tests appropriately
 - Continue execution with remaining tests after timeout
 - Ensure proper test coverage for timeout scenarios
-
-```javascript
-
-```
 
 <details>
 <summary>Solutions</summary>
