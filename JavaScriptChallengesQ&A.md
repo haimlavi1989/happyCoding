@@ -1570,7 +1570,7 @@ The framework must provide:
 - Number of failures (when applicable)
 - Complete error details for failed tests, referenced by numbers in the main output
 
-Enhanced Features
+Bonus Features
 
 Test Performance Monitoring
 Implement test execution timing with these considerations:
@@ -1591,7 +1591,102 @@ Add safety measures for test execution:
 ```
 
 <details>
-<summary>Solution</summary>
+<summary>Solution 1 - simple </summary>
+
+```javascript
+let count = 0;
+let failures = 0;
+let errors = [];
+let suites = [{ name: '', hooks: [] }];
+let onlyTests = new Set();
+let hasOnlyTests = false;
+let tests = [];
+let printedSuites = new Set();
+
+function getCurrentSuite() {
+    return suites[suites.length - 1];
+}
+
+function getIndent(level) {
+    return '  '.repeat(level);
+}
+
+function printSuite(name, level) {
+    if (!printedSuites.has(name)) {
+        console.log(`${getIndent(level)}${name}`);
+        printedSuites.add(name);
+    }
+}
+
+global.describe = function(name, fn) {
+    const parentSuite = getCurrentSuite();
+    const newSuite = { name, hooks: [], parent: parentSuite };
+    suites.push(newSuite);
+    fn();
+    suites.pop();
+};
+
+global.beforeEach = function(fn) {
+    getCurrentSuite().hooks.push(fn);
+};
+
+global.it = function(description, fn) {
+    const suite = getCurrentSuite();
+    const suitePath = [...suites].map(s => s.name).filter(Boolean);
+    
+    tests.push({
+        description,
+        fn,
+        suitePath,
+        level: suite.name ? suites.length : 1,
+        order: tests.length
+    });
+};
+
+require(process.argv[2]);
+
+// Execute tests
+tests.forEach((test) => {
+    let currentSuite = '';
+    // Print parent suites
+    test.suitePath.forEach((suite, idx) => {
+        printSuite(suite, idx + 1);
+    });
+    
+    try {
+        test.fn();
+        console.log(`${getIndent(test.level)}✓ ${test.description}`);
+        count++;
+    } catch (err) {
+        failures++;
+        errors.push({
+            description: test.description,
+            error: err,
+            order: failures - 1
+        });
+        console.log(`${getIndent(1)}${failures}) ${test.description}`);
+    }
+});
+
+if (failures > 0) {
+    console.log('');
+    console.log(`  ${count} passing`);
+    console.log(`  ${failures} failing`);
+    console.log('');
+    
+    errors.sort((a, b) => a.order - b.order).forEach((failure, index) => {
+        console.log(`  ${index + 1}) ${failure.description}:`);
+        console.log('');
+        console.log(`      AssertionError [ERR_ASSERTION]: ${failure.error.message}`);
+        console.log('');
+    });
+} else if (count > 0) {
+    console.log('');
+    console.log(`  ${count} passing`);
+}
+```
+<details>
+<summary>Solution 2 advanced with Bonus</summary>
 
 ```javascript
 class TestCase {
