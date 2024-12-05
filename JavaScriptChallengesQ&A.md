@@ -772,17 +772,17 @@ console.log(memoizedGetRate('USD', 'EUR')); // Uses cache
 <summary>Solution</summary>
 
 ```javascript
-const memoize = (fn, TTL) => {
+const memoize = (fn, TTLSeconds) => {
     const cache = new Map();
     
     return (...args) => {
         // Create unique key from function and arguments
         const key = JSON.stringify([fn.toString(), ...args]);
         
-        // Check if key exists in cache and is within TTL
+        // Check if key exists in cache and is within TTLSeconds
         if (cache.has(key)) {
             const cached = cache.get(key);
-            if (Date.now() - cached.time < TTL * 1000) {
+            if (Date.now() - cached.time < TTLSeconds * 1000) {
                 return cached.value;
             }
         }
