@@ -830,8 +830,94 @@ Design a system that:
 4. Generates statistical reports
 5. Runs automatically every 24 hours
 
+
 <details>
 <summary>Solution</summary>
+ 
+```javascript
+ ### Stage 1: Basic Solution with Simplicity of Implementation
+
+**File Retrieval:**
+
+- Connect to cloud storage using an appropriate library (e.g., AWS S3, GCP Storage, etc.) and retrieve all files in a specific folder.
+
+**File Classification:**
+
+- A `for` loop will iterate over each file and apply the classification function.
+- The classification function will return a category, and the file will be stored in a data structure (such as a HashMap) according to the returned category.
+
+**Report Generation:**
+
+- Generate a simple report describing the number of files in each category.
+
+**Scheduled Execution Every 24 Hours:**
+
+- Use a cron job to execute the task every 24 hours.
+
+---
+
+### Stage 2: Advanced Solution with Performance and Efficiency Improvements
+
+**Processing:**
+
+- Retrieve groups of files and work on them in parallel.
+- Small files that haven’t been processed can be retrieved immediately.
+- Large unprocessed files can be handled in batches and streams.
+- Optimize traffic and memory usage by processing files in chunks and streams.
+
+**Caching:**
+
+- If files have already been classified, use a caching system (such as Redis) to store the last known category and avoid reclassification unless the file has changed.
+- Files that have been deleted should be removed from the category accordingly.
+
+**Parallel File Processing:**
+
+- Improve performance by using workers to apply the classification function in parallel across multiple files, with each worker handling a different file.
+
+**Accumulated Report Management:**
+
+- Store classification results in a database and run daily update queries, saving processing time by avoiding reprocessing all files each time.
+
+**Handling Large Numbers of Files:**
+
+- Concurrent access to the cloud might cause strain on the storage system. A solution could be to use rate limiting to avoid overload.
+
+**Growing Categories Over Time:**
+
+- A cache-based system should include an eviction mechanism (e.g., LRU) to smartly manage memory usage as the cache grows.
+
+---
+
+### Information Gathering Layer:
+- **File Change Detector:** Detects changes in existing files.
+- **File System Scanner:** Periodically scans for new files.
+- **Change Queue:** Central queue for managing detected changes.
+
+### Task Management Layer:
+- **Task Orchestrator:** Distributes tasks based on file size:
+  - Small files (up to 1MB) -> Fast Track Pool
+  - Medium files (1MB-100MB) -> Regular Pool
+  - Large files (over 100MB) -> Heavy Pool
+
+### Processing Layer:
+- **In-Memory Processing:** For small files, process quickly in memory.
+- **Chunk Processing:** For medium-sized files, process in chunks.
+- **Stream Processing:** For large files, process in a stream.
+
+### Cache Layer:
+- **Redis Cache:** Store the latest classification results.
+- **Eviction Policy:** LRU with a TTL of 7 days.
+- **Store Metadata Only:** To save memory.
+
+### Analytics Layer:
+- **Analytics Engine:** Data analytics engine.
+- **Real-time Dashboard:** Real-time data display.
+- **Daily Reports:** Accumulated daily reports.
+```
+</details>
+
+<details>
+<summary>Code Solution</summary>
 
 ```javascript
 // Core System Components
