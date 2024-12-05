@@ -1473,59 +1473,40 @@ stack.print(); // Output: 4,3,2,1
 Solution task 2:
 
 ```javascript
-class Stack {
-    constructor() {
-        this.items = [];
+function reverseStack(originalStack) {
+    const helperStack = new Stack();
+    
+    // First, get the size dynamically
+    let size = 0;
+    const tempStack = new Stack();
+    while (!originalStack.isEmpty()) {
+        tempStack.push(originalStack.pop());
+        size++;
+    }
+    // Restore original stack
+    while (!tempStack.isEmpty()) {
+        originalStack.push(tempStack.pop());
     }
     
-    push(element) {
-        this.items.push(element);
-    }
-    
-    pop() {
-        if (this.isEmpty()) return null;
-        return this.items.pop();
-    }
-    
-    shift() {
-        if (this.isEmpty()) return null;
-        return this.items.shift();
-    }
-    
-    isEmpty() {
-        return this.items.length === 0;
-    }
-    
-    size() {
-        return this.items.length;
-    }
-    
-    print() {
-        console.log(this.items.toString());
-    }
-}
-
-function reverseStack(stack) {
-    const n = stack.size();
-    
-    // For each element in the stack
-    for (let i = 0; i < n; i++) {
-        // Step 1: Remove the top element
-        let temp = stack.pop();
+    // Now perform the reversal
+    for (let i = 0; i < size; i++) {
+        // Remove top element
+        let temp = originalStack.pop();
         
-        // Step 2: Rotate remaining elements to move them up
-        for (let j = 0; j < n - i - 1; j++) {
-            // Remove from front and add to back
-            let frontElement = stack.shift();
-            stack.push(frontElement);
+        // Move size-i-1 elements to helper stack
+        for (let j = 0; j < size-i-1; j++) {
+            helperStack.push(originalStack.pop());
         }
         
-        // Step 3: Push the original top element
-        // It will now be at the correct position from bottom
-        stack.push(temp);
+        // Put temp element in its final position
+        originalStack.push(temp);
+        
+        // Restore elements from helper stack
+        while (!helperStack.isEmpty()) {
+            originalStack.push(helperStack.pop());
+        }
     }
-    
-    return stack;
+    return originalStack;
 }
 
 // Example usage:
@@ -1533,16 +1514,14 @@ const stack = new Stack();
 stack.push(1);
 stack.push(2);
 stack.push(3);
-stack.push(4);
-stack.push(5);
+stack.push(4);  // Stack is now: [1,2,3,4] (bottom to top)
 
-console.log("Original Stack:");
-stack.print(); // Output: 1,2,3,4,5
-
+console.log("Original stack:", stack.items);  // [1,2,3,4]
 reverseStack(stack);
+console.log("Reversed stack:", stack.items);  // [4,3,2,1]
 
-console.log("Reversed Stack:");
-stack.print(); // Output: 5,4,3,2,1
+// Time Complexity: O(n²)
+// Space Complexity: O(n)
 ```
 
 </details>
