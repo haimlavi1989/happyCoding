@@ -536,15 +536,21 @@ class LRUCache {
     }
 
     removeNode(node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
+      if (!node || !node.prev || !node.next) return;
+      
+      node.prev.next = node.next;
+      node.next.prev = node.prev;
     }
 
     addToFront(node) {
-        node.next = this.head.next;
-        this.head.next.prev = node;
-        this.head.next = node;
-        node.prev = this.head;
+       if (!node || !this.head) return;
+       
+       node.next = this.head.next;
+       if (this.head.next) {  // Check if there's a next node
+           this.head.next.prev = node;
+       }
+       this.head.next = node;
+       node.prev = this.head;
     }
 }
 ```
