@@ -625,9 +625,10 @@ const sorByKind = (digits) => {
   const cache = new Map(); // Example: 1: 2, 2: 2, 3: 2, 4: 2
   
   // Count occurrences of each digit
-  for (let digit of digits) {
-    cache.has(digit) ? cache.set(digit, cache.get(digit) + 1) : cache.set(digit, 1);
-  }
+ for (let digit of digits) {
+   const cached = (cache.get(digit) | 0) + 1;
+   cache.set(digit, cached);
+ }
   
   // Push the digits into result array based on their count
   cache.forEach((value, key) => {
