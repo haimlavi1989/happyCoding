@@ -537,6 +537,7 @@ Implement a Queue data structure.
 const queue = new Queue();
 queue.add(1); queue.add(2);
 queue.remove() --> 1
+queue.isEmpty() --> false
 queue.peek() --> 2
 ```
 
@@ -548,17 +549,21 @@ class Queue {
     constructor() {
         this.data = [];
     }
-    
-    add(item) {
-        this.data.unshift(item);
+
+    add(record) {
+        this.data.unshift(record);
     }
-    
+
     remove() {
         return this.data.pop();
     }
-    
+
     peek() {
         return this.data[this.data.length - 1];
+    }
+
+    isEmpty() {
+        return this.data.length === 0;
     }
 }
 ```
@@ -580,17 +585,25 @@ weave(q1, q2) --> [1, 'Hi', 2, 'There']
 
 ```javascript
 const weave = (queueOne, queueTwo) => {
-    const q = new Queue();
+    if (!queueOne || !queueTwo) {
+        throw new Error('Both queues must be provided');
+    }
+    
+    if (!(queueOne instanceof Queue) || !(queueTwo instanceof Queue)) {
+        throw new Error('Both arguments must be Queue instances');
+    }
 
-    while (queueOne.peek() || queueTwo.peek()) {
-        if (queueOne.peek()) {
-            q.add(queueOne.remove());
+    const resultQueue = new Queue();
+
+    while (!queueOne.isEmpty() || !queueTwo.isEmpty()) {
+        if (!queueOne.isEmpty()) {
+            resultQueue.add(queueOne.remove());
         }
-        if (queueTwo.peek()) {
-            q.add(queueTwo.remove());
+        if (!queueTwo.isEmpty()) {
+            resultQueue.add(queueTwo.remove());
         }
     }
-    return q;
+    return resultQueue;
 }
 ```
 </details>
