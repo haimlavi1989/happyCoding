@@ -190,6 +190,13 @@ function chunk(array, size) {
     }
     return chunkedArray;
 }
+The time complexity is O(n) where n is the length of the input array. Here's why:
+The while loop runs n/size times
+In each iteration, array.slice() takes O(size) time
+Total operations = (n/size) × size = n
+
+While the overall complexity is O(n), there is a potential memory overhead since slice() creates new array copies.
+If memory is a concern use an alternative O(n) solution that uses less memory.
 ```
 </details>
 
@@ -278,7 +285,9 @@ function pyramid(n) {
         sidePadding--;
     }
 }
-// option 2
+Time Complexity: O(n²)
+
+// option 2 - same logic
 function pyramid(n) {
     for (let i = 1; i <= n; i++) {
         const sidePadding = n - i;
@@ -287,6 +296,32 @@ function pyramid(n) {
         console.log(line);
     }
 }
+Time Complexity: O(n²)
+
+// option 3
+function pyramid(n) {
+    // Create a single row template with 2*n-1 spaces
+    const row = new Array(2 * n - 1).fill(' ');
+    
+    for (let i = 0; i < n; i++) {
+        // Calculate the start and end positions for #
+        const start = n - 1 - i;
+        const end = n - 1 + i;
+        
+        // Fill in the # characters
+        for (let j = start; j <= end; j++) {
+            row[j] = '#';
+        }
+        
+        // Print the row
+        console.log(row.join(''));
+    }
+}
+This solution is O(n) because:
+We create the array once at the beginning
+For each row, we're just modifying specific positions
+join() only needs to be done once per row
+We avoid expensive string repetition operations
 ```
 </details>
 
@@ -312,6 +347,22 @@ function vowels(str) {
     }
     return count;
 }
+Time Complexity: O(n²) - Because includes() is O(n) and we're doing it n times in the loop
+
+// option 2
+const vowels = (str) => {
+    return str.toLowerCase().match(/[aeiou]/g)?.length || 0;
+};
+Time Complexity: O(n) - Regex matching scans the string once
+
+// option 3
+const vowels = (str) => {
+    const vowelsLetters = new Set(['a', 'e', 'i', 'o', 'u']);
+    return str.toLowerCase().split('')
+              .filter(char => vowelsLetters.has(char))
+              .length;
+};
+Time Complexity: O(n) - Set.has() is O(1), and we only scan the string once
 ```
 </details>
 
