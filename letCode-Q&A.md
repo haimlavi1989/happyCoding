@@ -286,19 +286,11 @@ function pyramid(n) {
     }
 }
 Time Complexity: O(n²)
+The outer loop runs n times
+For each iteration, repeat() method creates new strings with length proportional to n
+Each concatenation operation is also proportional to n
 
-// option 2 - same logic
-function pyramid(n) {
-    for (let i = 1; i <= n; i++) {
-        const sidePadding = n - i;
-        const hashes = 2 * i - 1;
-        const line = ' '.repeat(sidePadding) + '#'.repeat(hashes) + ' '.repeat(sidePadding);
-        console.log(line);
-    }
-}
-Time Complexity: O(n²)
-
-// option 3
+// option 2
 function pyramid(n) {
     // Create a single row template with 2*n-1 spaces
     const row = new Array(2 * n - 1).fill(' ');
