@@ -71,6 +71,8 @@ function isPalindrome(str) {
     const reverse = str.split('').reverse().join('');
     return str === reverse;
 }
+Time Complexity: O(n) - but performs multiple passes through the data
+Space Complexity: O(n) - creates new arrays/strings in memory
 
 // Alternative solution using every()
 function isPalindrome2(str) {
@@ -78,6 +80,24 @@ function isPalindrome2(str) {
         return char === str[str.length - i - 1];
     });
 }
+Time Complexity: O(n) - performs a single pass through half the string
+Space Complexity: O(n) - due to split creating an array
+
+function isPalindrome(str) {
+    let left = 0;
+    let right = str.length - 1;
+    
+    while (left < right) {
+        if (str[left] !== str[right]) {
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+Time Complexity: O(n)
+Space Complexity: O(1) 
 ```
 </details>
 
@@ -101,6 +121,7 @@ function reverseInt(int) {
     const reversedInt = parseInt(reversedStr);
     return int < 0 ? -reversedInt : reversedInt;
 }
+Time Complexity: O(n)
 ```
 </details>
 
@@ -134,6 +155,7 @@ function maxChar(str) {
     }
     return maxChar;
 }
+Time Complexity: O(n)
 ```
 </details>
 
@@ -239,6 +261,20 @@ function anagrams(str1, str2) {
 
     return true;
 }
+time complexity: O(n + m) where n and m are lengths of str1 and str2
+
+function anagrams(str1, str2) {
+    // Clean and sort both strings
+    const cleanAndSort = str => 
+        str.replace(/[^\w]/g, '')
+           .toLowerCase()
+           .split('')
+           .sort()
+           .join('');
+           
+    return cleanAndSort(str1) === cleanAndSort(str2);
+}
+time complexity: O(n log n) due to sorting, technically worse than O(n)
 ```
 </details>
 
