@@ -1025,31 +1025,48 @@ Given:    0
        1  2  3
        |     |
        4     5
-Answer: [1, 3, 2]
+// Level 0: [0] -> width = 1
+// Level 1: [1, 2, 3] -> width = 3
+// Level 2: [4, 5] -> width = 2
+// Answer: [1, 3, 2]
 ```
 
 <details>
 <summary>Solution</summary>
 
 ```javascript
-function levelWidth(root) {
-    const arr = [root, 'S'];
-    const counters = [0];
+const levelWidth = (root) => {
+    // Handle empty tree
+    if (!root) {
+        return [];
+    }
 
-    while (arr.length > 1) {
-        const node = arr.shift();
+    const result = [];
+    const queue = [root, 'end'];
+    let currentLevelWidth = 0;
 
-        if (node === 'S') {
-            counters.push(0);
-            arr.push('S');
+    while (queue.length > 1) {
+        const node = queue.shift();
+
+        if (node === 'end') {
+            result.push(currentLevelWidth);
+            currentLevelWidth = 0;
+            queue.push('end');
         } else {
-            arr.push(...node.children);
-            counters[counters.length - 1]++;
+            currentLevelWidth++;
+            if (node.children) {
+                queue.push(...node.children);
+            }
         }
     }
 
-    return counters;
-}
+    // Handle last level if it has any nodes
+    if (currentLevelWidth > 0) {
+        result.push(currentLevelWidth);
+    }
+
+    return result;
+};
 ```
 </details>
 
