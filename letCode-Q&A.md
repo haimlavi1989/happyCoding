@@ -905,18 +905,29 @@ circular(list) // returns true if list is circular
 
 ```javascript
 const circular = (list) => {
+    if (!list || !list.head) {
+        return false;
+    }
+
+    // Handle single node case
+    if (!list.head.next) {
+        return false;
+    }
+
     let slow = list.head;
     let fast = list.head;
 
-    while (fast.next && fast.next.next) {
+    while (fast && fast.next) {
         slow = slow.next;
         fast = fast.next.next;
+        
         if (slow === fast) {
             return true;
         }
     }
+
     return false;
-}
+};
 ```
 </details>
 
@@ -932,21 +943,27 @@ fromLast(list, 2).data // returns 'b' if list is a -> b -> c -> d
 
 ```javascript
 const fromLast = (list, n) => {
+    if (!list || !list.head || typeof n !== 'number' || n < 0) {
+        return null;
+    }
+
     let slow = list.head;
     let fast = list.head;
-    
+
     for (let i = 0; i < n; i++) {
-        if (fast) {
-            fast = fast.next;
+        if (!fast) {
+            return null;  // List is shorter than n
         }
+        fast = fast.next;
     }
-    
-    while (fast && fast.next) {
+
+    while (fast.next) {
         slow = slow.next;
         fast = fast.next;
     }
+
     return slow;
-}
+};
 ```
 </details>
 
