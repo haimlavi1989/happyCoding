@@ -473,21 +473,60 @@ fib(7) === 13
 ```javascript
 // Iterative Solution
 const fib = (n) => {
-    if (n < 2) return n;
-    const series = [0, 1];
-    for (let i = 2; i <= n; i++) {
-        series.push(series[i-1] + series[i-2]);
+    // Handle edge cases
+    if (n <= 0) return 0;
+    if (n === 1) return 1;
+    
+    const result = [0, 1];
+    
+    for (let i = 2; i <= n; i++) {  // Changed to <= n
+        result[i] = result[i-2] + result[i-1];
     }
-    return series[n];
-}
+    return result[n];  // Return nth number instead of whole array
+};
+Time Complexity: O(n)
 
-// Memoized Solution
+// Recursive
+const fib = (n) => {
+    if (n <= 0) return 0;
+    if (n <= 2) return 1;
+    return fib(n-1) + fib(n-2);
+};
+Time Complexity: not efficient, O(2^n)
+
+The function performs a single loop from 2 to n
+Each operation inside the loop is O(1)
+Space complexity is also O(n) as we're storing an array of n+1 numbers
+
+// Recursive with Memoized Solution
 const fib3 = (n, memo = new Map()) => {
-    if (n < 2) return n;
+    if (n <= 0) return 0;
+    if (n <= 2) return 1;
+
     if (memo.has(n)) return memo.get(n);
     memo.set(n, fib3(n - 1, memo) + fib3(n - 2, memo));
     return memo.get(n);
 }
+Time Complexity: O(n)
+
+// Most space-efficient
+const fib = (n) => {
+    if (n <= 0) return 0;
+    if (n <= 2) return 1;
+    
+    let prev2 = 0;
+    let prev1 = 1;
+    let current;
+    
+    for (let i = 2; i <= n; i++) {
+        current = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = current;
+    }
+    return current;
+};
+Time Complexity: O(n)
+Space Complexity: O(1)
 ```
 </details>
 
