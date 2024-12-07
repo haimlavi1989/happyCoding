@@ -534,11 +534,17 @@ Space Complexity: O(1)
 ### Question:
 Implement a Queue data structure.
 ```javascript
+// Create a new queue
 const queue = new Queue();
-queue.add(1); queue.add(2);
-queue.remove() --> 1
-queue.isEmpty() --> false
-queue.peek() --> 2
+
+// Add elements
+queue.add(1);      // [1]
+queue.add(2);      // [2, 1]
+queue.add(3);      // [3, 2, 1]
+
+console.log(queue.peek());    // Returns: 1
+console.log(queue.remove());  // Returns: 1
+console.log(queue.isEmpty()); // Returns: false
 ```
 
 <details>
