@@ -355,6 +355,20 @@ const vowels = (str) => {
               .length;
 };
 Time Complexity: O(n) - Set.has() is O(1), and we only scan the string once
+
+// option 4
+function vowels(str) {
+    const vowelMap = new Set(['a', 'e', 'i', 'o', 'u']);
+    let count = 0;
+    
+    for (const char of str.toLowerCase()) {
+        if (vowelMap.has(char)) {
+            count++;
+        }
+    }
+    return count;
+}
+Time Complexity: O(n) - Using Set.has() which is O(1)
 ```
 </details>
 
