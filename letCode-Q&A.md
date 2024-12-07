@@ -868,7 +868,9 @@ class LinkedList {
 Return the middle node of a linked list.
 ```javascript
 const l = new LinkedList();
-l.insertLast('a'); l.insertLast('b'); l.insertLast('c');
+l.insertLast('a');
+l.insertLast('b');
+l.insertLast('c');
 midpoint(l); // returns { data: 'b' }
 ```
 
@@ -877,7 +879,9 @@ midpoint(l); // returns { data: 'b' }
 
 ```javascript
 const midpoint = (list) => {
-    if (!list) return;
+    if (!list || !list.head) {
+        return null;
+    }
     let fast = list.head;
     let slow = list.head;
     while (fast.next && fast.next.next) {
