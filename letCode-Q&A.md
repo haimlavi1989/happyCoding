@@ -1036,7 +1036,6 @@ Given:    0
 
 ```javascript
 const levelWidth = (root) => {
-    // Handle empty tree
     if (!root) {
         return [];
     }
