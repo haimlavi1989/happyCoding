@@ -671,8 +671,66 @@ class Queue {
 
 ## 16. Linked List
 ### Question:
-Implement a Linked List with the following methods: insertFirst, size, getFirst, getLast, clear, removeFirst, removeLast, insertLast, getAt, removeAt, insertAt.
+Implement a Linked List.
 
+```javascript
+class Node {
+    constructor(data, next = null) {
+        this.data = data;
+        this.next = next;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.head = null;
+    }
+
+    insertFirst(data) {
+        // Insert a node at the beginning of the list
+    }
+
+    size() {
+        // Return the number of nodes in the list
+    }
+
+    getFirst() {
+        // Return the first node in the list
+    }
+
+    getLast() {
+        // Return the last node in the list
+    }
+
+    clear() {
+        // Clear the list
+    }
+
+    removeFirst() {
+        // Remove the first node and return it
+    }
+
+    removeLast() {
+        // Remove the last node and return it
+    }
+
+    insertLast(data) {
+        // Insert a node at the end of the list
+    }
+
+    getAt(index) {
+        // Get node at specific index
+    }
+
+    removeAt(index) {
+        // Remove node at specific index
+    }
+
+    insertAt(data, index) {
+        // Insert node at specific index
+    }
+}
+```
 <details>
 <summary>Solution</summary>
 
@@ -691,6 +749,7 @@ class LinkedList {
 
     insertFirst(data) {
         this.head = new Node(data, this.head);
+        return this.head;
     }
 
     size() {
@@ -721,15 +780,18 @@ class LinkedList {
     }
 
     removeFirst() {
-        if (!this.head) return;
+        if (!this.head) return null;
+        const removed = this.head;
         this.head = this.head.next;
+        return removed;
     }
 
     removeLast() {
-        if (!this.head) return;
+        if (!this.head) return null;
         if (!this.head.next) {
+            const removed = this.head;
             this.head = null;
-            return;
+            return removed;
         }
         let previous = this.head;
         let node = this.head.next;
@@ -738,18 +800,24 @@ class LinkedList {
             node = node.next;
         }
         previous.next = null;
+        return node;
     }
 
     insertLast(data) {
+        const newNode = new Node(data);
         const last = this.getLast();
         if (last) {
-            last.next = new Node(data);
+            last.next = newNode;
         } else {
-            this.head = new Node(data);
+            this.head = newNode;
         }
+        return newNode;
     }
 
     getAt(index) {
+        if (typeof index !== 'number' || index < 0) {
+            throw new Error('Index must be a non-negative number');
+        }
         let counter = 0;
         let node = this.head;
         while (node) {
@@ -761,23 +829,35 @@ class LinkedList {
     }
 
     removeAt(index) {
-        if (!this.head) return;
+        if (typeof index !== 'number' || index < 0) {
+            throw new Error('Index must be a non-negative number');
+        }
+        if (!this.head) return null;
         if (index === 0) {
+            const removed = this.head;
             this.head = this.head.next;
-            return;
+            return removed;
         }
         const previous = this.getAt(index - 1);
-        if (!previous || !previous.next) return;
+        if (!previous || !previous.next) return null;
+        const removed = previous.next;
         previous.next = previous.next.next;
+        return removed;
     }
 
     insertAt(data, index) {
+        if (typeof index !== 'number' || index < 0) {
+            throw new Error('Index must be a non-negative number');
+        }
         if (!this.head || index === 0) {
-            this.head = new Node(data, this.head);
-            return;
+            const newNode = new Node(data, this.head);
+            this.head = newNode;
+            return newNode;
         }
         const previous = this.getAt(index - 1) || this.getLast();
-        previous.next = new Node(data, previous.next);
+        const newNode = new Node(data, previous.next);
+        previous.next = newNode;
+        return newNode;
     }
 }
 ```
