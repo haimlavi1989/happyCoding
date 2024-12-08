@@ -1228,6 +1228,48 @@ class LRUCache {
         this.cache.set(key, value);
     }
 }
+// More universal structure but JavaScript specific implemintation.
+// In the universal version we use the Linked List approach to preserve cache order. 
+// Most recent used in the front last use in the back 
+class LRUCache {
+    #cache;
+    #capacity;
+
+    constructor(capacity) {
+        this.#cache = new Map();
+        this.#capacity = capacity;
+    }
+    
+    get(key) {
+        if (!this.#cache.has(key)) return -1;
+        const value = this.#cache.get(key);
+        this.#removeNode(key);
+        this.#addToFront(key, value);
+        return value;
+    }
+    
+    put(key, value) {
+        if (this.#cache.has(key)) {
+            this.#removeNode(key);
+        } else if (this.#cache.size >= this.#capacity) {
+            this.#removeOldest();
+        }
+        this.#addToFront(key, value);
+    }
+
+    #removeNode(key) {
+        this.#cache.delete(key);
+    }
+
+    #addToFront(key, value) {
+        this.#cache.set(key, value);
+    }
+
+    #removeOldest() {
+        const [firstKey] = this.#cache.keys();
+        this.#cache.delete(firstKey);
+    }
+}
 ```
 </details>
 
