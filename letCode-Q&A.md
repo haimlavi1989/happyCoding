@@ -1147,15 +1147,53 @@ Validate a binary search tree.
 <summary>Solution</summary>
 
 ```javascript
-function validate(node, min = null, max = null) {
-    if (!node) return true;
-    
-    if ((min !== null && node.data <= min) || (max !== null && node.data >= max)) {
-        return false;
+const bstValidator = (node, min = null, max = null) => {
+    // Base case: empty nodes are valid
+    if (!node) {
+        return true;
     }
-    
-    return validate(node.left, min, node.data) && validate(node.right, node.data, max);
-}
+
+    // Check boundaries
+    if (min && node.data <= min) return false;
+    if (max && node.data >= max) return false;
+
+    // Check subtrees
+    return bstValidator(node.left, min, node.data) && 
+           bstValidator(node.right, node.data, max);
+};
+
+/*
+Valid BST:
+     10
+    /  \
+   5    15
+  / \   /
+ 3   7 12
+
+Invalid BST:
+     10
+    /  \
+   5    15
+  / \
+ 3   12  // Invalid: 12 > 10
+*/
+
+const validRoot = new Node(10);
+validRoot.left = new Node(5);
+validRoot.right = new Node(15);
+validRoot.left.left = new Node(3);
+validRoot.left.right = new Node(7);
+validRoot.right.left = new Node(12);
+
+console.log(bstValidator(validRoot));  // true
+
+const invalidRoot = new Node(10);
+invalidRoot.left = new Node(5);
+invalidRoot.right = new Node(15);
+invalidRoot.left.left = new Node(3);
+invalidRoot.left.right = new Node(12);  // Violates BST property
+
+console.log(bstValidator(invalidRoot));  // false
 ```
 </details>
 
