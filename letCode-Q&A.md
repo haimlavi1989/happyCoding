@@ -1079,12 +1079,20 @@ Implement a Binary Search Tree with insert and contains methods.
 ```javascript
 class Node {
     constructor(data) {
+        if (data === undefined || data === null) {
+            throw new Error('Data cannot be null or undefined');
+        }
         this.data = data;
         this.left = null;
         this.right = null;
     }
 
     insert(data) {
+        // Validate input
+        if (data === undefined || data === null) {
+            throw new Error('Cannot insert null or undefined');
+        }
+
         if (data < this.data) {
             if (this.left) {
                 this.left.insert(data);
@@ -1098,9 +1106,16 @@ class Node {
                 this.right = new Node(data);
             }
         }
+        // If data === this.data, we're ignoring duplicates
+        // Could throw error or handle differently if desired
     }
 
     contains(data) {
+        // Validate input
+        if (data === undefined || data === null) {
+            return null;
+        }
+
         if (this.data === data) {
             return this;
         }
@@ -1110,10 +1125,17 @@ class Node {
         } else if (data > this.data && this.right) {
             return this.right.contains(data);
         }
-        
+
         return null;
     }
 }
+const root = new Node(10);
+root.insert(5);
+root.insert(15);
+root.insert(3);
+
+console.log(root.contains(5));  // Returns Node with data 5
+console.log(root.contains(7));  // Returns null
 ```
 </details>
 
