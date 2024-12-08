@@ -1462,7 +1462,7 @@ Output: 4
 
 ```javascript
 function binarySearch(nums, target) {
-    if (!nums || !nums.length || typeof target !== 'number') {
+    if (!Array.isArray(nums) || !nums.length || typeof target !== 'number') {
         return -1;
     }
 
