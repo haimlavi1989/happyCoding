@@ -1523,6 +1523,18 @@ function levelOrder(root) {
     
     return result;
 }
+/*
+Tree:      3
+         /   \
+        9     20
+             /  \
+            15   7
+
+Initial:  queue=[3]           result=[]
+Level 1:  queue=[9,20]       result=[[3]]
+Level 2:  queue=[15,7]       result=[[3],[9,20]]
+Level 3:  queue=[]           result=[[3],[9,20],[15,7]]
+*/
 ```
 </details>
 
