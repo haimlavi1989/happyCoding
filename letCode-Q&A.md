@@ -1462,14 +1462,21 @@ Output: 4
 
 ```javascript
 function binarySearch(nums, target) {
+    if (!nums || !nums.length || typeof target !== 'number') {
+        return -1;
+    }
+
     let left = 0;
     let right = nums.length - 1;
     
     while (left <= right) {
-        const mid = Math.floor((left + right) / 2);
+        const mid = Math.floor((right - left) / 2);
+        
         if (nums[mid] === target) {
             return mid;
-        } else if (nums[mid] < target) {
+        } 
+        
+        if (nums[mid] < target) {
             left = mid + 1;
         } else {
             right = mid - 1;
