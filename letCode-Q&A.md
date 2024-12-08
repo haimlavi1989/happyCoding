@@ -1337,6 +1337,10 @@ isValid("()[]{}") === true
 
 ```javascript
 function isValid(s) {
+    if (!s || typeof s !== 'string') {
+        return false;
+    }
+
     const stack = [];
     const pairs = {
         '(': ')',
@@ -1345,14 +1349,20 @@ function isValid(s) {
     };
     
     for (let char of s) {
-        if (pairs[char]) {
+        if (pairs[char]) { 
             stack.push(char);
-        } else {
-            if (pairs[stack.pop()] !== char) return false;
+        } else { 
+            if (!Object.values(pairs).includes(char)) {
+                return false;  // Invalid character
+            }
+            
+            if (stack.length === 0 || pairs[stack.pop()] !== char) {
+                return false;
+            }
         }
     }
     
-    return stack.length === 0;
+    return stack.length === 0;  
 }
 ```
 </details>
