@@ -15,6 +15,19 @@ A comprehensive collection of JavaScript algorithm pattern questions and solutio
 - [11. Greedy Techniques](#11-greedy-techniques)
 - [12. Backtracking](#12-backtracking)
 - [13. Dynamic Programming](#13-dynamic-programming)
+- [14. Cyclic Sort](#14-cyclic-sort)
+- [15. Topological Sort](#15-topological-sort)
+- [16. Matrices](#16-matrices)
+- [17. Stacks](#17-stacks)
+- [18. Graphs](#18-graphs)
+- [19. Tree Depth-First Search](#19-tree-depth-first-search)
+- [20. Tree Breadth-First Search](#20-tree-breadth-first-search)
+- [21. Trie](#21-trie)
+- [22. Hash Maps](#22-hash-maps)
+- [23. Knowing What to Track](#23-knowing-what-to-track)
+- [24. Union Find](#24-union-find)
+- [25. Custom Data Structures](#25-custom-data-structures)
+- [26. Bitwise Manipulation](#26-bitwise-manipulation)
 
 ## 1. Two Pointers Pattern
 ### Question:
@@ -625,4 +638,880 @@ Key points:
 - Space Complexity: O(n)
 - Two approaches: classic DP and binary search
 - Handles empty array and arrays with duplicates
+</details>
+
+## 14. Cyclic Sort
+### Question:
+Given an array containing n numbers where each number is between 1 and n, find the missing number.
+Example:
+```javascript
+findMissingNumber([3, 1, 4, 5, 2, 7, 8, 6, 10]) === 9
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function findMissingNumber(nums) {
+    let i = 0;
+    
+    // Place each number in its correct position
+    while (i < nums.length) {
+        const correctPos = nums[i] - 1;
+        if (correctPos < nums.length && nums[i] !== nums[correctPos]) {
+            [nums[i], nums[correctPos]] = [nums[correctPos], nums[i]];
+        } else {
+            i++;
+        }
+    }
+    
+    // Find the missing number
+    for (i = 0; i < nums.length; i++) {
+        if (nums[i] !== i + 1) {
+            return i + 1;
+        }
+    }
+    
+    return nums.length + 1;
+}
+```
+
+Key points:
+- Time Complexity: O(n)
+- Space Complexity: O(1)
+- In-place sorting technique
+- Handles numbers from 1 to n
+</details>
+
+## 15. Topological Sort
+### Question:
+Given a list of tasks and their dependencies, find a valid order to complete all tasks.
+Example:
+```javascript
+const tasks = 4;
+const prerequisites = [[1,0],[2,1],[3,2]];
+findOrder(tasks, prerequisites) === [0,1,2,3]
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function findOrder(numTasks, prerequisites) {
+    // Build adjacency list
+    const graph = Array.from({ length: numTasks }, () => []);
+    const inDegree = new Array(numTasks).fill(0);
+    
+    for (const [task, prereq] of prerequisites) {
+        graph[prereq].push(task);
+        inDegree[task]++;
+    }
+    
+    // Find all sources (tasks with no prerequisites)
+    const queue = [];
+    for (let i = 0; i < numTasks; i++) {
+        if (inDegree[i] === 0) queue.push(i);
+    }
+    
+    const result = [];
+    
+    while (queue.length) {
+        const task = queue.shift();
+        result.push(task);
+        
+        for (const nextTask of graph[task]) {
+            inDegree[nextTask]--;
+            if (inDegree[nextTask] === 0) {
+                queue.push(nextTask);
+            }
+        }
+    }
+    
+    return result.length === numTasks ? result : [];
+}
+```
+
+Key points:
+- Time Complexity: O(V + E)
+- Space Complexity: O(V + E)
+- Uses Kahn's algorithm
+- Detects cycles in dependencies
+</details>
+
+## 16. Matrices
+### Question:
+Rotate a matrix (2D array) 90 degrees clockwise in-place.
+Example:
+```javascript
+const matrix = [
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+];
+rotateMatrix(matrix);
+// matrix is now:
+// [7,4,1],
+// [8,5,2],
+// [9,6,3]
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function rotateMatrix(matrix) {
+    const n = matrix.length;
+    
+    // Transpose matrix
+    for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+        }
+    }
+    
+    // Reverse each row
+    for (let i = 0; i < n; i++) {
+        matrix[i].reverse();
+    }
+    
+    return matrix;
+}
+
+// Alternative solution with layers
+function rotateMatrixLayers(matrix) {
+    const n = matrix.length;
+    
+    for (let layer = 0; layer < Math.floor(n/2); layer++) {
+        const first = layer;
+        const last = n - 1 - layer;
+        
+        for (let i = first; i < last; i++) {
+            const offset = i - first;
+            
+            // Save top
+            const top = matrix[first][i];
+            
+            // Move left to top
+            matrix[first][i] = matrix[last-offset][first];
+            
+            // Move bottom to left
+            matrix[last-offset][first] = matrix[last][last-offset];
+            
+            // Move right to bottom
+            matrix[last][last-offset] = matrix[i][last];
+            
+            // Move top to right
+            matrix[i][last] = top;
+        }
+    }
+    
+    return matrix;
+}
+```
+
+Key points:
+- Time Complexity: O(n²)
+- Space Complexity: O(1)
+- Two approaches: transpose/reverse and layer-by-layer
+- Handles square matrices of any size
+</details>
+
+## 17. Stacks
+### Question:
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+Example:
+```javascript
+const minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // returns -3
+minStack.pop();
+minStack.top();    // returns 0
+minStack.getMin(); // returns -2
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+class MinStack {
+    constructor() {
+        this.stack = [];
+        this.minStack = [];
+    }
+    
+    push(val) {
+        this.stack.push(val);
+        
+        if (!this.minStack.length || val <= this.minStack[this.minStack.length - 1]) {
+            this.minStack.push(val);
+        }
+    }
+    
+    pop() {
+        if (!this.stack.length) return null;
+        
+        const val = this.stack.pop();
+        if (val === this.minStack[this.minStack.length - 1]) {
+            this.minStack.pop();
+        }
+        return val;
+    }
+    
+    top() {
+        return this.stack[this.stack.length - 1];
+    }
+    
+    getMin() {
+        return this.minStack[this.minStack.length - 1];
+    }
+}
+```
+
+Key points:
+- Time Complexity: O(1) for all operations
+- Space Complexity: O(n)
+- Uses auxiliary stack to track minimums
+- Handles duplicate values correctly
+</details>
+
+## 18. Graphs
+### Question:
+Implement a function to detect if there is a cycle in a directed graph.
+Example:
+```javascript
+const graph = {
+    vertices: 4,
+    edges: [[0,1], [1,2], [2,3], [3,1]]
+};
+hasCycle(graph) === true
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function hasCycle(graph) {
+    const visited = new Set();
+    const recursionStack = new Set();
+    const adjList = buildAdjList(graph);
+    
+    function dfs(vertex) {
+        if (recursionStack.has(vertex)) return true;
+        if (visited.has(vertex)) return false;
+        
+        visited.add(vertex);
+        recursionStack.add(vertex);
+        
+        for (const neighbor of adjList[vertex]) {
+            if (dfs(neighbor)) return true;
+        }
+        
+        recursionStack.delete(vertex);
+        return false;
+    }
+    
+    for (let i = 0; i < graph.vertices; i++) {
+        if (!visited.has(i) && dfs(i)) return true;
+    }
+    
+    return false;
+}
+
+function buildAdjList(graph) {
+    const adjList = Array.from({ length: graph.vertices }, () => []);
+    for (const [from, to] of graph.edges) {
+        adjList[from].push(to);
+    }
+    return adjList;
+}
+```
+
+Key points:
+- Time Complexity: O(V + E)
+- Space Complexity: O(V)
+- Uses DFS with recursion stack## 19. Tree Depth-First Search
+### Question:
+Given a binary tree and a target sum, find if there exists a path from root to leaf where the sum of node values equals the target.
+Example:
+```javascript
+const tree = {
+    val: 5,
+    left: { val: 4, left: { val: 11, left: { val: 7 }, right: { val: 2 } } },
+    right: { val: 8, right: { val: 4, right: { val: 1 } } }
+};
+hasPathSum(tree, 22) === true  // Path: 5->4->11->2
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function hasPathSum(root, targetSum) {
+    if (!root) return false;
+    
+    // If leaf node, check if we've reached target
+    if (!root.left && !root.right) {
+        return targetSum === root.val;
+    }
+    
+    // Recursively check left and right subtrees
+    return hasPathSum(root.left, targetSum - root.val) ||
+           hasPathSum(root.right, targetSum - root.val);
+}
+
+// Iterative solution using stack
+function hasPathSumIterative(root, targetSum) {
+    if (!root) return false;
+    
+    const stack = [[root, targetSum]];
+    
+    while (stack.length) {
+        const [node, currentSum] = stack.pop();
+        
+        if (!node.left && !node.right && currentSum === node.val) {
+            return true;
+        }
+        
+        if (node.right) {
+            stack.push([node.right, currentSum - node.val]);
+        }
+        if (node.left) {
+            stack.push([node.left, currentSum - node.val]);
+        }
+    }
+    
+    return false;
+}
+```
+
+Key points:
+- Time Complexity: O(n)
+- Space Complexity: O(h) where h is height of tree
+- Both recursive and iterative approaches
+- Handles edge cases (empty tree, single node)
+</details>
+
+## 20. Tree Breadth-First Search
+### Question:
+Return the level order traversal of a binary tree nodes' values (i.e., from left to right, level by level).
+Example:
+```javascript
+const tree = {
+    val: 3,
+    left: { val: 9 },
+    right: { val: 20, left: { val: 15 }, right: { val: 7 } }
+};
+levelOrder(tree) === [[3], [9, 20], [15, 7]]
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function levelOrder(root) {
+    if (!root) return [];
+    
+    const result = [];
+    const queue = [root];
+    
+    while (queue.length) {
+        const levelSize = queue.length;
+        const currentLevel = [];
+        
+        for (let i = 0; i < levelSize; i++) {
+            const node = queue.shift();
+            currentLevel.push(node.val);
+            
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
+        }
+        
+        result.push(currentLevel);
+    }
+    
+    return result;
+}
+
+// Alternative using recursive approach
+function levelOrderRecursive(root) {
+    const result = [];
+    
+    function traverse(node, level) {
+        if (!node) return;
+        
+        if (result.length === level) {
+            result.push([]);
+        }
+        
+        result[level].push(node.val);
+        
+        traverse(node.left, level + 1);
+        traverse(node.right, level + 1);
+    }
+    
+    traverse(root, 0);
+    return result;
+}
+```
+
+Key points:
+- Time Complexity: O(n)
+- Space Complexity: O(w) where w is max width of tree
+- Queue-based approach for iterative solution
+- Maintains level ordering
+</details>
+
+## 21. Trie
+### Question:
+Implement a trie (prefix tree) with insert, search, and startsWith methods.
+Example:
+```javascript
+const trie = new Trie();
+trie.insert("apple");
+trie.search("apple");   // returns true
+trie.search("app");     // returns false
+trie.startsWith("app"); // returns true
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+class TrieNode {
+    constructor() {
+        this.children = new Map();
+        this.isEndOfWord = false;
+    }
+}
+
+class Trie {
+    constructor() {
+        this.root = new TrieNode();
+    }
+    
+    insert(word) {
+        let node = this.root;
+        for (const char of word) {
+            if (!node.children.has(char)) {
+                node.children.set(char, new TrieNode());
+            }
+            node = node.children.get(char);
+        }
+        node.isEndOfWord = true;
+    }
+    
+    search(word) {
+        const node = this.traverse(word);
+        return node !== null && node.isEndOfWord;
+    }
+    
+    startsWith(prefix) {
+        return this.traverse(prefix) !== null;
+    }
+    
+    traverse(str) {
+        let node = this.root;
+        for (const char of str) {
+            if (!node.children.has(char)) {
+                return null;
+            }
+            node = node.children.get(char);
+        }
+        return node;
+    }
+}
+```
+
+Key points:
+- Time Complexity: O(m) for all operations, where m is word length
+- Space Complexity: O(ALPHABET_SIZE * m * n) for n words
+- Efficient prefix searching
+- Memory-efficient for common prefixes
+</details>
+
+## 22. Hash Maps
+### Question:
+Find all pairs of numbers in an array that sum to a target value.
+Example:
+```javascript
+findPairs([1, 5, 3, 7, 9, 2, 6], 8) === [[1,7], [2,6], [3,5]]
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function findPairs(nums, target) {
+    const pairs = [];
+    const seen = new Map();
+    
+    for (const num of nums) {
+        const complement = target - num;
+        
+        if (seen.has(complement)) {
+            pairs.push([complement, num]);
+            seen.delete(complement); // Avoid duplicates
+        } else {
+            seen.set(num, complement);
+        }
+    }
+    
+    return pairs.sort((a, b) => a[0] - b[0]);
+}
+
+// Alternative with Set for unique values
+function findPairsWithSet(nums, target) {
+    const pairs = new Set();
+    const seen = new Set();
+    
+    for (const num of nums) {
+        const complement = target - num;
+        
+        if (seen.has(complement)) {
+            pairs.add(JSON.stringify([Math.min(num, complement), 
+                                    Math.max(num, complement)]));
+        }
+        seen.add(num);
+    }
+    
+    return Array.from(pairs).map(JSON.parse).sort((a, b) => a[0] - b[0]);
+}
+```
+
+Key points:
+- Time Complexity: O(n)
+- Space Complexity: O(n)
+- Handles duplicates
+- Returns sorted results
+</details>
+
+## 23. Knowing What to Track
+### Question:
+Find the longest substring without repeating characters.
+Example:
+```javascript
+lengthOfLongestSubstring("abcabcbb") === 3 // "abc"
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function lengthOfLongestSubstring(s) {
+    const lastSeen = new Map();
+    let start = 0;
+    let maxLength = 0;
+    
+    for (let end = 0; end < s.length; end++) {
+        const char = s[end];
+        
+        if (lastSeen.has(char)) {
+            // Move start pointer to position after last occurrence
+            start = Math.max(start, lastSeen.get(char) + 1);
+        }
+        
+        lastSeen.set(char, end);
+        maxLength = Math.max(maxLength, end - start + 1);
+    }
+    
+    return maxLength;
+}
+
+// Alternative using Set
+function lengthOfLongestSubstringSet(s) {
+    const seen = new Set();
+    let start = 0;
+    let maxLength = 0;
+    
+    for (let end = 0; end < s.length; end++) {
+        while (seen.has(s[end])) {
+            seen.delete(s[start]);
+            start++;
+        }
+        seen.add(s[end]);
+        maxLength = Math.max(maxLength, end - start + 1);
+    }
+    
+    return maxLength;
+}
+```
+
+Key points:
+- Time Complexity: O(n)
+- Space Complexity: O(min(m,n)) where m is alphabet size
+- Uses sliding window with tracking
+- Two approaches: Map and Set
+</details>
+
+## 24. Union Find
+### Question:
+Given a set of points where each point is represented by a pair of coordinates (x, y), find the number of isolated islands. An island is formed by connecting adjacent points that share either the same x or y coordinate.
+Example:
+```javascript
+const points = [[1,1], [2,2], [2,3], [3,3], [4,1]];
+countIslands(points) === 2
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+class UnionFind {
+    constructor(size) {
+        this.parent = Array.from({ length: size }, (_, i) => i);
+        this.rank = new Array(size).fill(0);
+        this.count = size;
+    }
+    
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]); // Path compression
+        }
+        return this.parent[x];
+    }
+    
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX !== rootY) {
+            if (this.rank[rootX] < this.rank[rootY]) {
+                this.parent[rootX] = rootY;
+            } else if (this.rank[rootX] > this.rank[rootY]) {
+                this.parent[rootY] = rootX;
+            } else {
+                this.parent[rootY] = rootX;
+                this.rank[rootX]++;
+            }
+            this.count--;
+        }
+    }
+    
+    getCount() {
+        return this.count;
+    }
+}
+
+function countIslands(points) {
+    const n = points.length;
+    const uf = new UnionFind(n);
+    
+    // Create maps for x and y coordinates
+    const xMap = new Map();
+    const yMap = new Map();
+    
+    for (let i = 0; i < n; i++) {
+        const [x, y] = points[i];
+        
+        // Connect points with same x coordinate
+        if (xMap.has(x)) {
+            uf.union(i, xMap.get(x));
+        }
+        xMap.set(x, i);
+        
+        // Connect points with same y coordinate
+        if (yMap.has(y)) {
+            uf.union(i, yMap.get(y));
+        }
+        yMap.set(y, i);
+    }
+    
+    return uf.getCount();
+}
+```
+
+Key points:
+- Time Complexity: O(N × α(N)) where α is inverse Ackermann function
+- Space Complexity: O(N)
+- Uses path compression and union by rank
+- Handles disconnected components efficiently
+</details>
+
+## 25. Custom Data Structures
+### Question:
+Implement a LRU (Least Recently Used) Cache.
+Example:
+```javascript
+const cache = new LRUCache(2);
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);      // returns 1
+cache.put(3, 3);   // evicts key 2
+cache.get(2);      // returns -1 (not found)
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+class Node {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class LRUCache {
+    constructor(capacity) {
+        this.capacity = capacity;
+        this.cache = new Map();
+        
+        // Initialize dummy head and tail
+        this.head = new Node(0, 0);
+        this.tail = new Node(0, 0);
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+    
+    get(key) {
+        const node = this.cache.get(key);
+        if (!node) return -1;
+        
+        // Move to front
+        this.removeNode(node);
+        this.addToFront(node);
+        
+        return node.value;
+    }
+    
+    put(key, value) {
+        let node = this.cache.get(key);
+        
+        if (node) {
+            // Update existing node
+            node.value = value;
+            this.removeNode(node);
+            this.addToFront(node);
+        } else {
+            // Add new node
+            node = new Node(key, value);
+            this.cache.set(key, node);
+            this.addToFront(node);
+            
+            // Remove LRU if over capacity
+            if (this.cache.size > this.capacity) {
+                const lru = this.tail.prev;
+                this.removeNode(lru);
+                this.cache.delete(lru.key);
+            }
+        }
+    }
+    
+    removeNode(node) {
+        const prev = node.prev;
+        const next = node.next;
+        prev.next = next;
+        next.prev = prev;
+    }
+    
+    addToFront(node) {
+        node.prev = this.head;
+        node.next = this.head.next;
+        this.head.next.prev = node;
+        this.head.next = node;
+    }
+}
+```
+
+Key points:
+- Time Complexity: O(1) for both get and put
+- Space Complexity: O(capacity)
+- Uses doubly-linked list with hash map
+- Maintains insertion order
+</details>
+
+## 26. Bitwise Manipulation
+### Question:
+Find the number that appears once in an array where all other numbers appear exactly three times.
+Example:
+```javascript
+singleNumber([2,2,3,2]) === 3
+singleNumber([0,1,0,1,0,1,99]) === 99
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+function singleNumber(nums) {
+    let ones = 0;
+    let twos = 0;
+    
+    for (const num of nums) {
+        ones = (ones ^ num) & ~twos;
+        twos = (twos ^ num) & ~ones;
+    }
+    
+    return ones;
+}
+
+// Alternative solution using counting bits
+function singleNumberBits(nums) {
+    const bits = new Array(32).fill(0);
+    
+    // Count bits at each position
+    for (const num of nums) {
+        for (let i = 0; i < 32; i++) {
+            bits[i] += (num >> i) & 1;
+        }
+    }
+    
+    // Reconstruct the single number
+    let result = 0;
+    for (let i = 0; i < 32; i++) {
+        if (bits[i] % 3 !== 0) {
+            result |= (1 << i);
+        }
+    }
+    
+    return result;
+}
+
+// More examples with common bit manipulation techniques
+function commonBitOperations(n) {
+    // Check if power of 2
+    const isPowerOfTwo = n > 0 && (n & (n - 1)) === 0;
+    
+    // Get rightmost 1-bit
+    const rightmostOne = n & -n;
+    
+    // Clear rightmost 1-bit
+    const clearRightmostOne = n & (n - 1);
+    
+    // Count number of 1 bits
+    let count = 0;
+    let num = n;
+    while (num) {
+        num &= (num - 1);
+        count++;
+    }
+    
+    // Get/Set/Clear bit at position i
+    const getBit = (n, i) => (n >> i) & 1;
+    const setBit = (n, i) => n | (1 << i);
+    const clearBit = (n, i) => n & ~(1 << i);
+    
+    return {
+        isPowerOfTwo,
+        rightmostOne,
+        clearRightmostOne,
+        numberOfOneBits: count,
+        getBit: getBit(n, 3),  // Get bit at position 3
+        setBit: setBit(n, 2),  // Set bit at position 2
+        clearBit: clearBit(n, 1) // Clear bit at position 1
+    };
+}
+```
+
+Key points:
+- Time Complexity: O(n) for single number solutions
+- Space Complexity: O(1) for basic solution, O(32) for bit counting solution
+- Uses XOR and bit counting techniques
+- Common bit manipulation operations included
+- Handles both positive and negative numbers
+- Efficient for memory-constrained environments
 </details>
