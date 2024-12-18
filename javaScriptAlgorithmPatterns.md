@@ -67,19 +67,19 @@ Key points:
 - Handles edge cases (no solution, empty array)
 </details>
 
-# More Coding Problems
+## More "Two Pointers" Pattern Coding Problems
 
-- [Valid Palindrome]
-- [3Sum]
-- [Remove Nth Node from End of List]
-- [Sort Colors]
-- [Reverse Words in a String]
-- [Valid Word Abbreviation]
-- [Strobogrammatic Number]
-- [Minimum Number of Moves to Make Palindrome]
-- [Next Palindrome Using Same Digits]
-- [Lowest Common Ancestor of a Binary Tree III]
-- [Valid Palindrome II]
+- Valid Palindrome
+- 3Sum
+- Remove Nth Node from End of List
+- Sort Colors
+- Reverse Words in a String
+- Valid Word Abbreviation
+- Strobogrammatic Number
+- Minimum Number of Moves to Make Palindrome
+- Next Palindrome Using Same Digits
+- Lowest Common Ancestor of a Binary Tree III
+- Valid Palindrome II
 
 ## 2. Fast and Slow Pointers
 ### Question:
@@ -116,6 +116,17 @@ Key points:
 - Floyd's Tortoise and Hare algorithm
 - Handles edge cases (empty list, single node)
 </details>
+
+## More "Fast and Slow Pointers" Pattern Coding Problems
+
+- Happy Number
+- Linked List Cycle
+- Middle of the Linked List
+- Circular Array Loop
+- Find the Duplicate Number
+- Palindrome Linked List
+- Maximum Twin Sum of a Linked List
+- Split a Circular Linked List
 
 ## 3. Sliding Window
 ### Question:
@@ -154,6 +165,19 @@ Key points:
 - Efficient sliding technique
 - Handles arrays shorter than k
 </details>
+
+## More "Sliding Window" Pattern Coding Problems
+
+- Repeated DNA Sequences
+- Sliding Window Maximum
+- Minimum Window Subsequence
+- Longest Repeating Character Replacement
+- Minimum Window Substring
+- Longest Substring without Repeating Characters
+- Minimum Size Subarray Sum
+- Maximum Average Subarray I
+- Diet Plan Performance
+- Best Time to Buy and Sell Stock
 
 ## 4. Merge Intervals
 ### Question:
@@ -194,6 +218,15 @@ Key points:
 - Handles overlapping and non-overlapping cases
 </details>
 
+## More "Intervals" Pattern Coding Problems
+
+- Merge Intervals
+- Insert Interval
+- Interval List Intersections
+- Employee Free Time
+- Task Scheduler
+- Meeting Rooms II
+
 ## 5. In-Place Linked List Manipulation
 ### Question:
 Reverse a linked list in-place.
@@ -226,6 +259,19 @@ Key points:
 - In-place reversal technique
 - Handles empty list and single node
 </details>
+
+## More "Linked List" Pattern Coding Problems
+
+- Reverse Linked List
+- Reverse Nodes in k-Group
+- Reverse Linked List II
+- Reorder List
+- Swapping Nodes in a Linked List
+- Reverse Nodes in Even Length Groups
+- Remove Duplicates from Sorted List
+- Remove Linked List Elements
+- Split Linked List in Parts
+- Swap Nodes in Pairs
 
 ## 6. Two Heaps
 ### Question:
@@ -287,6 +333,16 @@ Key points:
 - Handles both even and odd number of elements
 </details>
 
+## More "Heaps" Pattern Coding Problems
+
+- IPO
+- Find Median from Data Stream
+- Sliding Window Median
+- Schedule Tasks on Minimum Machines
+- Meeting Rooms III
+- Largest Number After Digit Swaps by Parity
+- Find Right Interval
+
 ## 7. K-way Merge
 ### Question:
 Merge k sorted linked lists into one sorted linked list.
@@ -342,6 +398,14 @@ Key points:
 - Divide and conquer approach
 - Handles empty lists and single list cases
 </details>
+
+## More "K-way Merge" Pattern Coding Problems
+
+- Merge Sorted Array
+- Kth Smallest Number in M Sorted Lists
+- Find K Pairs with Smallest Sums
+- Merge K Sorted Lists
+- Kth Smallest Element in a Sorted Matrix
 
 ## 8. Top K Elements
 ### Question:
@@ -403,6 +467,17 @@ Key points:
 - Handles duplicates and edge cases
 </details>
 
+## More "Top K Elements" Pattern Coding Problems
+
+- Kth Largest Element in a Stream
+- Reorganize String
+- K Closest Points to Origin
+- Top K Frequent Elements
+- Kth Largest Element in an Array
+- Third Maximum Number
+- Find Subsequence of Length K with the Largest Sum
+- Minimum Cost to Hire K Workers
+
 ## 9. Modified Binary Search
 ### Question:
 Find an element in a rotated sorted array.
@@ -455,6 +530,18 @@ Key points:
 - Works with duplicate elements
 </details>
 
+## More "Modified Binary Search" Pattern Coding Problems
+
+- Binary Search
+- Search in Rotated Sorted Array
+- First Bad Version
+- Random Pick with Weight
+- Find K Closest Elements
+- Single Element in a Sorted Array
+- Maximum Value at a Given Index in a Bounded Array
+- The K Weakest Rows in a Matrix
+- Search in Rotated Sorted Array II
+
 ## 10. Subsets
 ### Question:
 Generate all possible subsets of a set of distinct integers.
@@ -506,6 +593,14 @@ Key points:
 - Handles empty set and single element sets
 </details>
 
+## More "Subsets" Pattern Coding Problems
+
+- Subsets
+- Permutations
+- Letter Combinations of a Phone Number
+- Generate Parentheses
+- Find K-Sum Subsets
+
 ## 11. Greedy Techniques
 ### Question:
 Given an array of intervals of meetings, find the minimum number of meeting rooms required.
@@ -549,6 +644,19 @@ Key points:
 - Handles overlapping intervals efficiently
 </details>
 
+## More "Greedy" Pattern Coding Problems
+
+- Jump Game
+- Boats to Save People
+- Gas Station
+- Two City Scheduling
+- Minimum Number of Refueling Stops
+- Largest Palindromic Number
+- Assign Cookies
+- Rearranging Fruits
+- Number of Steps to Reduce a Binary Number to One
+- Jump Game II
+
 ## 12. Backtracking
 ### Question:
 Generate all valid combinations of n pairs of parentheses.
@@ -589,6 +697,20 @@ Key points:
 - Uses backtracking with validity checks
 - Generates only valid combinations
 </details>
+
+## More "Backtracking/DFS" Pattern Coding Problems
+
+- N-Queens
+- Word Search
+- House Robber III
+- Restore IP Addresses
+- Flood Fill
+- Minimum Moves to Spread Stones Over Grid
+- Binary Tree Paths
+- Binary Watch
+- Optimal Account Balancing
+- Sudoku Solver
+- Matchsticks to Square
 
 ## 13. Dynamic Programming
 ### Question:
@@ -654,6 +776,26 @@ Key points:
 - Handles empty array and arrays with duplicates
 </details>
 
+## More "Dynamic Programming" Pattern Coding Problems
+
+- Introduction to Dynamic Programming
+- 0/1 Knapsack
+- Coin Change
+- N-th Tribonacci Number
+- Partition Equal Subset Sum
+- Counting Bits
+- 01 Matrix
+- House Robber II
+- Maximum Product Subarray
+- Combination Sum
+- Word Break
+- Palindromic Substrings
+- Longest Common Subsequence
+- Word Break II
+- Decode Ways
+- Count the Number of Good Subsequences
+- Climbing Stairs
+
 ## 14. Cyclic Sort
 ### Question:
 Given an array containing n numbers where each number is between 1 and n, find the missing number.
@@ -696,6 +838,13 @@ Key points:
 - In-place sorting technique
 - Handles numbers from 1 to n
 </details>
+
+## More "Cyclic Sort" Pattern Coding Problems
+- Introduction to Cyclic Sort
+- Missing Number
+- First Missing Positive
+- Find the Corrupt Pair
+- Find the First K Missing Positive Numbers
 
 ## 15. Topological Sort
 ### Question:
