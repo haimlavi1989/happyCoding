@@ -1833,8 +1833,7 @@ Key points:
 - Longest Subarray With Maximum Bitwise AND
 - Reverse Bits
 
-## Collection of common coding interview problems of various difficulty levels
-decide which pattern to apply when solving the problem
+## Collection of common coding interview problems of various difficulty levels - decide which pattern to apply when solving the problem
 - Shortest Bridge
 - Number of Connected Components in an Undirected Graph
 - Median of Two Sorted Arrays
