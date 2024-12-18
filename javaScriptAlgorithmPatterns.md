@@ -67,29 +67,19 @@ Key points:
 - Handles edge cases (no solution, empty array)
 </details>
 
-More:
-Valid Palindrome
-Solution: Valid Palindrome
-3Sum
-Solution: 3Sum
-Remove Nth Node from End of List
-Solution: Remove Nth Node from End of List
-Sort Colors
-Solution: Sort Colors
-Reverse Words in a String
-Solution: Reverse Words in a String
-Valid Word Abbreviation
-Solution: Valid Word Abbreviation
-Strobogrammatic Number
-Solution: Strobogrammatic Number
-Minimum Number of Moves to Make Palindrome
-Solution: Minimum Number of Moves to Make Palindrome
-Next Palindrome Using Same Digits
-Solution: Next Palindrome Using Same Digits
-Lowest Common Ancestor of a Binary Tree III
-Solution: Lowest Common Ancestor of a Binary Tree III
-Valid Palindrome II
+# More Coding Problems
 
+- [Valid Palindrome]
+- [3Sum]
+- [Remove Nth Node from End of List]
+- [Sort Colors]
+- [Reverse Words in a String]
+- [Valid Word Abbreviation]
+- [Strobogrammatic Number]
+- [Minimum Number of Moves to Make Palindrome]
+- [Next Palindrome Using Same Digits]
+- [Lowest Common Ancestor of a Binary Tree III]
+- [Valid Palindrome II]
 
 ## 2. Fast and Slow Pointers
 ### Question:
