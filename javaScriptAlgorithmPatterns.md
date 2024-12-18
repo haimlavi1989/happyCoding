@@ -1126,7 +1126,20 @@ function buildAdjList(graph) {
 Key points:
 - Time Complexity: O(V + E)
 - Space Complexity: O(V)
-- Uses DFS with recursion stack## 19. Tree Depth-First Search
+- Uses DFS with recursion stack
+</details>
+
+## More "Graph" Pattern Coding Problems
+- Network Delay Time
+- Paths in Maze That Lead to Same Room
+- Clone Graph
+- Graph Valid Tree
+- Bus Routes
+- Reconstruct Itinerary
+- Find the Town Judge
+- Find Center of Star Graph
+
+## 19. Tree Depth-First Search
 ### Question:
 Given a binary tree and a target sum, find if there exists a path from root to leaf where the sum of node values equals the target.
 Example:
