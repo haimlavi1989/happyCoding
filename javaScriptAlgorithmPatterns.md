@@ -1832,3 +1832,46 @@ Key points:
 - Count Triplets That Can Form Two Arrays of Equal XOR
 - Longest Subarray With Maximum Bitwise AND
 - Reverse Bits
+
+## Collection of common coding interview problems of various difficulty levels
+decide which pattern to apply when solving the problem
+- Shortest Bridge
+- Number of Connected Components in an Undirected Graph
+- Median of Two Sorted Arrays
+- Pacific Atlantic Water Flow
+- Contains Duplicate
+- Maximum Subarray
+- Two Sum
+- Find Minimum in Rotated Sorted Array
+- Non-overlapping Intervals
+- Meeting Rooms
+- Largest Rectangle in Histogram
+- Subtree of Another Tree
+- Sort List
+- Number of 1 Bits
+- Container with Most Water
+- Evaluate Reverse Polish Notation
+- 4Sum
+- Loud and Rich
+- Product of Array Except Self
+- Longest Increasing Subsequence
+- Sum of Two Integers
+- Majority Element
+- Unique Paths
+- Longest Palindromic Substring
+- Permutations II
+- Number of Provinces
+- Linked List Cycle II
+- Minimum Flips to Make the Binary String Alternate
+- Lemonade Change
+- House Robber
+- Find All Numbers Disappeared in an Array
+- Find All Duplicates in an Array
+- Same Tree
+- Design In-Memory File System
+- Design File System
+- Asteroid Collision
+- Rotting Oranges
+- Add Binary
+- Multiply Strings
+  
