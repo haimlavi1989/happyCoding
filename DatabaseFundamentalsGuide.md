@@ -19,7 +19,7 @@ The decision between SQL and NoSQL depends on the specific needs of the project:
   - Limited scalability compared to NoSQL for distributed systems.
   - Schema rigidity makes it less flexible for evolving data models.
   - Can be slower for large-scale write operations due to ACID compliance.
-  - Indexing improves performance but adds storage overhead.
+  - Indexing improves performance but adds storage overhead and slows down write operations.
 
 ### **NoSQL**
 - **Best for**: Systems with flexible data structures and high scalability requirements (e.g., social media, IoT).
