@@ -106,12 +106,12 @@ The decision between SQL and NoSQL depends on the specific needs of the project:
 
 ### **SQL**
 - **Best for**: Systems requiring high consistency, fixed data structures, and complex transactions (e.g., financial systems).
-- **Advantages**:
+- **📈Advantages**:
   - High consistency and structured data.
   - Supports complex queries, such as joins.
   - Adheres to ACID properties (Atomicity, Consistency, Isolation, Durability).
   - Reliable for critical operations like financial transactions.
-- **Disadvantages**:
+- **⚠️Challenges:**:
   - Limited scalability compared to NoSQL for distributed systems.
   - Schema rigidity makes it less flexible for evolving data models.
   - Can be slower for large-scale write operations due to ACID compliance.
@@ -125,7 +125,7 @@ The decision between SQL and NoSQL depends on the specific needs of the project:
   - Optimized for distributed architectures.
   - Extremely useful for rapid development, as it doesn’t require extensive preparation ahead of time. Frequent updates to the data structure can be made without significant downtime.
   - Well-suited for cloud computing, enabling easy horizontal scaling across multiple servers.
-- **Disadvantages**:
+- **⚠️Challenges:**:
   - Lacks the robustness of ACID transactions in many implementations.
   - Complex queries can be more challenging and less performant.
   - Potential for eventual consistency issues, where users may see outdated data.
