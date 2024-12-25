@@ -6,6 +6,100 @@ while NoSQL databases are non-relational and flexible. Choosing between them dep
 such as scalability, data structure, and transaction requirements.
 
 ---
+## 𝗨𝗻𝗱𝗲𝗿𝘀𝘁𝗮𝗻𝗱𝗶𝗻𝗴 𝘁𝗵𝗲 𝗕𝗮𝘀𝗶𝗰𝘀
+
+Transactions in SQL:
+A **transaction** is a series of operations treated as a single atomic unit. 
+If any operation fails, the entire transaction is rolled back to maintain consistency.
+Think of a bank account: Take $100 from Account A and add it to Account B in 
+a single transaction so either both actions happen or none at all.
+
+### **Mechanisms Ensuring Transaction Integrity**
+1. **Locks**: Control resource access so only one transaction can modify a resource at a time.
+2. **Multiversion Concurrency Control (MVCC)**: Manages simultaneous transactions by maintaining multiple data versions.
+
+### **ACID Properties**
+1. **Atomicity**: Transactions are indivisible; all operations succeed or fail as a unit.
+2. **Consistency**: The database moves from one valid state to another.
+3. **Isolation**: Transactions do not interfere with each other.
+4. **Durability**: Once completed, changes persist even after a system failure.
+
+### **Challenges**
+- **SQL**: May encounter bottlenecks due to lock contention, especially under high loads.
+- **NoSQL**: Prioritizes scalability over immediate consistency, which may lead to users seeing outdated data.
+
+Example Scenario:
+
+Alice has $100
+Bob has $50
+Alice wants to send $70 to Bob
+
+A consistent system will ensure:
+
+Alice's new balance will be $30 ($100 - $70)
+Bob's new balance will be $120 ($50 + $70)
+The total money in the system stays the same ($150 before and after)
+
+Inconsistency Example:
+If the system isn't consistent, you might get problematic situations like:
+
+Alice has $30 but Bob still has $50 (money disappeared)
+Alice has $100 and Bob has $120 (money created out of nowhere)
+Alice has -$20 (breaks the "no negative balance" rule)
+
+Scenario: Transfer $70 from Alice ($100) to Bob ($50)
+How Consistency Prevents Issues:
+
+Start Transaction
+
+System "locks" both accounts temporarily
+No one else can modify these accounts during the transfer
+
+Check Rules
+Verify Alice has $100 (sufficient funds)
+Check if $100 - $70 = $30 (won't go negative)
+These rules must pass before proceeding
+
+Make Changes Atomically (all or nothing)
+Step 1: Deduct $70 from Alice ($100 → $30)
+Step 2: Add $70 to Bob ($50 → $120)
+Either BOTH steps succeed, or NEITHER happens
+
+End Transaction
+If both steps succeed: Commit changes
+If any step fails: Rollback (undo) all changes
+Release the locks on accounts
+
+---
+
+Structured data
+Think of a bank account - it always has specific 
+fields: account number, balance, owner details, etc. 
+Every account record follows the exact same format, like a strict template.
+
+Strict schema
+Like a standardized form at a hospital - 
+every patient record MUST have name, date of birth, blood type, etc. 
+You can't skip these fields or add random new ones.
+
+Relational data
+Picture an e-commerce system: Orders are connected to Customers who made them,
+and Products that were ordered.
+It's like a family tree where everything is connected.
+
+Need for complex joins
+Imagine generating a sales report that needs to combine:
+Customer details (from customers table)
+Their orders (from orders table)
+Products they bought (from products table)
+Shipping status (from shipping table)
+All this information needs to be pulled together accurately.
+
+Fast index lookups
+Like a phone book - if you know someone's name,
+you can find their number quickly because it's organized alphabetically.
+
+---
 
 ## Choosing Between SQL and NoSQL
 The decision between SQL and NoSQL depends on the specific needs of the project:
@@ -60,50 +154,7 @@ When choosing between SQL and NoSQL, consider:
   - Real-time data aggregation platforms for social media, where flexibility and speed take precedence over immediate consistency.
   - Applications requiring rapid development with frequent updates to the data structure.
   - Logs and analytics where high write speeds are prioritized over strict consistency.
-
----
-
-## Transactions in SQL
-
-A **transaction** is a series of operations treated as a single atomic unit. If any operation fails, the entire transaction is rolled back to maintain consistency.
-
-### **Mechanisms Ensuring Transaction Integrity**
-1. **Locks**: Control resource access so only one transaction can modify a resource at a time.
-2. **Multiversion Concurrency Control (MVCC)**: Manages simultaneous transactions by maintaining multiple data versions.
-
-### **ACID Properties**
-1. **Atomicity**: Transactions are indivisible; all operations succeed or fail as a unit.
-2. **Consistency**: The database moves from one valid state to another.
-3. **Isolation**: Transactions do not interfere with each other.
-4. **Durability**: Once completed, changes persist even after a system failure.
-
-### **Challenges**
-- **SQL**: May encounter bottlenecks due to lock contention, especially under high loads.
-- **NoSQL**: Prioritizes scalability over immediate consistency, which may lead to users seeing outdated data.
-
----
-
-## CAP Theorem (Consistency, Availability, Partition Tolerance)
-
-The CAP theorem states that in a distributed system, you can only guarantee **two out of three** properties:
-
-1. **Consistency (C)**: Every read receives the most recent write or an error.
-2. **Availability (A)**: Every request receives a response, even if it’s not the most recent data.
-3. **Partition Tolerance (P)**: The system continues to operate despite network partitions.
-
-### **Trade-offs**
-- To achieve **Consistency and Partition Tolerance (CP)**, you sacrifice **Availability** (e.g., relational databases like PostgreSQL during network issues).
-- For **Availability and Partition Tolerance (AP)**, you sacrifice **Consistency** (e.g., NoSQL systems like Cassandra or DynamoDB, which may show stale data).
-- **Consistency and Availability (CA)** is only possible in systems without network partitions, which is unrealistic in distributed environments.
-
-### **CAP Theorem Examples**
-- **CP Example**: A financial database that prioritizes accurate transactions over uptime.
-- **AP Example**: A social media platform ensuring users can post and interact, even if some data is temporarily outdated.
-- **CA Example**: Limited to single-node systems or local environments.
-
-### **Interview-Ready Summary**
-"In a distributed system, you always sacrifice one property. For example, in a network partition, choosing Availability ensures the system remains responsive but sacrifices data consistency, while prioritizing Consistency ensures accurate data at the cost of downtime. This is why understanding the specific use case is key when designing distributed systems."
-
+    
 ---
 
 ## CRUD Best Practices
@@ -184,3 +235,28 @@ for post in posts:
 - Choose **NoSQL** for flexibility, scalability, and big data needs.
 - Always structure data to match application query/update patterns.
 - Use ORM/ODM tools but be mindful of performance pitfalls.
+
+---
+
+## CAP Theorem (Consistency, Availability, Partition Tolerance)
+
+The CAP theorem states that in a distributed system, you can only guarantee **two out of three** properties:
+
+1. **Consistency (C)**: Every read receives the most recent write or an error.
+2. **Availability (A)**: Every request receives a response, even if it’s not the most recent data.
+3. **Partition Tolerance (P)**: The system continues to operate despite network partitions.
+
+### **Trade-offs**
+- To achieve **Consistency and Partition Tolerance (CP)**, you sacrifice **Availability** (e.g., relational databases like PostgreSQL during network issues).
+- For **Availability and Partition Tolerance (AP)**, you sacrifice **Consistency** (e.g., NoSQL systems like Cassandra or DynamoDB, which may show stale data).
+- **Consistency and Availability (CA)** is only possible in systems without network partitions, which is unrealistic in distributed environments.
+
+### **CAP Theorem Examples**
+- **CP Example**: A financial database that prioritizes accurate transactions over uptime.
+- **AP Example**: A social media platform ensuring users can post and interact, even if some data is temporarily outdated.
+- **CA Example**: Limited to single-node systems or local environments.
+
+### **Interview-Ready Summary**
+"In a distributed system, you always sacrifice one property. For example, in a network partition, choosing Availability ensures the system remains responsive but sacrifices data consistency, while prioritizing Consistency ensures accurate data at the cost of downtime. This is why understanding the specific use case is key when designing distributed systems."
+
+---
