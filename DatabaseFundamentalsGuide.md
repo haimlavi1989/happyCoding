@@ -1,7 +1,9 @@
 # Comprehensive Database Fundamentals Guide
 
 ## Introduction
-In the world of databases, there are two main types: SQL and NoSQL. SQL databases are relational and structured, while NoSQL databases are non-relational and flexible. Choosing between them depends on your project’s needs, such as scalability, data structure, and transaction requirements.
+In the world of databases, there are two main types: SQL and NoSQL. SQL databases are relational and structured,
+while NoSQL databases are non-relational and flexible. Choosing between them depends on your project’s needs,
+such as scalability, data structure, and transaction requirements.
 
 ---
 
