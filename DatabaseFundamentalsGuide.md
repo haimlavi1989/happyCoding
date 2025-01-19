@@ -116,6 +116,7 @@ A consistent system ensures:
 pagination 
 
 MongoDB
+```javascript
 const page = parseInt(req.query.page) || 1; // מספר דף, ברירת מחדל 1
 const limit = parseInt(req.query.limit) || 10; // מספר פריטים לדף, ברירת מחדל 10
 
@@ -126,13 +127,35 @@ const results = await MyCollection.find()
   .limit(limit);
 
 res.json(results);
+```
+
 
 SQL (PostgreSQL) 
 // skip = OFFSET
+
+```sql
 SELECT *
 FROM my_table
 ORDER BY id ASC
 LIMIT 10 OFFSET 20;
+```
+
+```javascript
+app.get('/items', async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const results = await Items.find().skip(skip).limit(limit);
+  const total = await Items.countDocuments();
+
+  res.json({
+    data: results,
+    total,
+    page: parseInt(page),
+    totalPages: Math.ceil(total / limit),
+  });
+});
+```
 
 ---
 ## CAP Theorem: Balancing Priorities
