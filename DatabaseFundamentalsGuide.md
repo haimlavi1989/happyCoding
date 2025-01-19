@@ -117,8 +117,8 @@ pagination
 
 MongoDB
 ```javascript
-const page = parseInt(req.query.page) || 1; // מספר דף, ברירת מחדל 1
-const limit = parseInt(req.query.limit) || 10; // מספר פריטים לדף, ברירת מחדל 10
+const page = parseInt(req.query.page) || 1; //  page number
+const limit = parseInt(req.query.limit) || 10; // items per page
 
 const skip = (page - 1) * limit;
 
