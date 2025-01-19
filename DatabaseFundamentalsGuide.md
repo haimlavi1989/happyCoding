@@ -113,6 +113,28 @@ A consistent system ensures:
 
 ---
 
+pagination 
+
+MongoDB
+const page = parseInt(req.query.page) || 1; // מספר דף, ברירת מחדל 1
+const limit = parseInt(req.query.limit) || 10; // מספר פריטים לדף, ברירת מחדל 10
+
+const skip = (page - 1) * limit;
+
+const results = await MyCollection.find()
+  .skip(skip)
+  .limit(limit);
+
+res.json(results);
+
+SQL (PostgreSQL) 
+// skip = OFFSET
+SELECT *
+FROM my_table
+ORDER BY id ASC
+LIMIT 10 OFFSET 20;
+
+---
 ## CAP Theorem: Balancing Priorities
 
 The CAP theorem states that distributed systems can only guarantee two out of three properties:
