@@ -1895,6 +1895,94 @@ runner.run().catch(console.error);
 ## 21. New Template
 
 ### Question:
+Define an Iterator Interface The interface is implemented via JavaScript conventions (comments for design).
+```javascript
+class Iterator {
+
+}
+
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+// Iterator Interface (conceptual in JS)
+class Iterator {
+  next() {
+    throw new Error("Method 'next()' must be implemented.");
+  }
+}
+
+// Node definition
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+// LinkedList definition
+class LinkedList {
+  constructor() {
+    this.head = null;
+  }
+
+  append(value) {
+    const newNode = new Node(value);
+    if (!this.head) {
+      this.head = newNode;
+    } else {
+      let current = this.head;
+      while (current.next) {
+        current = current.next;
+      }
+      current.next = newNode;
+    }
+  }
+
+  // Provide an iterator
+  getIterator() {
+    return new LinkedListIterator(this);
+  }
+}
+
+// LinkedListIterator implementing the Iterator interface
+class LinkedListIterator extends Iterator {
+  constructor(linkedList) {
+    super();
+    this.current = linkedList.head;
+  }
+
+  next() {
+    if (this.current) {
+      const value = this.current.value;
+      this.current = this.current.next;
+      return { value, done: false };
+    } else {
+      return { value: undefined, done: true };
+    }
+  }
+}
+
+// Usage
+const linkedList = new LinkedList();
+linkedList.append(1);
+linkedList.append(2);
+linkedList.append(3);
+
+const iterator = linkedList.getIterator();
+
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: 3, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+```
+</details>
+
+## 22. New Template
+
+### Question:
 Question
 ```javascript
 
