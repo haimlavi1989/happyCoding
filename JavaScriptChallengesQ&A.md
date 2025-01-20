@@ -23,7 +23,7 @@ A comprehensive collection of JavaScript interview questions and solutions with 
 - [18. Function Types Comparison](#18-function-types-comparison)
 - [19. Stack Reversal Implementation](#19-stack-reversal-implementation)
 - [20. Mocha Test Framework](#20-Mocha-Test-Framework)
-- [21. New Template](#21-New-Template)
+- [21. Iterator](#21-Iterator)
 
 ## 1. Closures and Timeouts
 
@@ -1892,10 +1892,10 @@ runner.run().catch(console.error);
 ```
 </details>
 
-## 21. New Template
+## 21. Iterator
 
 ### Question:
-Define an Iterator Interface The interface is implemented via JavaScript conventions (comments for design).
+Define & implement an Iterator Interface The interface for LinkedList
 ```javascript
 class Iterator {
 
