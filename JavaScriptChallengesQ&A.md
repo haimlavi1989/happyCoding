@@ -1895,7 +1895,10 @@ runner.run().catch(console.error);
 ## 21. Iterator
 
 ### Question:
-Define & implement an Iterator Interface The interface for LinkedList
+Implement an Iterator interface in JavaScript and use it to create an iterator for a custom LinkedList class. 
+Your implementation should include:
+A definition of the Iterator interface.
+
 ```javascript
 class Iterator {
 
