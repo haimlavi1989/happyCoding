@@ -1,3 +1,146 @@
+
+# URL Shortener System Design
+
+## S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Generate short unique URLs from long URLs
+- Redirect users to original URL when accessing short URL
+- Allow custom URL aliases (optional)
+- Set expiration on URLs
+- Delete/update existing URLs
+
+### Non-Functional Requirements
+- Highly available system (URL redirection should always work)
+- Low latency for redirections
+- URLs should not be predictable
+- System should be scalable
+
+### Clarifying Questions
+- What's the expected URL length?
+- Should we allow custom URLs?
+- Do URLs expire automatically?
+- Do we need analytics?
+
+### Constraints & Assumptions
+- Maximum URL length: 2048 characters
+- Custom URLs limited to 16 characters
+- Default expiration: 2 years
+- URLs are case sensitive
+
+## C - Capacity Estimation (3-4 min)
+
+### Traffic Estimates
+- 500M new URLs per month
+- Read:Write ratio = 100:1
+- QPS calculations:
+  - Writes: 200 URLs/second
+  - Reads: 20K redirects/second
+
+### Storage Estimates
+- Storage per URL: ~500 bytes
+- 5-year storage: 15TB
+- New storage per day: ~8GB
+
+### Memory Estimates
+- 20% hot URLs cached
+- Cache size: 170GB
+- Cache entries: ~340M URLs
+
+## A - API Design (2-3 min)
+
+### Key Endpoints
+```
+POST /api/v1/shorten
+  Request: {
+    "longUrl": "string",
+    "customAlias": "string" (optional),
+    "expireDate": "date" (optional)
+  }
+  Response: {
+    "shortUrl": "string",
+    "expirationDate": "date"
+  }
+
+GET /api/v1/{shortUrl}
+  Response: HTTP 302 redirect to long URL
+```
+
+## L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+URLs Table:
+  - hash (PK): varchar(16)
+  - original_url: varchar(2048)
+  - creation_date: timestamp
+  - expiration_date: timestamp
+  - user_id: integer
+
+Users Table:
+  - user_id (PK): integer
+  - email: varchar(255)
+  - api_key: varchar(64)
+```
+
+### Core Algorithms
+- URL Encoding: Base62 encoding
+- Key Generation Service (KGS)
+- Cache eviction: LRU policy
+
+## E - Entire Architecture (8-10 min)
+
+### System Components
+1. Load Balancers (NGINX)
+   - Client traffic distribution
+   - Database traffic distribution
+
+2. Application Servers
+   - URL shortening logic
+   - Redirection handling
+
+3. Cache Layer (Redis)
+   - Hot URL storage
+   - LRU eviction
+
+4. Database Layer
+   - Primary: URL mappings
+   - Secondary: Analytics
+
+5. Key Generation Service
+   - Pre-generates unique keys
+   - Maintains used/unused keys
+
+### Data Flow
+1. Client sends long URL
+2. Load balancer routes request
+3. App server generates/fetches short key
+4. Database stores mapping
+5. Cache updated
+6. Short URL returned to client
+
+## D - Deep Dive & Discussion (5-8 min)
+
+### Scalability Approaches
+- Database sharding by URL hash
+- Cache replication
+- Consistent hashing for load balancing
+
+### Failure Handling
+- Database replication for redundancy
+- Multiple data center deployment
+- Cache fallback strategies
+
+### Monitoring & Security
+- Rate limiting by API key
+- Analytics tracking
+- Request logging
+- Security measures (SQL injection, XSS)
+
+
+-----------------------------------------------------------------------------------------------------
+
+
 # Uber System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
@@ -1089,7 +1232,7 @@ CREATE TABLE search_index (
   
 -----------------------------------------------------------------------------------------------------
 
-API Rate Limiter system design
+# API Rate Limiter system design
 
 **🟢 S - Scope & Requirements (2-3 min)**
 
@@ -1604,5 +1747,4 @@ UserStatus {
 
 
 -----------------------------------------------------------------------------------------------------
-
 
