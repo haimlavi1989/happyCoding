@@ -1414,3 +1414,195 @@ Media (
 -----------------------------------------------------------------------------------------------------
 
 
+# Facebook Messenger System Design
+
+## 🟢 S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- One-on-one messaging
+- Group chat functionality
+- Online/offline status tracking
+- Message history persistence
+- Message delivery status (sent, delivered, read)
+- Push notifications for offline users
+
+### Non-Functional Requirements
+- Real-time message delivery (< 100ms latency)
+- High consistency across devices
+- High availability (99.99%)
+- Message ordering guarantee
+- Data durability
+- Secure message transmission
+
+### Clarifying Questions
+- Do we need end-to-end encryption?
+- Message size limits?
+- Media file support?
+- Message retention period?
+- Geographic distribution requirements?
+
+### Constraints & Assumptions
+- Text messages only (initially)
+- Maximum message size: 100 bytes
+- Messages stored for 5 years
+- Global user distribution
+- Mobile and web platforms supported
+
+## 🟢 C - Capacity Estimation (3-4 min)
+
+### Users & Traffic
+- 500M Daily Active Users (DAU)
+- 40 messages/user/day = 20B messages/day
+- Peak RPS = 20B / 86400 * 2 (peak factor) ≈ 500K RPS
+
+### Storage & Bandwidth
+- Storage per message: 100 bytes
+- Daily storage: 20B * 100 bytes = 2TB/day
+- 5-year storage: 2TB * 365 * 5 = 3.6PB
+- Bandwidth: 2TB/86400 = 25MB/s (both upload and download)
+
+### Quick Estimations
+- Concurrent users: 500M * 20% = 100M
+- Server capacity: 50K connections/server
+- Number of servers needed: 100M/50K = 2000 servers
+
+## 🟢 A - API Design (2-3 min)
+
+### WebSocket APIs
+```javascript
+// Establish connection
+ws.connect(authToken)
+
+// Send message
+sendMessage({
+    to: userId,
+    content: string,
+    type: 'text',
+    timestamp: long
+})
+
+// Receive message
+onMessage(message => {
+    // Handle incoming message
+})
+
+// Status updates
+updateStatus(status: 'online' | 'offline')
+```
+
+### REST APIs
+```
+POST /api/messages - Send new message
+GET /api/messages/{conversationId} - Get message history
+PUT /api/status - Update user status
+GET /api/conversations - Get user conversations
+```
+
+## 🟢 L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+Messages {
+    message_id: uuid (primary key)
+    conversation_id: uuid
+    sender_id: uuid
+    content: text
+    timestamp: timestamp
+    status: enum
+    sequence_number: long
+}
+
+Conversations {
+    conversation_id: uuid (primary key)
+    type: enum (one_on_one, group)
+    created_at: timestamp
+}
+
+ConversationMembers {
+    conversation_id: uuid
+    user_id: uuid
+    joined_at: timestamp
+    PRIMARY KEY (conversation_id, user_id)
+}
+
+UserStatus {
+    user_id: uuid (primary key)
+    status: enum
+    last_active: timestamp
+}
+```
+
+### Core Components
+- Connection Manager: Handles WebSocket connections
+- Message Router: Routes messages to correct recipients
+- Status Manager: Tracks user online/offline status
+- Push Notification Service: Handles offline message delivery
+
+## 🟢 E - Entire Architecture (8-10 min)
+
+### Client Layer
+- Web Application (React)
+- Mobile Apps (iOS/Android)
+- WebSocket clients
+
+### Load Balancing
+- Global DNS load balancing
+- Regional load balancers
+- WebSocket connection sticky sessions
+
+### Service Layer
+- Chat servers (handle WebSocket connections)
+- Status service
+- Group chat service
+- Push notification service
+
+### Data Layer
+- HBase for message storage (partitioned by user_id)
+- Redis for:
+  - User sessions
+  - Recent conversations
+  - Online status
+- Message Queue (Kafka) for:
+  - Offline message delivery
+  - Push notifications
+  - Analytics
+
+### Caching Strategy
+- Redis cache clusters in each region
+- Cache recent conversations and status
+- LRU eviction policy
+- Write-through caching for status updates
+
+## 🟢 D - Deep Dive & Discussion (5-8 min)
+
+### Scalability Approaches
+- Horizontal scaling of chat servers
+- Database sharding by user_id
+- Geographic distribution of services
+- Multi-region deployment
+
+### Message Ordering & Consistency
+- Lamport timestamps for message ordering
+- Sequence numbers per conversation
+- Strong consistency for message delivery
+- Eventual consistency for status updates
+
+### Fault Tolerance
+- No single point of failure
+- Data replication across regions
+- Automatic failover
+- Message persistence in queue
+
+### Monitoring & Security
+- Message delivery latency
+- WebSocket connection health
+- Server resource utilization
+- Rate limiting per user
+- Authentication using JWT
+- TLS for all connections
+- Message encryption at rest
+
+
+-----------------------------------------------------------------------------------------------------
+
+
