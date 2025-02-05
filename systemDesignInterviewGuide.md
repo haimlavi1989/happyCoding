@@ -56,14 +56,15 @@ GET /{shortUrl} → Redirects to original URL
 ## 🟢 E - Entire Architecture (8-10 min)
 
 ### 📌 High-Level Design:
-🖥️ Client Applications → Web (React/Angular/Vue), Mobile (iOS/Android)
-🌐 CDN → Cloudflare for static content
-⚖️ Load Balancer → Distribute traffic (NGINX, AWS ALB)
-🔧 Backend Services → API Layer, Business Logic
-💾 Database → SQL (for consistency), NoSQL (for scale)
-⚡ Caching Strategy → Redis/Memcached for fast lookups
-📦 Blob Storage → AWS S3/Azure Blob for file storage
-📨 Queue System → Kafka/RabbitMQ for async processing
+# System Architecture Components
+* 🖥️ Client Applications → Web (React/Angular/Vue), Mobile (iOS/Android)
+* 🌐 CDN → Cloudflare for static content
+* ⚖️ Load Balancer → Distribute traffic (NGINX, AWS ALB)
+* 🔧 Backend Services → API Layer, Business Logic
+* 💾 Database → SQL (for consistency), NoSQL (for scale)
+* ⚡ Caching Strategy → Redis/Memcached for fast lookups
+* 📦 Blob Storage → AWS S3/Azure Blob for file storage
+* 📨 Queue System → Kafka/RabbitMQ for async processing
 📌 System Diagram → Always draw one!
 
 ## 🟢 D - Deep Dive & Discussion (5-8 min)
