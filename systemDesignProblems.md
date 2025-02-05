@@ -888,3 +888,204 @@ Follows (
   
 -----------------------------------------------------------------------------------------------------
 
+
+# Twitter Search System Design 
+
+## 🟢 S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Search tweets by keywords
+- Support AND/OR operations in search
+- Return relevant tweets sorted by time/relevance
+- Support pagination of results
+- Handle real-time indexing of new tweets
+
+### Non-Functional Requirements
+- Low latency (results under 200ms)
+- High availability (99.99% uptime)
+- Eventually consistent search results
+- Scalable to handle growing tweet volume
+- Support for multiple languages
+
+### Constraints & Assumptions
+- Tweets are primarily text-based
+- Maximum tweet length: 280 characters
+- Search works on exact word matches
+- Support for hashtag searches
+- No support for regex or fuzzy search initially
+
+## 🟢 C - Capacity Estimation (3-4 min)
+
+### Scale Metrics
+- Small Scale:
+  - Users: ≤10K
+  - RPS: ≤1K
+  - Storage: ≤10GB
+  - Tweets/day: ≤100K
+
+- Medium Scale:
+  - Users: ≤1M
+  - RPS: ≤10K
+  - Storage: ≤1TB
+  - Tweets/day: ≤1M
+
+- Large Scale:
+  - Users: ≥1B
+  - RPS: ≥500K
+  - Storage: ≥500TB
+  - Tweets/day: ≥400M
+
+### Calculations
+- Daily Storage: 400M tweets × 300 bytes = 120GB/day
+- Index Size: 500K words × (5 bytes/word + tweet_references) ≈ 21TB
+- Bandwidth: 1.38MB/second for new content
+
+## 🟢 A - API Design (2-3 min)
+
+### Search API
+```javascript
+POST /api/v1/search
+{
+    "query": "string",          // Search terms
+    "max_results": number,      // Default: 20
+    "sort": "latest|relevant",  // Default: latest
+    "page_token": "string"      // For pagination
+}
+
+Response:
+{
+    "tweets": [
+        {
+            "id": "string",
+            "text": "string",
+            "user_id": "string",
+            "created_at": "timestamp",
+            "likes": number
+        }
+    ],
+    "next_page_token": "string"
+}
+```
+
+### Index API (Internal)
+```javascript
+POST /api/v1/index
+{
+    "tweet_id": "string",
+    "text": "string",
+    "metadata": {...}
+}
+```
+
+## 🟢 L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+-- Tweets Table
+CREATE TABLE tweets (
+    tweet_id BIGINT PRIMARY KEY,
+    user_id BIGINT,
+    text VARCHAR(280),
+    created_at TIMESTAMP,
+    likes INT,
+    INDEX idx_user (user_id),
+    INDEX idx_created (created_at)
+);
+
+-- Search Index Table
+CREATE TABLE search_index (
+    word VARCHAR(64),
+    tweet_id BIGINT,
+    position INT,
+    PRIMARY KEY (word, tweet_id)
+);
+```
+
+### Core Components
+1. Search Service
+   - Query parser
+   - Index searcher
+   - Result ranker
+
+2. Indexing Service
+   - Word tokenizer
+   - Index builder
+   - Update manager
+
+## 🟢 E - Entire Architecture (8-10 min)
+
+### Components
+1. Client Layer
+   - Web UI (React)
+   - Mobile Apps
+   - API Clients
+
+2. Infrastructure
+   - Global CDN (Cloudflare/Akamai)
+   - Load Balancers (NGINX)
+   - API Gateway (Rate limiting, Auth)
+
+3. Application Services
+   - Search API Service
+   - Index Builder Service
+   - Ranking Service
+   - Analytics Service
+
+4. Data Layer
+   - Distributed Search Index (Elasticsearch)
+   - Tweet Storage (Cassandra)
+   - Cache Layer (Redis)
+   - Message Queue (Kafka)
+
+## 🟢 D - Deep Dive & Discussion (5-8 min)
+
+### Scalability
+1. Sharding Strategies
+   - Word-based sharding
+   - Tweet-based sharding
+   - Hybrid approach
+
+2. Performance Optimization
+   - In-memory cache for hot tweets
+   - Pre-computed indices
+   - Result caching
+
+### Reliability
+1. Fault Tolerance
+   - Index replication
+   - Master-slave setup
+   - Recovery mechanism
+
+2. Monitoring
+   - Search latency metrics
+   - Index update lag
+   - Error rates
+   - Resource utilization
+
+### Security
+1. Rate Limiting
+   - Per-user limits
+   - IP-based restrictions
+   - Token bucket algorithm
+
+2. Data Protection
+   - Access control
+   - Data encryption
+   - Audit logging
+
+### Trade-offs Discussion
+1. Consistency vs Availability
+   - Eventually consistent search
+   - Real-time index updates
+
+2. Storage vs Performance
+   - Index size optimization
+   - Caching strategies
+
+3. Precision vs Recall
+   - Exact vs fuzzy matching
+   - Ranking algorithms
+
+  
+-----------------------------------------------------------------------------------------------------
+
