@@ -11,7 +11,7 @@
 - [9. Twitter System Design](#9-twitter-system-design)
 - [10. Facebook Messenger System Design](#10-facebook-messenger-system-design)
 
-# URL Shortener System Design
+## 1. URL Shortener System Design
 
 ## S - Scope & Requirements (2-3 min)
 
@@ -153,7 +153,7 @@ Users Table:
 -----------------------------------------------------------------------------------------------------
 
 
-# Uber System Design
+## 2. Uber System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -293,7 +293,7 @@ Rides
 
 -----------------------------------------------------------------------------------------------------
 
-# YouTube System Design
+## 3. YouTube System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
