@@ -79,3 +79,51 @@ GET /{shortUrl} → Redirects to original URL
 ✅ Talk Through Your Thought Process – Explain trade-offs & why  
 ✅ Ask for Feedback – Validate your approach with the interviewer  
 
+
+# 🚀 **Scaling Users**
+When the number of users grows, solutions are required to ensure fast response times and stable performance, even under high loads.
+
+## ⚖️ **Load Balancer**
+Distributes user requests across multiple servers to prevent any single server from becoming overloaded.
+
+## ⚡ **Caching Layer (Redis, Memcached)**
+Stores frequently accessed data to speed up performance and reduce server load.
+
+## 🛡️ **Rate Limiting**
+Prevents excessive requests from users or bots that could overload the system.
+
+## 📈 **Horizontal Scaling**
+Adds application servers dynamically to handle more users. Microservices can simplify this process.
+
+## 🌍 **CDN (Content Delivery Network)**
+Speeds up content delivery by serving static files from geographically distributed edge locations.
+
+## 📊 **Logging & Monitoring (Prometheus, Grafana)**
+Monitors system performance in real-time and helps identify bottlenecks.
+
+---
+
+# 🏢 **Scaling Data**
+As the data volume grows, it’s crucial to address storage, processing, and retrieval efficiency.
+
+## 🗂️ **Database Sharding**
+Splits data across multiple database instances to balance the load and improve query performance.
+
+## ☁️ **Distributed Storage (HDFS, S3, GCS)**
+Stores large-scale data across distributed systems for scalability and redundancy.
+
+## 🔍 **Indexing System (Elasticsearch, Solr)**
+Creates efficient indexes for faster retrieval of massive datasets.
+
+## 📌 **Data Partitioning**
+Organizes data by categories, regions, or frequency to improve targeted queries.
+
+## 🔄 **MapReduce & Parallel Processing**
+Processes large datasets in parallel across multiple servers for efficiency.
+
+## 🔗 **Asynchronous Processing (RabbitMQ, Kafka)**
+Handles background tasks like indexing and event processing asynchronously.
+
+## 🗃️ **Versioned Data & Backups**
+Maintains data history and performs regular backups to prevent data loss.
+
