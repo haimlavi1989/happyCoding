@@ -468,7 +468,7 @@ CREATE TABLE comments (
 
 -----------------------------------------------------------------------------------------------------
 
-# Nearby Friends System Design
+## 4. Nearby Friends System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -657,7 +657,7 @@ Reviews:
 
 -----------------------------------------------------------------------------------------------------
 
-# Web Crawler System Design
+## 5. Web Crawler System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -863,7 +863,7 @@ CREATE TABLE links (
   
 -----------------------------------------------------------------------------------------------------
 
-# Instagram System Design
+## 6. Instagram System Design
 
 ## S - Scope & Requirements (2-3 min)
 
@@ -1044,7 +1044,7 @@ Follows (
 -----------------------------------------------------------------------------------------------------
 
 
-# Twitter Search System Design 
+## 7. Twitter Search System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -1244,7 +1244,7 @@ CREATE TABLE search_index (
   
 -----------------------------------------------------------------------------------------------------
 
-# API Rate Limiter system design
+## 8. API Rate Limiter System Design
 
 **🟢 S - Scope & Requirements (2-3 min)**
 
@@ -1390,7 +1390,7 @@ Components:
 
 -----------------------------------------------------------------------------------------------------
 
-# Twitter System Design
+## 9. Twitter System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -1569,7 +1569,7 @@ Media (
 -----------------------------------------------------------------------------------------------------
 
 
-# Facebook Messenger System Design
+## 10. Facebook Messenger System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
