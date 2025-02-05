@@ -1089,3 +1089,149 @@ CREATE TABLE search_index (
   
 -----------------------------------------------------------------------------------------------------
 
+API Rate Limiter system design
+
+**🟢 S - Scope & Requirements (2-3 min)**
+
+Functional Requirements:
+1. Limit number of requests per user/IP within time window
+2. Configure different rate limits for different APIs/services
+3. Block excess requests when limit is reached
+4. Support multiple time windows (per second/minute/hour)
+
+Non-Functional Requirements:
+1. High Availability (99.99%) - rate limiting must always work
+2. Low Latency (< 5ms overhead)
+3. Consistency across distributed system
+4. Real-time processing
+
+**🟢 C - Capacity Estimation (3-4 min)**
+
+Scale Levels:
+1. Small Scale:
+   - Users: 1K users
+   - Traffic: 100 RPS
+   - Storage: ~100MB/day (counters + metadata)
+   - Memory: ~1GB Redis
+
+2. Medium Scale:
+   - Users: 100K users
+   - Traffic: 1K RPS
+   - Storage: ~10GB/day
+   - Memory: ~10GB Redis cluster
+
+3. Large Scale:
+   - Users: 1M+ users
+   - Traffic: 10K+ RPS
+   - Storage: ~100GB/day
+   - Memory: ~50GB Redis cluster
+
+**🟢 A - API Design (2-3 min)**
+
+```markdown
+1. Rate Limit Check:
+   GET /v1/ratelimit/check
+   Headers: {user-id or IP, api-key}
+   Response: {allowed: boolean, remaining: int, reset_time: timestamp}
+
+2. Rate Limit Configuration:
+   POST /v1/ratelimit/config
+   Body: {
+     resource_id: string,
+     limit: int,
+     window: string,
+     type: "hard"|"soft"|"elastic"
+   }
+
+3. Rate Limit Status:
+   GET /v1/ratelimit/status/{user_id}
+   Response: {
+     limits: [{api: string, used: int, remaining: int}]
+   }
+```
+
+Let me continue with the rest of the design...
+
+**🟢 L - Low-Level Design (8-10 min)**
+
+Database Schema:
+```sql
+-- Rate Limit Configurations
+CREATE TABLE rate_limits (
+    id UUID PRIMARY KEY,
+    resource_id VARCHAR(255),
+    limit_count INTEGER,
+    window_size INTEGER,
+    window_unit VARCHAR(10),
+    created_at TIMESTAMP
+);
+
+-- Rate Limit Usage
+CREATE TABLE usage_logs (
+    id UUID PRIMARY KEY,
+    user_id VARCHAR(255),
+    resource_id VARCHAR(255),
+    request_count INTEGER,
+    window_start TIMESTAMP,
+    last_request TIMESTAMP
+);
+```
+
+Core Algorithms:
+1. Fixed Window Counter
+2. Sliding Window Counter
+3. Token Bucket Algorithm
+
+**🟢 E - Entire Architecture (8-10 min)**
+
+Components:
+1. Frontend Layer:
+   - API Gateway/WAF for initial filtering
+   - DDoS protection
+   - Basic request validation
+
+2. Service Layer:
+   - Load Balancer for traffic distribution
+   - API Servers for business logic
+   - Rate Limiter Service for decision making
+   - Config Service for limit management
+
+3. Cache Layer:
+   - Redis Cluster for real-time counters
+   - Primary-Replica setup for HA
+
+4. Storage Layer:
+   - Database for persistence
+   - Message Queue for async processing
+
+5. Monitoring Layer:
+   - Prometheus for metrics
+   - Grafana for visualization
+   - ELK Stack for logging
+
+**🟢 D - Deep Dive & Discussion (5-8 min)**
+
+1. Scalability:
+   - Horizontal scaling of API servers
+   - Redis cluster sharding
+   - Database partitioning by user_id
+
+2. Failure Handling:
+   - Redis failover with replicas
+   - Database redundancy
+   - Circuit breakers for degraded operation
+
+3. Security:
+   - API authentication
+   - Request encryption
+   - Rate limit token validation
+
+4. Monitoring:
+   - Request rate metrics
+   - Error rate tracking
+   - Latency monitoring
+   - Usage patterns analysis
+
+
+-----------------------------------------------------------------------------------------------------
+
