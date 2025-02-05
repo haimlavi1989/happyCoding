@@ -1,5 +1,4 @@
-# 🚀 S.C.A.L.E.D. - System Design Interview Framework
-
+# System Design Interview Framework - 🚀 S.C.A.L.E.D.
 ## 🔑 Key Mnemonic: S.C.A.L.E.D.
 ✔ S – Scope & Requirements  
 ✔ C – Capacity Estimation  
