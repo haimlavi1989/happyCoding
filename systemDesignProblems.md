@@ -1,3 +1,4 @@
+# System design Problems List
 
 ## Table of Contents
 - [1. URL Shortener System Design](#1-url-shortener-system-design)
@@ -11,7 +12,7 @@
 - [9. Twitter System Design](#9-twitter-system-design)
 - [10. Facebook Messenger System Design](#10-facebook-messenger-system-design)
 
-## 1. URL Shortener System Design
+# 1. URL Shortener System Design
 
 ## S - Scope & Requirements (2-3 min)
 
@@ -153,7 +154,7 @@ Users Table:
 -----------------------------------------------------------------------------------------------------
 
 
-## 2. Uber System Design
+# 2. Uber System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -293,7 +294,7 @@ Rides
 
 -----------------------------------------------------------------------------------------------------
 
-## 3. YouTube System Design
+# 3. YouTube System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
