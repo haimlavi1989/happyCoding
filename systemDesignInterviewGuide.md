@@ -10,7 +10,7 @@
 ## 🟢 S - Scope & Requirements (2-3 min)
 ✔ Functional requirements → What must the system do? (e.g., URL Shortener → Generate, Store, Redirect)  
 ✔ Non-functional requirements → Performance, reliability, security, latency, etc.  
-✔ Clarifying Questions → Who are the users? Expected scale?   
+✔ Clarifying Questions → input? output? Who are the users?
 ✔ Constraints & Assumptions → Fill in missing details  
 
 ## 🟢 C - Capacity Estimation (3-4 min)
@@ -61,8 +61,8 @@ GET /{shortUrl} → Redirects to original URL
 * 🔧 Backend Services → API Layer, Business Logic
 * 💾 Database → SQL (for consistency), NoSQL (for scale)
 * ⚡ Caching Strategy → Redis/Memcached for fast lookups
-* 📦 Blob Storage → AWS S3/Azure Blob for file storage
-* 📨 Queue System → Kafka/RabbitMQ for async processing
+* 📦 Blob Storage → GCP bucket/AWS S3/Azure Blob for file storage
+* 📨 Queue System → PubSub/Kafka/RabbitMQ for async processing
 * 📌 System Diagram → Always draw one!
 
 ## 🟢 D - Deep Dive & Discussion (5-8 min)
