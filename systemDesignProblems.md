@@ -138,7 +138,7 @@ Rides
 
 -----------------------------------------------------------------------------------------------------
 
-# YouTube System Design Following S.C.A.L.E.D. Pattern
+# YouTube System Design
 
 ## 🟢 S - Scope & Requirements (2-3 min)
 
@@ -310,6 +310,195 @@ CREATE TABLE comments (
 - Adaptive bitrate streaming
 - Regional content delivery optimization
 - Real-time analytics processing
+
+-----------------------------------------------------------------------------------------------------
+
+# Nearby Friends System Design
+
+## 🟢 S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Add/delete/update places
+- Search nearby places within radius
+- Add reviews (text, photos, ratings)
+- Rate and review places
+- Filter by categories (restaurants, shopping, etc.)
+
+### Non-Functional Requirements
+- Low latency for search (real-time experience)
+- High availability for read operations
+- Eventually consistent writes acceptable
+- Results should be location-relevant
+
+### Clarifying Questions
+- What is the search radius limit?
+- Do we need real-time updates for new places?
+- Should we support multiple languages?
+- Do we need to support mobile apps?
+
+### Constraints & Assumptions
+- User location accuracy is within acceptable GPS range
+- Reviews can be delayed in showing up
+- Search results prioritize accuracy over completeness
+
+## 🟢 C - Capacity Estimation (3-4 min)
+
+### Traffic Estimates
+- 500M total places
+- 100K QPS (Queries Per Second)
+- Read to Write ratio: 100:1 (more searches than updates)
+- 20% annual growth rate
+
+### Storage Estimates
+- Per place: ~793 bytes
+  - LocationID: 8 bytes
+  - Name: 256 bytes
+  - Coordinates: 16 bytes
+  - Description: 512 bytes
+  - Category: 1 byte
+- Total storage for places: 500M * 793 bytes ≈ 396.5 GB
+- Reviews and photos will need additional storage
+
+### Bandwidth Estimates
+- Average response size: 1KB per place
+- For 100 places per search: 100KB per request
+- Bandwidth: 100K QPS * 100KB = 10GB/s
+
+## 🟢 A - API Design (2-3 min)
+
+### Search API
+```
+GET /api/v1/places/search
+Parameters:
+- api_dev_key: string
+- latitude: float
+- longitude: float
+- radius: int (meters)
+- category: string (optional)
+- sort: enum (DISTANCE, RATING)
+- page_token: string
+
+Response:
+{
+  "places": [{
+    "id": string,
+    "name": string,
+    "location": {lat, lng},
+    "rating": float,
+    "category": string
+  }],
+  "next_page_token": string
+}
+```
+
+### Review API
+```
+POST /api/v1/places/{place_id}/reviews
+{
+  "rating": int,
+  "text": string,
+  "photos": [binary]
+}
+```
+
+## 🟢 L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+Places:
+  - location_id (PK)
+  - name
+  - latitude
+  - longitude
+  - description
+  - category
+  - created_at
+  - updated_at
+
+Reviews:
+  - review_id (PK)
+  - location_id (FK)
+  - user_id
+  - rating
+  - text
+  - created_at
+```
+
+### Core Components
+- QuadTree Implementation
+  - Node capacity: 500 places
+  - Dynamic splitting when full
+  - Leaf node connection for neighbor search
+- Geohashing Algorithm
+  - Convert lat/long to grid identifier
+  - Support for radius search
+
+## 🟢 E - Entire Architecture (8-10 min)
+
+### System Components
+1. Load Balancers
+   - Route requests based on location
+   - Health checking
+
+2. Application Servers
+   - Handle API requests
+   - Implement business logic
+   - Cache coordination
+
+3. QuadTree Servers
+   - Store location indices
+   - Handle proximity queries
+   - Memory optimized
+
+4. Cache Layer
+   - Store hot places
+   - LRU eviction
+   - Memcached/Redis
+
+5. Database Servers
+   - Primary for writes
+   - Replicas for reads
+   - Sharded by LocationID
+
+### Data Flow
+1. Client sends location-based search
+2. Load balancer routes to nearest datacenter
+3. Application server processes request
+4. QuadTree server finds relevant grids
+5. Cache/DB fetches place details
+6. Results aggregated and returned
+
+## 🟢 D - Deep Dive & Discussion (5-8 min)
+
+### Scalability
+- Horizontal scaling of application servers
+- Database sharding by LocationID
+- Read replicas for scaling reads
+- CDN for static content (images)
+
+### Failure Handling
+- QuadTree server redundancy
+- Master-slave replication
+- Automatic failover
+- Data rebuilding strategy
+
+### Monitoring & Performance
+- Query latency tracking
+- Cache hit/miss rates
+- Server load monitoring
+- Error rate tracking
+
+### Optimizations
+- Batch updates for popularity scores
+- Precomputed grids for common radiuses
+- Caching strategy for hot areas
+- Background jobs for analytics
+
+### Security
+- Rate limiting by API key
+- Input validation
+- DDOS protection
+- Data encryption
 
 -----------------------------------------------------------------------------------------------------
 
