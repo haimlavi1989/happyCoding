@@ -83,10 +83,10 @@ GET /{shortUrl} → Redirects to original URL
 # 🚀 **Scaling Users**
 When the number of users grows, solutions are required to ensure fast response times and stable performance, even under high loads.
 
-## ⚖️ **Load Balancer**
+⚖️ **Load Balancer**
 Distributes user requests across multiple servers to prevent any single server from becoming overloaded.
 
-## ⚡ **Caching Layer (Redis, Memcached)**
+⚡ **Caching Layer (Redis, Memcached)**
 Stores frequently accessed data to speed up performance and reduce server load.
 
 ## 🛡️ **Rate Limiting**
