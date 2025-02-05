@@ -1235,3 +1235,182 @@ Components:
 
 -----------------------------------------------------------------------------------------------------
 
+# Twitter System Design
+
+## 🟢 S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Post tweets (text, images, videos)
+- View timeline (personalized feed)
+- Follow/unfollow users
+- Like and retweet
+- User profile management
+
+### Non-Functional Requirements
+- High Availability (99.99%)
+- Low Latency (< 200ms for timeline)
+- Eventually consistent
+- Scalable to handle massive user base
+
+### Clarifying Questions
+- Tweet size limit? (140 characters)
+- Media file size limits? (5MB images, 500MB videos)
+- Timeline refresh rate? (Real-time vs Pull-based)
+- Geographic distribution? (Global service)
+
+### Constraints & Assumptions
+- Users can follow unlimited accounts
+- Timeline shows most recent 100 tweets by default
+- Read-heavy system (read:write ratio = 100:1)
+- Media storage handled by separate service
+
+## 🟢 C - Capacity Estimation (3-4 min)
+
+### Scale Metrics
+- DAU: 200M users
+- MAU: 1B users
+- New tweets: 100M/day (~1,150 TPS)
+- Timeline reads: 28B/day (~325K RPS)
+
+### Storage Requirements
+- Tweet text: 30GB/day
+  * 100M tweets × (140 chars × 2 bytes + 30 bytes metadata)
+- Media: 24TB/day
+  * Photos: (100M/5) × 200KB
+  * Videos: (100M/10) × 2MB
+
+### Bandwidth
+- Ingress: 290MB/sec
+- Egress: 35GB/sec (mainly media)
+
+## 🟢 A - API Design (2-3 min)
+
+### Core Endpoints
+```javascript
+// Post new tweet
+POST /api/v1/tweets
+{
+    "text": "string",
+    "media_ids": ["array"],
+    "location": {"lat": float, "long": float}
+}
+
+// Get user timeline
+GET /api/v1/timeline
+{
+    "user_id": "string",
+    "page_size": int,
+    "last_tweet_id": "string"
+}
+
+// Follow user
+POST /api/v1/users/{user_id}/follow
+
+// Like tweet
+POST /api/v1/tweets/{tweet_id}/like
+```
+
+## 🟢 L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+Users (
+    user_id: uuid PRIMARY KEY,
+    username: varchar(50),
+    email: varchar(100),
+    created_at: timestamp
+)
+
+Tweets (
+    tweet_id: uuid PRIMARY KEY,
+    user_id: uuid,
+    content: varchar(140),
+    created_at: timestamp,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+)
+
+Follows (
+    follower_id: uuid,
+    followee_id: uuid,
+    created_at: timestamp,
+    PRIMARY KEY (follower_id, followee_id)
+)
+
+Media (
+    media_id: uuid PRIMARY KEY,
+    tweet_id: uuid,
+    url: varchar(255),
+    type: enum('photo','video'),
+    FOREIGN KEY (tweet_id) REFERENCES Tweets(tweet_id)
+)
+```
+
+### Key Algorithms
+- Timeline Generation: Merge-sort across followed users' tweets
+- TweetID Generation: Epoch timestamp + sequence number (48 bits)
+- Cache Strategy: LRU for hot tweets, user data
+
+## 🟢 E - Entire Architecture (8-10 min)
+
+### Components
+1. **Load Balancers**
+   - Global DNS routing
+   - Application layer balancing
+
+2. **Application Servers**
+   - Stateless service fleet
+   - Regional deployment
+
+3. **Caching Layer**
+   - Redis clusters for tweets
+   - Memcached for user data
+   - CDN for media
+
+4. **Data Storage**
+   - Tweets: Sharded by tweet_id
+   - Users: Sharded by user_id
+   - Media: Object storage (S3)
+
+5. **Message Queues**
+   - Kafka for async processing
+   - Fan-out for notifications
+
+## 🟢 D - Deep Dive & Discussion (5-8 min)
+
+### Scalability Approaches
+1. **Data Sharding**
+   - Tweet sharding by ID (temporal + sequential)
+   - User sharding by ID
+   - Read replicas for scaling reads
+
+2. **Caching Strategy**
+   - Cache recent tweets (3 days)
+   - Cache user graphs
+   - Cache trending topics
+
+### Failure Handling
+1. **High Availability**
+   - Multi-AZ deployment
+   - Database replication
+   - Service redundancy
+
+2. **Monitoring**
+   - Tweet ingestion rate
+   - Timeline generation latency
+   - Cache hit ratios
+   - Error rates
+
+### Security
+1. **Rate Limiting**
+   - Per-user limits
+   - IP-based restrictions
+
+2. **Data Protection**
+   - Encryption at rest
+   - HTTPS for all APIs
+   - Access token authentication
+  
+
+-----------------------------------------------------------------------------------------------------
+
+
