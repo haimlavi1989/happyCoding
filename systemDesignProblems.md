@@ -502,3 +502,208 @@ Reviews:
 
 -----------------------------------------------------------------------------------------------------
 
+# Web Crawler System Design
+
+## 🟢 S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Crawl web pages systematically
+- Extract and store webpage content
+- Follow links to discover new pages
+- Respect robots.txt rules
+- Handle different content types (HTML, images, etc.)
+
+### Non-Functional Requirements
+- Scalability: Handle billions of web pages
+- Politeness: Don't overwhelm web servers
+- Freshness: Regular recrawling of content
+- Robustness: Handle malformed HTML, broken links
+- Extensibility: Easy to add new content types
+
+### Clarifying Questions
+- What's the crawling scope? (Whole web vs specific sites)
+- Content types to handle? (HTML only vs multimedia)
+- How fresh should the data be?
+- Priority for different websites?
+- Storage duration for crawled content?
+
+### Constraints & Assumptions
+- Handle 1 billion pages per month
+- HTML-focused initially, extensible later
+- Store content for 3 months
+- Respect robots.txt and crawl delays
+- Handle international websites
+
+## 🟢 C - Capacity Estimation (3-4 min)
+
+### Traffic Estimation
+```
+Daily Active Crawls = 33M pages/day
+RPS = 33M / (24 * 3600) ≈ 382 pages/second
+Peak RPS = 382 * 3 ≈ 1,146 pages/second
+```
+
+### Storage Estimation
+```
+Average page size = 100KB
+Daily storage = 33M * 100KB = 3.3TB/day
+3-month storage = 3.3TB * 90 = 297TB
+With replication (3x) = 891TB
+```
+
+### Bandwidth Estimation
+```
+Download bandwidth = 382 pages/sec * 100KB = 38.2 MB/second
+Peak bandwidth = 114.6 MB/second
+Monthly bandwidth = 100TB
+```
+
+## 🟢 A - API Design (2-3 min)
+
+### RESTful APIs
+```javascript
+// Add new URLs to crawl
+POST /api/crawl/submit
+{
+    "urls": ["http://example.com"],
+    "priority": 1,
+    "recrawl_frequency": "daily"
+}
+
+// Get crawl status
+GET /api/crawl/status/{domain}
+
+// Get crawled content
+GET /api/content/{url_hash}
+
+// Update crawl configuration
+PUT /api/crawl/config
+{
+    "politeness_delay": 1000,
+    "max_depth": 3,
+    "allowed_domains": ["example.com"]
+}
+```
+
+## 🟢 L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+-- URLs to crawl
+CREATE TABLE urls (
+    url_hash VARCHAR(64) PRIMARY KEY,
+    url TEXT NOT NULL,
+    priority INT,
+    last_crawled TIMESTAMP,
+    crawl_frequency INTERVAL,
+    status VARCHAR(20)
+);
+
+-- Crawled content
+CREATE TABLE content (
+    content_id BIGSERIAL PRIMARY KEY,
+    url_hash VARCHAR(64) REFERENCES urls,
+    content_type VARCHAR(50),
+    content BYTEA,
+    crawled_at TIMESTAMP,
+    response_code INT
+);
+
+-- Link graph
+CREATE TABLE links (
+    source_hash VARCHAR(64),
+    target_hash VARCHAR(64),
+    discovered_at TIMESTAMP,
+    PRIMARY KEY (source_hash, target_hash)
+);
+```
+
+### Core Components
+- URL Frontier: Prioritized URL queue
+- Fetcher: HTTP client with politeness controls
+- Parser: HTML processing and link extraction
+- Deduplication: Content and URL deduping
+- Storage Manager: Content persistence
+
+## 🟢 E - Entire Architecture (8-10 min)
+
+### High-Level Components
+1. **Frontend Layer**
+   - Admin Dashboard (React)
+   - Monitoring UI (Grafana)
+   - Configuration Interface
+
+2. **Load Balancing**
+   - DNS Round Robin
+   - NGINX/HAProxy
+   - Geographic distribution
+
+3. **Crawler Service**
+   - URL Frontier Service
+   - Fetcher Service
+   - Parser Service
+   - Link Extractor
+   - Robot.txt Handler
+
+4. **Storage Layer**
+   - PostgreSQL (URL metadata)
+   - S3/GCS (content storage)
+   - Redis (URL deduplication)
+   - Elasticsearch (content indexing)
+
+5. **Queue System**
+   - Kafka for URL distribution
+   - RabbitMQ for task management
+
+## 🟢 D - Deep Dive & Discussion (5-8 min)
+
+### Scalability Approaches
+1. **Horizontal Scaling**
+   - Stateless crawler nodes
+   - Distributed URL frontier
+   - Partitioned storage
+
+2. **Performance Optimization**
+   - In-memory caching
+   - Batch processing
+   - Adaptive crawl rates
+
+### Failure Handling
+1. **Crawler Failures**
+   - Checkpointing
+   - Task reallocation
+   - Dead letter queues
+
+2. **Storage Failures**
+   - Replication
+   - Regular backups
+   - Failover mechanisms
+
+### Monitoring & Alerting
+- Crawler performance metrics
+- System health monitoring
+- Error rate tracking
+- Resource utilization
+- SLA monitoring
+
+### Security Measures
+- Rate limiting
+- IP rotation
+- SSL/TLS handling
+- Access control
+- Data encryption
+
+### Advanced Features
+1. **Intelligent Crawling**
+   - Priority-based scheduling
+   - Importance scoring
+   - Freshness-based recrawling
+
+2. **Content Processing**
+   - Duplicate detection
+   - Content classification
+   - Language detection
+   - Quality scoring
+  
+-----------------------------------------------------------------------------------------------------
+
