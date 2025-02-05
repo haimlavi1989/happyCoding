@@ -158,22 +158,6 @@ app.get('/items', async (req, res) => {
 ```
 
 ---
-## CAP Theorem: Balancing Priorities
-
-The CAP theorem states that distributed systems can only guarantee two out of three properties:
-1. **Consistency (C)**: Every read receives the most recent write or an error.
-2. **Availability (A)**: Every request receives a response.
-3. **Partition Tolerance (P)**: System operates despite network partitions.
-
-### Trade-offs
-- **CP**: Sacrifices Availability (e.g., SQL databases in network issues).
-- **AP**: Sacrifices Consistency (e.g., NoSQL like DynamoDB).
-- **CA**: Only achievable in single-node or non-distributed systems.
-
-#### Interview-Ready Summary
-"In a distributed system, you must choose between Consistency and Availability during network partitions. The decision depends on the application’s requirements."
-
----
 
 ## General Guidelines
 
