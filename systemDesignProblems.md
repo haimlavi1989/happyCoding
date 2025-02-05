@@ -704,6 +704,187 @@ CREATE TABLE links (
    - Content classification
    - Language detection
    - Quality scoring
+
+  
+-----------------------------------------------------------------------------------------------------
+
+# Instagram System Design
+
+## S - Scope & Requirements (2-3 min)
+
+### Functional Requirements
+- Upload/download/view photos
+- Follow other users
+- Generate news feed from followed users
+- Search photos by title
+- Like/unlike photos
+
+### Non-Functional Requirements
+- High Availability (99.99% uptime)
+- Low Latency (200ms for news feed)
+- Reliability (no photo loss)
+- Eventual consistency acceptable
+
+### Clarifying Questions
+- Photo size limits?
+- Supported formats?
+- Mobile vs web usage ratio?
+- Geographic distribution?
+
+### Constraints & Assumptions
+- Average photo size: 200KB
+- Read-heavy system (100:1 read/write)
+- Photos are never deleted
+- Mobile-first application
+
+## C - Capacity Estimation (3-4 min)
+
+### Users & Traffic
+- Total Users: 500M
+- Daily Active Users: 1M
+- New photos per day: 2M (23 photos/second)
+
+### Storage & Bandwidth
+- Daily storage: 2M * 200KB = 400GB/day
+- 10-year storage: 1425TB
+- Metadata storage: 3.7TB for 10 years
+- Read Operations: ~100K/second (assuming 100 reads/user/day)
+
+### Quick Calculations
+```
+Metadata per user: 68 bytes
+Photos per user per day: 2
+Cache needed: ~20% of daily read volume
+```
+
+## A - API Design (2-3 min)
+
+### Core Endpoints
+```
+POST /api/v1/photos
+    Request: Multipart form data (photo)
+    Response: PhotoID, URL
+
+GET /api/v1/users/{userId}/feed
+    Response: List of photos from followed users
+
+POST /api/v1/users/{userId}/follow
+    Request: {followeeId}
+    Response: Success/Failure
+
+GET /api/v1/photos/search
+    Query params: title, tags
+    Response: List of matching photos
+```
+
+## L - Low-Level Design (8-10 min)
+
+### Database Schema
+```sql
+Users (
+    userId: int,
+    name: string,
+    email: string,
+    createdAt: timestamp
+)
+
+Photos (
+    photoId: int,
+    userId: int,
+    path: string,
+    createdAt: timestamp
+)
+
+Follows (
+    followerId: int,
+    followeeId: int,
+    createdAt: timestamp
+)
+```
+
+### Core Components
+- PhotoManager: Handles upload/storage
+- FeedGenerator: Creates user feeds
+- FollowManager: Manages relationships
+- SearchService: Handles photo search
+
+## E - Entire Architecture (8-10 min)
+
+### Key Components
+1. Client Applications
+   - Mobile apps (iOS/Android)
+   - Web interface (React)
+
+2. CDN Layer
+   - CloudFront/Akamai for photo delivery
+   - Edge caching for popular content
+
+3. Load Balancers
+   - L7 for application routing
+   - L4 for backend services
+
+4. Backend Services
+   - Upload Service
+   - Feed Service
+   - Search Service
+   - Follow Service
+
+5. Storage
+   - Photos: S3/HDFS
+   - Metadata: NoSQL
+   - User Data: SQL
+
+6. Caching
+   - Redis for metadata
+   - CDN for photos
+   - Local caches for application data
+
+## D - Deep Dive & Discussion (5-8 min)
+
+### Scaling Approaches
+1. Photo Storage
+   - Sharding by photoId
+   - Multiple storage regions
+   - Read replicas for databases
+
+2. Feed Generation
+   - Pre-compute feeds
+   - Fan-out on write for small followers
+   - Pull model for celebrities
+
+### Failure Handling
+1. Photo Upload
+   - Multiple copies
+   - Write-ahead logging
+   - Checksums for integrity
+
+2. Database Failures
+   - Automatic failover
+   - Multiple read replicas
+   - Circuit breakers
+
+### Monitoring & Security
+1. Metrics
+   - Upload success rate
+   - Feed generation latency
+   - Cache hit ratios
+
+2. Security
+   - Signed URLs for photos
+   - Rate limiting
+   - Authentication/Authorization
+
+### Performance Optimization
+1. Caching Strategy
+   - Hot photos in CDN
+   - User metadata in Redis
+   - Feed data in application cache
+
+2. Load Management
+   - Auto-scaling groups
+   - Request throttling
+   - Async processing for uploads
+
   
 -----------------------------------------------------------------------------------------------------
 
