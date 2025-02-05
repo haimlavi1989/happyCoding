@@ -69,8 +69,9 @@ GET /{shortUrl} → Redirects to original URL
 📌 Scalability Approaches → Horizontal Scaling, Sharding, Replication  
 📌 Failure Points → Single Point of Failure (SPOF), Redundancy  
 📌 Monitoring & Logging → Prometheus, ELK Stack  
-📌 Security → Rate Limiting, Authentication (OAuth/JWT), Data Encryption  
+📌 Security → 🔐 Authentication & Authorization: JWT for secure access / RBAC, 🛡 Data Protection: Rate Limiting / Encryption 
 
+ 
 ## 🎯 Final Tips for Success:
 ✅ Always Start with Requirements – Never jump to a solution too fast  
 ✅ Use Round Numbers for Quick Estimations – Don't overcomplicate math  
