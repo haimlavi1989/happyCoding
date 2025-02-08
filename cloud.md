@@ -1,13 +1,26 @@
 # 🔗 מדריך הכנה לראיון עבודה: ArgoCD, GitOps ו-IaC
+עבור על הקונספט של GitOps ולהבין אותו יותר לעמוק.
+להצליח לעמוד על ההבדלים בין Iac vs GitOps.
+תשחק קצת עם ArgoCD ותנסה להבין את הארכיטקטורה של המערכת.
+בנוסף תשחק קצת עם Argo Workflow, שהוא בעצם מנוע ג׳נרי להרצת 
+פייפלנים על גבי קוברנטיס ותנסה לחשוב איך היא ניתן להפוך אותו ומה היה 
+צריך להוסיף לו כדי להפוך אותו לכלי ci/cd מלא.
 
 ## 🏢 GitOps - סקירה כללית
-GitOps היא גישה לפריסה וניהול של יישומים ותשתיות באופן דקלרטיבי, תוך שימוש ב-Git כמקור אמת יחיד (Single Source of Truth).
+שיטה לניהול והפצת תשתיות וקוד אפליקטיבי 
+בצורה דקלרטיבית תוך שימוש ב-Git כSingle Source of Truth-
+
 
 ### 🔎 עקרונות מרכזיים של GitOps:
 - **מצב דקלרטיבי**: כל הגדרות התשתית והיישומים נשמרות בקובצי YAML או JSON בתוך מאגר Git.
 - **בקרה באמצעות Git**: כל שינוי בתשתית או בקוד מיושם דרך Pull Request, מה שמאפשר ניהול גרסאות ברור.
 - **סנכרון אוטומטי**: כלי GitOps מבטיחים שהמערכת בפועל תואמת למצב המוגדר ב-Git.
 - **מנגנוני אבטחה ושחזור**: כל שינוי ניתן לשחזור ולבדיקה ע"י חזרה לגרסה קודמת ב-Git.
+
+יתרונות:
+קל לניהול ולשחזור (rollback)
+אבטחה טובה יותר
+קונסיסטנטיות גבוהה בין סביבות
 
 ## 🔄 IaC לעומת GitOps
 | מאפיין | IaC (Infrastructure as Code) | GitOps |
