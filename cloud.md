@@ -63,5 +63,19 @@ Argo CD הוא כלי **Continuous Delivery (CD)** מבוסס GitOps המאפש�
   - CD דואג לפריסה אוטומטית של החבילות האלו לסביבת ה-Production או Testing בהתאם.
   - שימוש בכלים כמו ArgoCD מאפשר לבצע CD בצורה דקלרטיבית ומבוססת GitOps.
 
+ArgoCD - ארכיטקטורה
+ArgoCD הוא כלי Pull-based GitOps לניהול אפליקציות Kubernetes.
+
+🔹 רכיבי הארכיטקטורה העיקריים:
+API Server – מספק REST API ו-GUI לניהול הסנכרון
+Repo Server – קורא מה-Repo ומוודא את הדיפלוימנטים
+Application Controller – עוקב אחר הסטטוס של ה-Cluster ודואג לסנכרון
+Dex (optional) – רכיב לזיהוי משתמשים ותמיכה ב-SSO
+
+✔ תכונות חשובות:
+תמיכה ב-Helm, Kustomize ו-K8s manifests
+מנגנון Rollback אוטומטי
+UI לניהול ודיבאגינג
+
 ### 🔍 לסיכום
 ArgoCD ו-GitOps מספקים פתרון מתקדם לפריסת יישומים על Kubernetes, מבוסס ניהול תצורה דקלרטיבי עם יתרונות רבים כמו אוטומציה מלאה, ניהול שינויים ברור ושיפור אבטחה. הבנה מעמיקה של המודלים Pull vs Push, תהליכי GitOps, היתרונות של ניהול תצורה דקלרטיבי וארכיטקטורת ArgoCD חיונית להצלחה בראיון עבודה.
