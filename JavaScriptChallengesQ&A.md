@@ -273,6 +273,12 @@ console.log(rateLimiter.isAllowed('user1')); // false
 ```javascript
 class RateLimiter {
     constructor(maxAttempts = 5, timeFrame = 60 * 1000) {
+        if (typeof maxAttempts !== 'number' || maxAttempts <= 0) {
+            throw new Error('maxAttempts must be a positive number');
+        }
+        if (typeof timeFrame !== 'number' || timeFrame <= 0) {
+            throw new Error('timeFrame must be a positive number');
+        }
         this.attempts = new Map();
         this.maxAttempts = maxAttempts;
         this.timeFrameMilliseconds = timeFrame;
