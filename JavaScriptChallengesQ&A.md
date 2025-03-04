@@ -285,6 +285,9 @@ class RateLimiter {
     }
     
     isAllowed(userId) {
+        if (userId === undefined || userId === null) {
+            throw new Error('userId is required');
+        }
         const currentTime = Date.now();
         
         if (!this.attempts.has(userId)) {
