@@ -480,6 +480,7 @@ Key features:
 5. Error handling for invalid inputs
 </details>
 
+## Custom implementation of Promise.all()
 ### Question:
  Implement a function similar to JavaScript's Promise.all()
 ```javascript
