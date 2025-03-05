@@ -453,8 +453,12 @@ function promiseAllSettledWithTimeout(promises, timeout) {
             const timeoutPromise = new Promise((_, reject) =>
                 setTimeout(() => reject(new Error('timeout')), timeout)
             );
-
-            Promise.race([Promise.resolve(promise), timeoutPromise])
+            // Handle both promise and non-promise values properly
+            const racePromises = [
+                promise instanceof Promise ? promise : Promise.resolve(promise),
+                timeoutPromise
+            ];
+            Promise.race(racePromises)
                 .then(value => handlePromiseResult(index, 'fulfilled', value))
                 .catch(reason => {
                     if (reason.message === 'timeout') {
