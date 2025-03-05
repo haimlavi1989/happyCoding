@@ -411,9 +411,16 @@ const promiseAllSettled = (promises) => {
         };
 
         promises.forEach((promise, index) => {
-            Promise.resolve(promise)
-                .then(value => handlePromiseResult(index, 'fulfilled', value))
-                .catch(reason => handlePromiseResult(index, 'rejected', reason));
+            // Handle both promise and non-promise values properly
+            if (promise instanceof Promise) {
+                // Directly use the promise if it's already a Promise instance
+                promise
+                    .then(value => handlePromiseResult(index, 'fulfilled', value))
+                    .catch(reason => handlePromiseResult(index, 'rejected', reason));
+            } else {
+                // For non-promise values, treat them as already fulfilled
+                handlePromiseResult(index, 'fulfilled', promise);
+            }
         });
     });
 }
