@@ -221,7 +221,18 @@ maxChar("apple 31111") === "1"
 
 ```javascript
 function maxChar(str) {
-    if (!str) return null;
+    // Input validation
+    if (str === undefined || str === null) {
+        throw new Error("Input cannot be null or undefined");
+    }
+    
+    if (typeof str !== 'string') {
+        throw new TypeError(`Input must be a string, got ${typeof str}`);
+    }
+    
+    if (str.length === 0) {
+        throw new Error("Input string cannot be empty");
+    }
 
     const cache = new Map();
     let maxChar = str[0];
@@ -272,7 +283,7 @@ console.log(rateLimiter.isAllowed('user1')); // false
 
 ```javascript
 class RateLimiter {
-    constructor(maxAttempts = 5, timeFrame = 60 * 1000) {
+    constructor(maxAttempts = 5, timeFrameInSeconds = 60) {
         if (typeof maxAttempts !== 'number' || maxAttempts <= 0) {
             throw new Error('maxAttempts must be a positive number');
         }
@@ -281,7 +292,7 @@ class RateLimiter {
         }
         this.attempts = new Map();
         this.maxAttempts = maxAttempts;
-        this.timeFrameMilliseconds = timeFrame;
+        this.timeFrameMilliseconds = timeFrameInSeconds * 1000; // Convert to milliseconds
     }
     
     isAllowed(userId) {
