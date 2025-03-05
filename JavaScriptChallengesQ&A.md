@@ -480,6 +480,83 @@ Key features:
 5. Error handling for invalid inputs
 </details>
 
+### Question:
+ Implement a function similar to JavaScript's Promise.all()
+```javascript
+Custom implementation of Promise.all()
+```
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+/**
+ * Custom implementation of Promise.all()
+ * Takes an array of promises and returns a new promise that resolves when all input promises resolve,
+ * or rejects when any input promise rejects.
+ * 
+ * @param {Array<Promise>} promises - An array of promises to be resolved
+ * @returns {Promise} A promise that resolves to an array of resolved values
+ */
+function myPromiseAll(promises) {
+
+  if (promises.length === 0) {
+    return Promise.resolve([]);
+  }
+  
+  return new Promise((resolve, reject) => {
+    const results = new Array(promises.length);
+    let resolvedCount = 0;
+    
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then(value => {
+          results[index] = value;
+          resolvedCount++;
+          
+          if (resolvedCount === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  });
+}
+
+// Example usage:
+async function testMyPromiseAll() {
+  const promise1 = Promise.resolve(1);
+  const promise2 = new Promise(resolve => setTimeout(() => resolve(2), 100));
+  const promise3 = new Promise(resolve => setTimeout(() => resolve(3), 50));
+  
+  try {
+    // Using our custom implementation
+    const results = await myPromiseAll([promise1, promise2, promise3]);
+    console.log('All promises resolved:', results);
+    
+    // Compare with native Promise.all
+    const nativeResults = await Promise.all([promise1, promise2, promise3]);
+    console.log('Native Promise.all results:', nativeResults);
+    
+    // Test with a rejected promise
+    const promise4 = Promise.reject('Oops, something went wrong!');
+    await myPromiseAll([promise1, promise4]);
+  } catch (error) {
+    console.log('Error caught:', error);
+  }
+  
+  // Test with non-promise values
+  const mixedValues = await myPromiseAll([Promise.resolve(10), 20, 'string']);
+  console.log('Mixed values result:', mixedValues);
+}
+
+// Run the test
+testMyPromiseAll();
+```
+</details>
+
 ## 9. LRU Cache
 
 ### Question:
