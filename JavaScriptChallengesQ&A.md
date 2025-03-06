@@ -1598,48 +1598,26 @@ Timer.addTimer(2000, () => console.log('Timer 2: 2 seconds'));
 <summary>Solution</summary>
 
 ```javascript
-class Timer {
-    static timerCache = new Map();
-
-    static getCurrentTimeMillis() {
-        return Date.now();
-    }
-
-    static setTimer(durationMillis, callback) {
-        // You can use it - No need to implement
-    }
-
-    static addTimer(durationMillis, callback) {
-        const now = this.getCurrentTimeMillis();
-        
-        // Check cached timers
-        for (const [key, timer] of this.timerCache) {
-            if (now >= timer.startTime + timer.duration) {
-                if (this.timerCache.has(key)) {  // Check if not already executed
-                    timer.callback();
-                    this.timerCache.delete(key);
-                }
-            }
+static addTimer(durationMillis, callback) {
+    // Generate a unique ID instead of using duration as key
+    const timerId = Date.now() + Math.random().toString(36).substr(2, 9);
+    
+    const wrappedCallback = () => {
+        if (this.timerCache.has(timerId)) {
+            callback();
+            this.timerCache.delete(timerId);
         }
-        
-        // Wrap callback to clean cache after execution
-        const wrappedCallback = () => {
-            if (this.timerCache.has(durationMillis)) {
-                callback();
-                this.timerCache.delete(durationMillis);
-            }
-        };
-        
-        const timer = {
-            startTime: now,
-            duration: durationMillis,
-            callback: wrappedCallback
-        };
-        
-        this.timerCache.set(durationMillis, timer);
-        this.setTimer(durationMillis, wrappedCallback);
-        return timer;
-    }
+    };
+    
+    const timer = {
+        startTime: this.getCurrentTimeMillis(),
+        duration: durationMillis,
+        callback: wrappedCallback
+    };
+    
+    this.timerCache.set(timerId, timer);
+    this.setTimer(durationMillis, wrappedCallback);
+    return timerId; // Could be useful for cancellation
 }
 ```
 </details>
