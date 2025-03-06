@@ -753,12 +753,8 @@ const sorByKind = (digits) => {
 console.log(sorByKind([1, 2, 3, 4, 1, 2, 3, 4])); // Output: [1, 1, 2, 2, 3, 3, 4, 4]
 ```
 
-Key features:
-1. Maintains relative order for equal frequencies
-2. O(n log n) time complexity
-3. Handles duplicate elements
-4. Preserves original order when frequencies are equal
-5. Optimized version for better performance with large arrays
+sorByKind implementation runs in O(n + k) time, where n is the number of digits and k is the number of unique digits
+* The standard .sort() method in JavaScript typically runs in O(n log n) time
 </details>
 
 ## 12. Card Deck Manager
