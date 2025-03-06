@@ -865,6 +865,397 @@ Key features:
 5. Clean API interface
 </details>
 
+<details>
+<summary>Solution 2 improved code </summary>
+
+```javascript
+const API_BASE_URL = 'https://www.deckofcardsapi.com/api/deck';
+const DEFAULT_DECK_COUNT = 1;
+const MAX_RETRY_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 1000;
+
+/**
+ * Enhanced fetch wrapper with retry mechanism and better error handling
+ * @param {string} url - The URL to fetch
+ * @param {Object} options - Fetch options
+ * @param {number} retryCount - Number of retry attempts (default: 0)
+ * @returns {Promise<Object>} - Parsed JSON response
+ */
+const fetchWithErrorHandling = async (url, options = {}, retryCount = 0) => {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(url, { 
+      ...options, 
+      signal: controller.signal 
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    
+    // Validate that the response has a success property and it's true
+    if (data.hasOwnProperty('success') && data.success === false) {
+      throw new Error(`API error: ${data.error || 'Unknown error'}`);
+    }
+    
+    return data;
+  } catch (error) {
+    // Check if we should retry
+    if (retryCount < MAX_RETRY_ATTEMPTS && 
+        (error.name === 'AbortError' || error.message.includes('fetch'))) {
+      console.warn(`Retry attempt ${retryCount + 1} for ${url}`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
+      return fetchWithErrorHandling(url, options, retryCount + 1);
+    }
+    
+    console.error('Fetch error:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * DeckManager class to handle deck operations
+ */
+class DeckManager {
+  constructor(deckCount = DEFAULT_DECK_COUNT) {
+    this.deckCount = deckCount;
+    this.deckId = null;
+    this.remaining = 0;
+    this.cardsInPlay = [];
+  }
+
+  /**
+   * Create a new deck
+   * @param {boolean} shuffle - Whether to shuffle the deck
+   * @returns {Promise<string>} - Deck ID
+   */
+  async createDeck(shuffle = true) {
+    const apiUrl = `${API_BASE_URL}/new/${shuffle ? 'shuffle' : ''}/?deck_count=${this.deckCount}`;
+    const data = await fetchWithErrorHandling(apiUrl);
+    
+    // Validate response data
+    if (!data.deck_id) {
+      throw new Error('Failed to create a deck. No deck ID returned.');
+    }
+    
+    this.deckId = data.deck_id;
+    this.remaining = data.remaining;
+    return this.deckId;
+  }
+
+  /**
+   * Draw cards from the deck
+   * @param {number} count - Number of cards to draw
+   * @returns {Promise<Array>} - Array of card objects
+   */
+  async drawCards(count) {
+    if (!this.deckId) {
+      throw new Error('No deck available. Call createDeck() first.');
+    }
+    
+    // Validate count
+    if (!Number.isInteger(count) || count <= 0) {
+      throw new Error('Count must be a positive integer.');
+    }
+    
+    // Check if we have enough cards
+    if (count > this.remaining) {
+      console.warn(`Requested ${count} cards but only ${this.remaining} remain. Drawing remaining cards.`);
+      count = this.remaining;
+      
+      // If no cards remain, return empty array
+      if (count === 0) {
+        return [];
+      }
+    }
+    
+    const apiUrl = `${API_BASE_URL}/${this.deckId}/draw/?count=${count}`;
+    const data = await fetchWithErrorHandling(apiUrl);
+    
+    // Update the remaining count
+    this.remaining = data.remaining;
+    
+    // Validate cards array
+    if (!Array.isArray(data.cards)) {
+      throw new Error('Invalid response format. Expected cards array.');
+    }
+    
+    // Track cards in play
+    this.cardsInPlay.push(...data.cards);
+    
+    return data.cards;
+  }
+
+  /**
+   * Reshuffle the deck
+   * @param {boolean} includeDrawn - Include previously drawn cards
+   * @returns {Promise<number>} - Number of remaining cards
+   */
+  async reshuffleDeck(includeDrawn = false) {
+    if (!this.deckId) {
+      throw new Error('No deck available. Call createDeck() first.');
+    }
+    
+    const apiUrl = `${API_BASE_URL}/${this.deckId}/shuffle/?remaining=${!includeDrawn}`;
+    const data = await fetchWithErrorHandling(apiUrl);
+    
+    // If we include drawn cards, clear the cardsInPlay array
+    if (includeDrawn) {
+      this.cardsInPlay = [];
+    }
+    
+    this.remaining = data.remaining;
+    return this.remaining;
+  }
+
+  /**
+   * Return cards to the deck
+   * @param {Array} cards - Array of card codes to return
+   * @returns {Promise<number>} - Number of remaining cards
+   */
+  async returnCardsToDeck(cards) {
+    if (!this.deckId) {
+      throw new Error('No deck available. Call createDeck() first.');
+    }
+    
+    if (!Array.isArray(cards) || cards.length === 0) {
+      throw new Error('Cards must be a non-empty array of card codes.');
+    }
+    
+    const cardCodes = cards.map(card => 
+      typeof card === 'string' ? card : (card.code || '')
+    ).filter(code => code);
+    
+    if (cardCodes.length === 0) {
+      throw new Error('No valid card codes provided.');
+    }
+    
+    const apiUrl = `${API_BASE_URL}/${this.deckId}/return/?cards=${cardCodes.join(',')}`;
+    const data = await fetchWithErrorHandling(apiUrl);
+    
+    // Update remaining count
+    this.remaining = data.remaining;
+    
+    // Remove returned cards from cardsInPlay
+    const returnedCodes = new Set(cardCodes);
+    this.cardsInPlay = this.cardsInPlay.filter(card => !returnedCodes.has(card.code));
+    
+    return this.remaining;
+  }
+
+  /**
+   * Return all cards in play back to the deck
+   * @returns {Promise<number>} - Number of remaining cards
+   */
+  async returnAllCardsToDeck() {
+    if (this.cardsInPlay.length === 0) {
+      return this.remaining;
+    }
+    
+    const cardCodes = this.cardsInPlay.map(card => card.code);
+    return this.returnCardsToDeck(cardCodes);
+  }
+  
+  /**
+   * Get the numeric value of a card
+   * @param {Object} card - Card object
+   * @returns {number} - Numeric value of the card
+   */
+  getCardValue(card) {
+    if (!card || typeof card !== 'object') {
+      throw new Error('Invalid card object.');
+    }
+    
+    // Make sure value exists
+    if (!card.value) {
+      throw new Error('Card has no value property.');
+    }
+    
+    const normalizedValue = card.value.toUpperCase();
+    const faceValues = {
+      'ACE': 1,
+      'JACK': 11,
+      'QUEEN': 12,
+      'KING': 13
+    };
+    
+    if (normalizedValue in faceValues) {
+      return faceValues[normalizedValue];
+    }
+    
+    // Try to parse as integer
+    const numericValue = parseInt(normalizedValue, 10);
+    if (isNaN(numericValue)) {
+      throw new Error(`Unable to parse card value: ${card.value}`);
+    }
+    
+    return numericValue;
+  }
+
+  /**
+   * Get the numeric value of a suit
+   * @param {string} suit - Card suit
+   * @returns {number} - Numeric value of the suit
+   */
+  getSuitValue(suit) {
+    if (!suit || typeof suit !== 'string') {
+      throw new Error('Invalid suit.');
+    }
+    
+    const normalizedSuit = suit.toUpperCase();
+    const suitValues = {
+      'CLUBS': 0,
+      'DIAMONDS': 1,
+      'HEARTS': 2,
+      'SPADES': 3
+    };
+    
+    if (!(normalizedSuit in suitValues)) {
+      throw new Error(`Unknown suit: ${suit}`);
+    }
+    
+    return suitValues[normalizedSuit];
+  }
+
+  /**
+   * Sort cards by value and suit
+   * @param {Array} cards - Array of card objects
+   * @returns {Array} - Sorted array of card objects
+   */
+  sortCards(cards) {
+    if (!Array.isArray(cards)) {
+      throw new Error('Cards must be an array.');
+    }
+    
+    // Create a safe copy
+    const cardsCopy = [...cards];
+    
+    return cardsCopy.sort((a, b) => {
+      try {
+        const valueA = this.getCardValue(a);
+        const valueB = this.getCardValue(b);
+        
+        // Sort by value first
+        if (valueA !== valueB) {
+          return valueA - valueB;
+        }
+        
+        // If values are equal, sort by suit
+        try {
+          const suitA = this.getSuitValue(a.suit);
+          const suitB = this.getSuitValue(b.suit);
+          return suitA - suitB;
+        } catch (error) {
+          console.warn('Error comparing suits:', error.message);
+          // If suit comparison fails, keep original order
+          return 0;
+        }
+      } catch (error) {
+        console.warn('Error comparing card values:', error.message);
+        // If value comparison fails, keep original order
+        return 0;
+      }
+    });
+  }
+}
+
+/**
+ * Example usage of the DeckManager
+ */
+const main = async () => {
+  try {
+    const deckManager = new DeckManager(1);
+    
+    // Create a new deck
+    await deckManager.createDeck();
+    console.log(`Created deck with ID: ${deckManager.deckId}`);
+    console.log(`Remaining cards: ${deckManager.remaining}`);
+    
+    // Draw cards
+    const cardsToDraw = 10;
+    console.log(`Drawing ${cardsToDraw} cards...`);
+    const drawnCards = await deckManager.drawCards(cardsToDraw);
+    console.log('Drawn cards:', drawnCards);
+    console.log(`Remaining cards: ${deckManager.remaining}`);
+    
+    // Sort the cards
+    const sortedCards = deckManager.sortCards(drawnCards);
+    console.log('Sorted cards:', sortedCards);
+    
+    // Return some cards to the deck
+    if (drawnCards.length >= 2) {
+      const cardsToReturn = [drawnCards[0].code, drawnCards[1].code];
+      console.log(`Returning cards ${cardsToReturn.join(', ')} to the deck...`);
+      await deckManager.returnCardsToDeck(cardsToReturn);
+      console.log(`Remaining cards: ${deckManager.remaining}`);
+    }
+    
+    // Reshuffle the deck
+    console.log('Reshuffling the deck...');
+    await deckManager.reshuffleDeck();
+    console.log(`Remaining cards after reshuffle: ${deckManager.remaining}`);
+    
+  } catch (error) {
+    console.error('An error occurred:', error.message);
+  }
+};
+
+// Uncomment to run the example
+// main();
+
+// Export for potential module use
+if (typeof module !== 'undefined') {
+  module.exports = {
+    DeckManager,
+    fetchWithErrorHandling
+  };
+}
+```
+
+Key features:
+1. Enhanced Error Handling & Network Resiliency
+Added retry mechanism with configurable attempts and delays
+Implemented request timeouts to prevent hanging requests
+Added more detailed error messaging and validation
+
+2. Improved Card Value and Suit Handling
+Normalized case sensitivity issues with toUpperCase() for consistent comparisons
+Added proper error handling for invalid values
+Improved validation throughout the code
+
+3. Better API Response Validation
+Checks for success/error flags in responses
+Validates expected response structures before accessing properties
+
+4. Complete Deck Management
+Created a DeckManager class to maintain state and group related operations
+Added functionality to reshuffle the deck with reshuffleDeck()
+Added methods to return cards to the deck with returnCardsToDeck() and returnAllCardsToDeck()
+
+5. Enhanced Sorting Algorithm
+Made sorting more robust with try/catch blocks to handle unexpected values
+Maintains original order if sorting fails rather than breaking
+
+6. Input Validation
+Added validation for parameters throughout the code
+Added type checking to prevent runtime errors
+
+7. Better State Management
+The DeckManager class tracks remaining cards and cards in play
+Updates remaining count automatically after operations
+
+8. Improved Code Structure and Documentation
+Added JSDoc comments for better documentation
+Separated concerns into distinct methods
+Made the code more modular and reusable
+</details>
+
 ## 13. Memoization with TTL
 
 ### Question:
