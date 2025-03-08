@@ -469,6 +469,8 @@ CREATE TABLE comments (
 - Adaptive bitrate streaming
 - Regional content delivery optimization
 - Real-time analytics processing
+  
+![shortURL](diagrams/youtube-OR-Netflix.JPG) 
 
 -----------------------------------------------------------------------------------------------------
 
