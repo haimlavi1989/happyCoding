@@ -150,7 +150,7 @@ Users Table:
 - Request logging
 - Security measures (SQL injection, XSS)
 
-![shortURL](diagrams/shortURL.JPG)
+![shortURL](diagrams/shortURL.JPG) 
 
 -----------------------------------------------------------------------------------------------------
 
@@ -292,6 +292,8 @@ Rides
 - Multiple ride requests for same driver
 - Driver availability status accuracy
 - Payment failure handling
+
+![shortURL](diagrams/uber.JPG)
 
 -----------------------------------------------------------------------------------------------------
 
