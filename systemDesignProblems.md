@@ -150,6 +150,7 @@ Users Table:
 - Request logging
 - Security measures (SQL injection, XSS)
 
+![shortURL](diagrams/shortURL.JPG)
 
 -----------------------------------------------------------------------------------------------------
 
