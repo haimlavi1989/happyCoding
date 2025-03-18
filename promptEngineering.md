@@ -120,7 +120,6 @@ Please extract significant business insights from this news article. Address the
     "Opportunity for technology companies to provide compliance solutions"
   ]
 }}
-```
 
 # Call the AI model
 message = anthropic_client.messages.create(
