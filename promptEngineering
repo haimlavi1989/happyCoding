@@ -1,5 +1,6 @@
-# Enhanced Prompt Based on 8 Key Prompting Tips
+# Enhanced Prompt Tips
 
+Strategy 1: Clear and Specific Instructions:
 The following prompt was created using these 8 key prompting strategies:
 1. **Detailed prompt** - Providing comprehensive instructions
 2. **Role prompting** - Defining a specific role for the AI
@@ -9,6 +10,41 @@ The following prompt was created using these 8 key prompting strategies:
 6. **Delimiters** - Using clear section markers
 7. **Special case instructions** - Handling exceptions and edge cases
 8. **Asking for structured output** - Requesting specific output format
+
+Strategy 2: Give the model "time to think"
+
+This is only a heading in the second image, without additional details that can be extracted.
+These strategies focus on improving the quality of AI model responses by encouraging organized and gradual thinking processes.
+
+Chain of Thought
+
+The concept of "Chain of Thought" is to break down complex tasks into simpler sub-tasks and cause LLM models to present a sequence of intermediate steps that lead to the desired answer.
+Help the model by asking to detail the steps to complete a task: Step 1: ..., Step 2: ...
+Ask the model to explain each step
+Even just mentioning this instruction can improve results!
+"Take a step-by-step approach in your answer"
+
+Strategy 3: Test changes systematically
+
+Performance improvement is easier when it can be measured
+Sometimes, a change in the prompt may achieve better performance in some isolated examples, but lead to worse performance across a representative set of examples
+Prompt engineering should be data-driven and tested on a large scale
+Developing effective prompts requires an experimental approach
+
+Iterative prompt development
+
+Try something with a small group of examples
+Analyze where the results don't give what you want
+Clarify the instructions
+And repeat the process again...
+Circular process: Idea → Implementation (code/data/prompt) → Experimental result → Error analysis → New idea
+
+Types of models affect response quality
+
+GPT-3.5 → Fast and cost-efficient, but weaker in complex thinking
+GPT-4 → Stronger, supports images, but slower and more expensive
+GPT-4o → Optimized for speed and multimodal interactions
+o1 → The best for deep thinking and specialized problem solving
 
 ---
 
