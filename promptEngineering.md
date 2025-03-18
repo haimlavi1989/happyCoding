@@ -121,7 +121,6 @@ Please extract significant business insights from this news article. Address the
   ]
 }}
 ```
-"""
 
 # Call the AI model
 message = anthropic_client.messages.create(
@@ -141,7 +140,6 @@ message = anthropic_client.messages.create(
 
 # Print the response
 print(message)
-
 ```
 
 
