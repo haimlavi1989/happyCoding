@@ -17,7 +17,6 @@ To get high-quality responses, use the following strategies:
 
 ### **2️⃣ Allow the Model "Time to Think"**
 To improve response quality, use techniques such as:
-
 🧩 **Chain of Thought** – Ask the model to explain its reasoning step by step.  
 📝 **Explicit Prompting** – "Answer in a step-by-step manner."  
 🔄 **Few-Shot Learning** – Provide multiple examples before asking the question.  
