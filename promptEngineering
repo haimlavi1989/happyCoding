@@ -35,7 +35,6 @@ To improve response quality, use techniques such as:
 ## **🎯 Example of an Advanced Prompt**
 
 ```python
-
 import json
 from anthropic import Anthropic
 
@@ -143,7 +142,7 @@ message = anthropic_client.messages.create(
 
 # Print the response
 print(message)
-
+```
 
 
 
