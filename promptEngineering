@@ -1,52 +1,59 @@
-# Enhanced Prompt Tips
+# **Guide to Effective Prompt Engineering**
 
-Strategy 1: Clear and Specific Instructions:
-The following prompt was created using these 8 key prompting strategies:
-1. **Detailed prompt** - Providing comprehensive instructions
-2. **Role prompting** - Defining a specific role for the AI
-3. **Providing examples** - Including concrete examples of desired output
-4. **Specifying prompt length** - Defining the expected response length
-5. **Repeating important instructions at the end** - Reinforcing key points
-6. **Delimiters** - Using clear section markers
-7. **Special case instructions** - Handling exceptions and edge cases
-8. **Asking for structured output** - Requesting specific output format
+## **🔹 Key Strategies for Improving Prompts**
 
-Strategy 2: Give the model "time to think"
-These strategies focus on improving the quality of AI model responses by encouraging organized and gradual thinking processes.
-
-Chain of Thought
-
-The concept of "Chain of Thought" is to break down complex tasks into simpler sub-tasks and cause LLM models to present a sequence of intermediate steps that lead to the desired answer.
-Help the model by asking to detail the steps to complete a task: Step 1: ..., Step 2: ...
-Ask the model to explain each step
-Even just mentioning this instruction can improve results!
-"Take a step-by-step approach in your answer"
-
-Strategy 3: Test changes systematically
-
-Performance improvement is easier when it can be measured
-Sometimes, a change in the prompt may achieve better performance in some isolated examples, but lead to worse performance across a representative set of examples
-Prompt engineering should be data-driven and tested on a large scale
-Developing effective prompts requires an experimental approach
-
-Iterative prompt development
-
-Try something with a small group of examples
-Analyze where the results don't give what you want
-Clarify the instructions
-And repeat the process again...
-Circular process: Idea → Implementation (code/data/prompt) → Experimental result → Error analysis → New idea
-
-Types of models affect response quality
-
-GPT-3.5 → Fast and cost-efficient, but weaker in complex thinking
-GPT-4 → Stronger, supports images, but slower and more expensive
-GPT-4o → Optimized for speed and multimodal interactions
-o1 → The best for deep thinking and specialized problem solving
+### **1️⃣ Providing Clear and Precise Instructions**
+To get high-quality responses, use the following strategies:
+✔ **Detailed Prompting** – Provide comprehensive and clear instructions.  
+✔ **Role Prompting** – Ask the model to act in a specific role (e.g., "You are a financial analyst...").  
+✔ **Providing Examples** – Show examples of the desired output.  
+✔ **Defining Response Length** – Specify whether the response should be short, medium, or detailed.  
+✔ **Reinforcing Key Instructions at the End** – Helps prevent errors from the model.  
+✔ **Using Delimiters** – Mark different sections in the prompt (e.g., with `###`).  
+✔ **Handling Special Cases** – Define how to deal with missing information or contradictions.  
+✔ **Requesting Structured Output** – Ask the model to return JSON, tables, or structured lists.  
 
 ---
 
+### **2️⃣ Allow the Model "Time to Think"**
+To improve response quality, use techniques such as:
+
+🧩 **Chain of Thought** – Ask the model to explain its reasoning step by step.  
+📝 **Explicit Prompting** – "Answer in a step-by-step manner."  
+🔄 **Few-Shot Learning** – Provide multiple examples before asking the question.  
+
+---
+
+### **3️⃣ Systematic Prompt Development (Iterative Prompting)**
+✅ **Initial Testing** – Try different prompts on various examples.  
+✅ **Analyze Results** – Identify what worked well and what didn’t.  
+✅ **Refine Instructions** – Add clarifications and improve structure.  
+✅ **Repeat the Process** – Iteratively improve until achieving optimal results.  
+
+---
+
+## **🎯 Example of an Advanced Prompt**
+
 ```python
+
+import json
+from anthropic import Anthropic
+
+# Initialize the AI client
+anthropic_client = Anthropic()
+
+# Sample input data (replace with actual input)
+news_text = """
+Example news article content goes here. It should be a real-world business-related article.
+"""
+
+model_results = {
+    "sentiment": "Neutral",
+    "key_entities": ["Company A", "Industry B"],
+    "summary": "Regulatory changes affecting the market."
+}
+
+# Construct the AI prompt
 prompt = f"""
 ## Business Insights Analysis from News Article
 
@@ -57,12 +64,40 @@ prompt = f"""
 {json.dumps(model_results, indent=2)}
 
 ### Your Task
-Please extract significant business insights from this news article. Address the following 5 categories:
-1. Potential stock market impacts
-2. Competitive implications
-3. Business opportunities
-4. Potential risks
-5. Relevant market trends
+Please extract significant business insights from this news article. Address the following five categories:
+1. **Potential stock market impacts**
+2. **Competitive implications**
+3. **Business opportunities**
+4. **Potential risks**
+5. **Relevant market trends**
+
+---
+
+## Guidelines for Response:
+- **Each key must contain at least 3-5 relevant insights**.
+- **Each insight should include a brief explanation (1-3 sentences)**.
+- **Total response length: 400-600 words**.
+- **Clearly distinguish between short-term and long-term effects**.
+- **Indicate the level of certainty** (`low/medium/high`).
+- **If global implications are relevant, include them**.
+- **Strictly avoid political interpretations – focus only on business aspects**.
+
+---
+
+## Special Cases:
+- If **insufficient information** exists, return `{{ "insufficient_data": true }}`.
+- If there are **contradictory insights**, explain both and estimate likelihood.
+- If the article discusses a **financial crisis**, include `"crisis_response_strategy"` key.
+- If it’s about a **specific company**, provide `"company_specific_analysis"` with in-depth insights.
+
+---
+
+## Important Guidelines:
+ Base insights **only** on the article and model analysis.  
+ **Distinguish short-term vs. long-term effects**.  
+ Indicate **certainty level (low/medium/high)**.  
+ Consider **global implications**.  
+ **Avoid political bias** – focus on business aspects.
 
 ### Example of Desired Response
 ```json
@@ -88,42 +123,30 @@ Please extract significant business insights from this news article. Address the
   ]
 }}
 ```
-
-### Response Format Guidelines
-Present your insights in JSON format with the following keys:
-"market_impact", "competitive_implications", "business_opportunities", "potential_risks", "market_trends"
-
-Each key should contain an array of relevant insights (at least 3-5 in each category).
-
-### Response Scope
-- The complete response should be 400-600 words in length
-- For each category, provide at least 3 meaningful insights, but no more than 5
-- For each insight, include 1-3 explanatory sentences
-
-### Special Cases
-- If the news doesn't contain sufficient information in a certain category, indicate this with the field "insufficient_data": true
-- If there are contradictions in the information, note the alternative narratives and assess the likelihood of each
-- If the news refers to a financial crisis, add an additional key named "crisis_response_strategy" with recommendations
-- If the news is related to a specific company, add a "company_specific_analysis" key with in-depth analysis
-
-### Important Guidelines to Remember
-- Base your analysis only on facts presented in the news article and preliminary analysis
-- Distinguish between short-term and long-term effects
-- Indicate level of certainty (low/medium/high) for each insight
-- Address global implications if relevant
-- Avoid political interpretation and focus only on business aspects
 """
 
+# Call the AI model
 message = anthropic_client.messages.create(
     model="claude-3-sonnet-20240229",
     max_tokens=2000,
     temperature=0.1,
-    system="""You are an expert business analyst specializing in extracting business insights from news articles.
+    system="""
+    You are an expert business analyst specializing in extracting business insights from news articles.
     You have 15 years of experience analyzing macroeconomic implications of news events.
     You can identify patterns and business implications that aren't immediately obvious.
-    Your insights should be deep, data-driven, and geared toward business decision-making.""",
+    Your insights should be deep, data-driven, and geared toward business decision-making.
+    """,
     messages=[
         {"role": "user", "content": prompt}
     ]
 )
-```
+
+# Print the response
+print(message)
+
+
+
+
+
+
+
