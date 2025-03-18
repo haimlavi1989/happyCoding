@@ -37,30 +37,27 @@ To improve response quality, use techniques such as:
 import json
 from anthropic import Anthropic
 
-# Initialize the AI client
-anthropic_client = Anthropic()
-
-# Sample input data (replace with actual input)
-news_text = """
-Example news article content goes here. It should be a real-world business-related article.
-"""
-
-model_results = {
-    "sentiment": "Neutral",
-    "key_entities": ["Company A", "Industry B"],
-    "summary": "Regulatory changes affecting the market."
-}
-
-# Construct the AI prompt
-prompt = f"""
+def analyze_business_insights(news_text, model_results):
+    """
+    Extract business insights from news articles using Claude.
+    
+    Args:
+        news_text (str): The text content of the news article
+        model_results (dict): Preliminary model analysis results
+        
+    Returns:
+        dict: Claude's analysis of business insights
+    """
+    # Initialize the Anthropic client
+    client = Anthropic()
+    
+    # Construct the AI prompt
+    prompt = f"""
 ## Business Insights Analysis from News Article
-
 ### News Article
 {news_text}
-
 ### Preliminary Model Analysis
 {json.dumps(model_results, indent=2)}
-
 ### Your Task
 Please extract significant business insights from this news article. Address the following five categories:
 1. **Potential stock market impacts**
@@ -68,9 +65,7 @@ Please extract significant business insights from this news article. Address the
 3. **Business opportunities**
 4. **Potential risks**
 5. **Relevant market trends**
-
 ---
-
 ## 📌 Guidelines for Response:
 - **Each key must contain at least 3-5 relevant insights**.
 - **Each insight should include a brief explanation (1-3 sentences)**.
@@ -79,24 +74,19 @@ Please extract significant business insights from this news article. Address the
 - **Indicate the level of certainty** (`low/medium/high`).
 - **If global implications are relevant, include them**.
 - **Strictly avoid political interpretations – focus only on business aspects**.
-
 ---
-
 ## 📌 Special Cases:
 - If **insufficient information** exists, return `{{ "insufficient_data": true }}`.
 - If there are **contradictory insights**, explain both and estimate likelihood.
 - If the article discusses a **financial crisis**, include `"crisis_response_strategy"` key.
-- If it’s about a **specific company**, provide `"company_specific_analysis"` with in-depth insights.
-
+- If it's about a **specific company**, provide `"company_specific_analysis"` with in-depth insights.
 ---
-
 ## 📌 Important Guidelines:
 ✅ Base insights **only** on the article and model analysis.  
 ✅ **Distinguish short-term vs. long-term effects**.  
 ✅ Indicate **certainty level (low/medium/high)**.  
 ✅ Consider **global implications**.  
 ✅ **Avoid political bias** – focus on business aspects.
-
 ### Example of Desired Response
 ```json
 {{
@@ -120,28 +110,6 @@ Please extract significant business insights from this news article. Address the
     "Opportunity for technology companies to provide compliance solutions"
   ]
 }}
-```
-"""
-
-# Call the AI model
-message = anthropic_client.messages.create(
-    model="claude-3-sonnet-20240229",
-    max_tokens=2000,
-    temperature=0.1,
-    system="""
-    You are an expert business analyst specializing in extracting business insights from news articles.
-    You have 15 years of experience analyzing macroeconomic implications of news events.
-    You can identify patterns and business implications that aren't immediately obvious.
-    Your insights should be deep, data-driven, and geared toward business decision-making.
-    """,
-    messages=[
-        {"role": "user", "content": prompt}
-    ]
-)
-
-# Print the response
-print(message)
-
 ```
 
 
