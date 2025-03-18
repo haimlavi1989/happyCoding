@@ -33,7 +33,6 @@ To improve response quality, use techniques such as:
 ---
 
 ## **🎯 Example of an Advanced Prompt**
-
 ```python
 import json
 from anthropic import Anthropic
@@ -72,7 +71,7 @@ Please extract significant business insights from this news article. Address the
 
 ---
 
-## Guidelines for Response:
+## 📌 Guidelines for Response:
 - **Each key must contain at least 3-5 relevant insights**.
 - **Each insight should include a brief explanation (1-3 sentences)**.
 - **Total response length: 400-600 words**.
@@ -83,7 +82,7 @@ Please extract significant business insights from this news article. Address the
 
 ---
 
-## Special Cases:
+## 📌 Special Cases:
 - If **insufficient information** exists, return `{{ "insufficient_data": true }}`.
 - If there are **contradictory insights**, explain both and estimate likelihood.
 - If the article discusses a **financial crisis**, include `"crisis_response_strategy"` key.
@@ -91,12 +90,12 @@ Please extract significant business insights from this news article. Address the
 
 ---
 
-## Important Guidelines:
- Base insights **only** on the article and model analysis.  
- **Distinguish short-term vs. long-term effects**.  
- Indicate **certainty level (low/medium/high)**.  
- Consider **global implications**.  
- **Avoid political bias** – focus on business aspects.
+## 📌 Important Guidelines:
+✅ Base insights **only** on the article and model analysis.  
+✅ **Distinguish short-term vs. long-term effects**.  
+✅ Indicate **certainty level (low/medium/high)**.  
+✅ Consider **global implications**.  
+✅ **Avoid political bias** – focus on business aspects.
 
 ### Example of Desired Response
 ```json
@@ -142,8 +141,8 @@ message = anthropic_client.messages.create(
 
 # Print the response
 print(message)
-```
 
+```
 
 
 
