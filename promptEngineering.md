@@ -98,7 +98,6 @@ Please extract significant business insights from this news article. Address the
 ✅ **Avoid political bias** – focus on business aspects.
 
 ### Example of Desired Response
-```json
 {{
   "market_impact": [
     {{
