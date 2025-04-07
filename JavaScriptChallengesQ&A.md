@@ -2513,7 +2513,7 @@ class BinaryTreeIterator {
     this._pushLeftNodes(root);
   }
 
-  // Push all the left nodes of the current subtree onto the stack
+  // Push all the left nodes of the current subtree onto the stack (In-order traversal)
   _pushLeftNodes(node) {
     while (node) {
       this.stack.push(node);
