@@ -1603,10 +1603,10 @@ static addTimer(durationMillis, callback) {
     const timerId = Date.now() + Math.random().toString(36).substr(2, 9);
     
     const wrappedCallback = () => {
-        if (this.timerCache.has(timerId)) {
+        //if (this.timerCache.has(timerId)) {
             callback();
             this.timerCache.delete(timerId);
-        }
+        //}
     };
     
     const timer = {
