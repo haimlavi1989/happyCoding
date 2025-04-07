@@ -2454,6 +2454,107 @@ console.log(iterator.next()); // { value: 1, done: false }
 console.log(iterator.next()); // { value: 2, done: false }
 console.log(iterator.next()); // { value: 3, done: false }
 console.log(iterator.next()); // { value: undefined, done: true }
+
+------------------------------------
+Binary Tree Iterator 
+------------------------------------
+// Node definition for Binary Tree
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+// BinaryTree definition
+class BinaryTree {
+  constructor() {
+    this.root = null;
+  }
+
+  // Method to insert values in the tree
+  insert(value) {
+    const newNode = new TreeNode(value);
+    if (!this.root) {
+      this.root = newNode;
+    } else {
+      this._insertRecursively(this.root, newNode);
+    }
+  }
+
+  // Recursive helper method for insertion
+  _insertRecursively(node, newNode) {
+    if (newNode.value < node.value) {
+      if (!node.left) {
+        node.left = newNode;
+      } else {
+        this._insertRecursively(node.left, newNode);
+      }
+    } else {
+      if (!node.right) {
+        node.right = newNode;
+      } else {
+        this._insertRecursively(node.right, newNode);
+      }
+    }
+  }
+
+  // Provide an iterator
+  getIterator() {
+    return new BinaryTreeIterator(this.root);
+  }
+}
+
+// BinaryTreeIterator implementing the Iterator interface
+class BinaryTreeIterator {
+  constructor(root) {
+    this.stack = [];
+    this._pushLeftNodes(root);
+  }
+
+  // Push all the left nodes of the current subtree onto the stack
+  _pushLeftNodes(node) {
+    while (node) {
+      this.stack.push(node);
+      node = node.left;
+    }
+  }
+
+  // Next method to return the current node's value and move the iterator forward
+  next() {
+    if (this.stack.length === 0) {
+      return { value: undefined, done: true };
+    }
+
+    const node = this.stack.pop();
+    this._pushLeftNodes(node.right);
+
+    return { value: node.value, done: false };
+  }
+}
+
+// Usage
+const binaryTree = new BinaryTree();
+binaryTree.insert(4);
+binaryTree.insert(2);
+binaryTree.insert(6);
+binaryTree.insert(1);
+binaryTree.insert(3);
+binaryTree.insert(5);
+binaryTree.insert(7);
+
+const iterator = binaryTree.getIterator();
+
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: 3, done: false }
+console.log(iterator.next()); // { value: 4, done: false }
+console.log(iterator.next()); // { value: 5, done: false }
+console.log(iterator.next()); // { value: 6, done: false }
+console.log(iterator.next()); // { value: 7, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+
 ```
 </details>
 
