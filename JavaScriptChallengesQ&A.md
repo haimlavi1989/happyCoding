@@ -1618,6 +1618,7 @@ static addTimer(durationMillis, callback) {
     };
     
     this.timerCache.set(timerId, timer);
+    // Assume setTimer already performs this check: if (currentTime >= timer.startTime + timer.duration)
     this.setTimer(durationMillis, wrappedCallback);
     return timerId; // Could be useful for cancellation
 }
